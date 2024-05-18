@@ -37,7 +37,7 @@ Add flutter_chatflow to your pubspec.yaml:
 dependencies:
   flutter_chatflow: ^1.0.0
 ```
-Then run flutter pub get to install the package.
+Then run `flutter pub get` to install the package.
 
 ## Usage
 
