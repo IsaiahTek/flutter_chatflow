@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:fluchat/chat.dart';
-import 'package:fluchat/widgets/image_message.dart';
+import 'package:flutter_chatflow/chatflow.dart';
+import 'package:flutter_chatflow/widgets/image_message.dart';
 
 class ComputedMessage extends StatelessWidget{
   

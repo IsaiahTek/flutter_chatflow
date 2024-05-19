@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:fluchat/notifier.dart';
-import 'package:fluchat/widgets/computed_widget.dart';
-import 'package:fluchat/widgets/image_carousel.dart';
+import 'package:flutter_chatflow/notifier.dart';
+import 'package:flutter_chatflow/widgets/computed_widget.dart';
+import 'package:flutter_chatflow/widgets/image_carousel.dart';
 
 enum MessageType{
   text,
   image,
   video,
   file,
+  custom,
+  partition
 }
 
 abstract class Message{
@@ -33,6 +35,14 @@ class ImageMessage extends Message{
     required super.createdAt,
     required this.uri,
     this.text
+  });
+}
+
+class PartitionMessage extends Message{
+  PartitionMessage({
+    required super.authorID,
+    required super.createdAt,
+    super.type = MessageType.partition
   });
 }
 
@@ -70,8 +80,23 @@ class _FluChatState extends State<FluChat>{
 
   final TextEditingController _textEditingController = TextEditingController();
 
-  List<Message> get _messages => widget.messages..sort((a, b)=> a.createdAt.compareTo(b.createdAt));
+  bool isSameDay(int? previousMessageTime, int currentMessageTime){
+    return previousMessageTime != null 
+      ? DateTime.fromMillisecondsSinceEpoch(currentMessageTime).difference(DateTime.fromMillisecondsSinceEpoch(previousMessageTime)).inDays != 0
+      : true;
+  }
 
+  List<Message> get _messages => widget.messages..sort((a, b)=> a.createdAt.compareTo(b.createdAt));
+    
+
+  String computeTimePartitionText(int millisecondsSinceEpoch){
+    int year = DateTime.fromMillisecondsSinceEpoch(millisecondsSinceEpoch).year;
+    int month = DateTime.fromMillisecondsSinceEpoch(millisecondsSinceEpoch).month;
+    int day = DateTime.fromMillisecondsSinceEpoch(millisecondsSinceEpoch).day;
+    return '$day/$month/$year';
+  }
+
+  // Passed to image carousel for viewing all images in current chat
   List<ImageMessage> get _imageMessages => _messages.where((element) => element.type == MessageType.image).cast<ImageMessage>().toList();
 
   @override
@@ -80,14 +105,11 @@ class _FluChatState extends State<FluChat>{
       FluChatNotifier.instance.setIsTyping();
     });
     super.initState();
-    // _messages = widget.messages;
-    // _messages.sort((a, b)=> a.createdAt.compareTo(b.createdAt));
   }
 
   @override
   void dispose() {
     _textEditingController.dispose();
-    // FluChatNotifier.instance.dispose();
     super.dispose();
   }
 
@@ -107,35 +129,52 @@ class _FluChatState extends State<FluChat>{
                     itemCount: _messages.length,
                     physics: const NeverScrollableScrollPhysics(),
                     itemBuilder: (context, index){
-                      return Row(
-                        mainAxisAlignment: widget.userID == _messages[index].authorID ? MainAxisAlignment.end : MainAxisAlignment.start,
+                      return Column(
                         children: [
-                          Container(
-                            constraints: BoxConstraints.loose(Size.fromWidth(MediaQuery.of(context).size.width*.75)),
-                            child: GestureDetector(
-                              onTap: (){
-                                debugPrint("Taped message");
-                                int currentImageIndex = _imageMessages.indexWhere((element) => element.createdAt == _messages[index].createdAt);
-                                if(_messages[index].type == MessageType.image){
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: ((context) => ImageCarousel(imageMessages: _imageMessages, currentIndex: currentImageIndex,))
-                                    )
-                                  );
-                                }
-                              },
-                              onLongPress: ()=>debugPrint("Long Press message"),
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  color: widget.userID == _messages[index].authorID ? Theme.of(context).primaryColor.withOpacity(.2) : const Color.fromARGB(255, 241, 241, 241),
+                          if(isSameDay( index > 0 ? _messages[index-1].createdAt: null, _messages[index].createdAt))
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Container(
+                                decoration: const BoxDecoration(color: Colors.white10),
+                                child: Text(
+                                  computeTimePartitionText(_messages[index].createdAt),
+                                  style: const TextStyle(fontStyle: FontStyle.italic),
                                 ),
-                                padding: EdgeInsets.symmetric(horizontal: _messages[index].type == MessageType.text ? 15 : 2, vertical: _messages[index].type == MessageType.text ? 10 : 2),
-                                margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                                child: ComputedMessage(message: _messages[index]),
-                              ),
-                            ),
+                              )
+                            ],
+                          ),
+                          Row(
+                            mainAxisAlignment: widget.userID == _messages[index].authorID ? MainAxisAlignment.end : MainAxisAlignment.start,
+                            children: [
+                              Container(
+                                constraints: BoxConstraints.loose(Size.fromWidth(MediaQuery.of(context).size.width*.75)),
+                                child: GestureDetector(
+                                  onTap: (){
+                                    debugPrint("Taped message");
+                                    int currentImageIndex = _imageMessages.indexWhere((element) => element.createdAt == _messages[index].createdAt);
+                                    if(_messages[index].type == MessageType.image){
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: ((context) => ImageCarousel(imageMessages: _imageMessages, currentIndex: currentImageIndex,))
+                                        )
+                                      );
+                                    }
+                                  },
+                                  onLongPress: ()=>debugPrint("Long Press message"),
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      color: widget.userID == _messages[index].authorID ? Theme.of(context).primaryColor.withOpacity(.2) : const Color.fromARGB(255, 241, 241, 241),
+                                    ),
+                                    padding: EdgeInsets.symmetric(horizontal: _messages[index].type == MessageType.text ? 15 : 2, vertical: _messages[index].type == MessageType.text ? 10 : 2),
+                                    margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                                    child: ComputedMessage(message: _messages[index]),
+                                  ),
+                                ),
+                              )
+                            ],
                           )
                         ],
                       );

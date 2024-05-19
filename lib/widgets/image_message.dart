@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:fluchat/widgets/image_widget.dart';
+import 'package:flutter_chatflow/widgets/image_widget.dart';
 
 class ImageMessageWidget extends StatelessWidget{
   final String uri;
