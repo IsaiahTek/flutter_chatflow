@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_chatflow/chatflow.dart';
 
 class ChatAvatar extends StatelessWidget{
-  final bool isGroupChat;
+  final bool showUserAvatarInChat;
   final ChatUser chatUser;
   final ChatUser author;
 
   const ChatAvatar({super.key, 
     required this.author,
     required this.chatUser,
-    required this.isGroupChat
+    required this.showUserAvatarInChat
   });
 
   bool get hasPhoto {
@@ -24,7 +24,7 @@ class ChatAvatar extends StatelessWidget{
   Widget build(BuildContext context) {
     return Wrap(
       children: [
-        if(isGroupChat && chatUser.userID != author.userID)
+        if(showUserAvatarInChat && chatUser.userID != author.userID)
         Container(
           margin: const EdgeInsets.only(left: 5),
           child: CircleAvatar(

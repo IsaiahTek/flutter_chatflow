@@ -111,7 +111,10 @@ class FluChat extends StatefulWidget{
   final ChatUser chatUser;
   final void Function(String message)? onSendPressed;
   final void Function()? onAttachmentPressed;
-  final bool? isGroupChat;
+  final void Function()? onMessageLongPressed;
+  final void Function()? onMessageSwipedLeft;
+  final void Function()? onMessageSwipedRight;
+  final bool? showUserAvatarInChat; // Used to show user photo or name initial in group chat
   
   const FluChat({
     super.key,
@@ -119,7 +122,10 @@ class FluChat extends StatefulWidget{
     required this.chatUser,
     this.onSendPressed,
     this.onAttachmentPressed,
-    this.isGroupChat
+    this.onMessageLongPressed,
+    this.onMessageSwipedLeft,
+    this.onMessageSwipedRight,
+    this.showUserAvatarInChat,
   });
 
   @override
@@ -133,7 +139,7 @@ class _FluChatState extends State<FluChat>{
 
   List<Message> get _messages => widget.messages..sort((a, b)=> a.createdAt.compareTo(b.createdAt));
 
-  bool isGroupChat = false;
+  bool showUserAvatarInChat = false;
 
   bool isSameDay(int? previousMessageTime, int currentMessageTime){
     int? previousDay = previousMessageTime != null ? DateTime.fromMillisecondsSinceEpoch(previousMessageTime).day: null;
@@ -161,7 +167,7 @@ class _FluChatState extends State<FluChat>{
       FluChatNotifier.instance.setIsTyping();
     });
     setState(() {
-      isGroupChat = widget.isGroupChat??false;
+      showUserAvatarInChat = widget.showUserAvatarInChat??false;
     });
     super.initState();
   }
@@ -213,7 +219,7 @@ class _FluChatState extends State<FluChat>{
                             mainAxisAlignment: widget.chatUser.userID == _messages[index].author.userID ? MainAxisAlignment.end : MainAxisAlignment.start,
                             children: [
                               ChatAvatar(
-                                isGroupChat: isGroupChat,
+                                showUserAvatarInChat: showUserAvatarInChat,
                                 author: _messages[index].author,
                                 chatUser: widget.chatUser,
                               ),
