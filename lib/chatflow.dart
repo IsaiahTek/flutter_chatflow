@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_chatflow/notifier.dart';
+import 'package:flutter_chatflow/widgets/chat_avatar.dart';
 import 'package:flutter_chatflow/widgets/computed_widget.dart';
 import 'package:flutter_chatflow/widgets/image_carousel.dart';
 
@@ -167,9 +168,10 @@ class _FluChatState extends State<FluChat>{
                           Row(
                             mainAxisAlignment: widget.chatUser.userID == _messages[index].author.userID ? MainAxisAlignment.end : MainAxisAlignment.start,
                             children: [
-                              if(isGroupChat && widget.chatUser.userID != _messages[index].author.userID)
-                              CircleAvatar(
-                                child: _messages[index].author.photoUrl!.isNotEmpty ? Image.network(_messages[index].author.photoUrl!):Text(_messages[index].author.name!.substring(0,1)),
+                              ChatAvatar(
+                                isGroupChat: isGroupChat,
+                                author: _messages[index].author,
+                                chatUser: widget.chatUser,
                               ),
                               Container(
                                 constraints: BoxConstraints.loose(Size.fromWidth(MediaQuery.of(context).size.width*.75)),
