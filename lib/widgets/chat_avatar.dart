@@ -13,15 +13,8 @@ class ChatAvatar extends StatelessWidget{
   });
 
   bool get hasPhoto {
-    if(chatUser.photoUrl != null){
-      if(chatUser.photoUrl!.isNotEmpty){
-        return true;
-      }else{
-        return false;
-      }
-    }else{
-      return false;
-    }
+    String? photoUrl = chatUser.photoUrl;
+    return photoUrl != null && photoUrl.isNotEmpty;
   }
 
   bool get hasName => chatUser.name != null;
