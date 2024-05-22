@@ -1,6 +1,9 @@
 name: flutter_chatflow
-description: "A new Flutter package project."
+
+description: "A powerful and flexible chat solution for Flutter apps. Features include real-time messaging, private chats, group chats, customizable UI, user management, media sharing, rich text support, typing user(s), etc."
+
 version: 0.0.1
+
 homepage:
 
 environment:
