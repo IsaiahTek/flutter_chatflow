@@ -14,13 +14,13 @@ enum MessageType{
 
 abstract class Message{
   MessageType type;
-  String authorID;
+  ChatUser author;
   int createdAt;
   Map<String, dynamic>? meta;
 
   Message({
     required this.type,
-    required this.authorID,
+    required this.author,
     required this.createdAt,
     this.meta
   });
@@ -31,18 +31,10 @@ class ImageMessage extends Message{
   String? text;
   ImageMessage({
     super.type = MessageType.image,
-    required super.authorID,
+    required super.author,
     required super.createdAt,
     required this.uri,
     this.text
-  });
-}
-
-class PartitionMessage extends Message{
-  PartitionMessage({
-    required super.authorID,
-    required super.createdAt,
-    super.type = MessageType.partition
   });
 }
 
@@ -50,25 +42,39 @@ class TextMessage extends Message{
   final String text;
   TextMessage({
     super.type = MessageType.text,
-    required super.authorID,
+    required super.author,
     required super.createdAt,
     required this.text
+  });
+}
+
+class ChatUser{
+  final String userID;
+  final String? name;
+  final String? photoUrl;
+
+  const ChatUser({
+    required this.userID,
+    this.name,
+    this.photoUrl
   });
 }
 
 class FluChat extends StatefulWidget{
   
   final List<Message> messages;
-  final String userID;
+  final ChatUser chatUser;
   final void Function(String message)? onSendPressed;
   final void Function()? onAttachmentPressed;
+  final bool? isGroupChat;
   
   const FluChat({
     super.key,
     required this.messages,
-    required this.userID,
+    required this.chatUser,
     this.onSendPressed,
     this.onAttachmentPressed,
+    this.isGroupChat
   });
 
   @override
@@ -80,13 +86,18 @@ class _FluChatState extends State<FluChat>{
 
   final TextEditingController _textEditingController = TextEditingController();
 
+  List<Message> get _messages => widget.messages..sort((a, b)=> a.createdAt.compareTo(b.createdAt));
+
+  bool isGroupChat = false;
+
   bool isSameDay(int? previousMessageTime, int currentMessageTime){
-    return previousMessageTime != null 
-      ? DateTime.fromMillisecondsSinceEpoch(currentMessageTime).difference(DateTime.fromMillisecondsSinceEpoch(previousMessageTime)).inDays != 0
-      : true;
+    int? previousDay = previousMessageTime != null ? DateTime.fromMillisecondsSinceEpoch(previousMessageTime).day: null;
+    int currentDay = DateTime.fromMillisecondsSinceEpoch(currentMessageTime).day;
+    int deltaDay = previousDay != null? currentDay - previousDay : 1;
+
+    return deltaDay == 0;
   }
 
-  List<Message> get _messages => widget.messages..sort((a, b)=> a.createdAt.compareTo(b.createdAt));
     
 
   String computeTimePartitionText(int millisecondsSinceEpoch){
@@ -103,6 +114,9 @@ class _FluChatState extends State<FluChat>{
   void initState() {
     _textEditingController.addListener(() {
       FluChatNotifier.instance.setIsTyping();
+    });
+    setState(() {
+      isGroupChat = widget.isGroupChat??false;
     });
     super.initState();
   }
@@ -131,7 +145,10 @@ class _FluChatState extends State<FluChat>{
                     itemBuilder: (context, index){
                       return Column(
                         children: [
-                          if(isSameDay( index > 0 ? _messages[index-1].createdAt: null, _messages[index].createdAt))
+                          if(!isSameDay(
+                            index>0? _messages[index-1].createdAt:null,
+                            _messages[index].createdAt
+                          ))
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
@@ -139,14 +156,21 @@ class _FluChatState extends State<FluChat>{
                                 decoration: const BoxDecoration(color: Colors.white10),
                                 child: Text(
                                   computeTimePartitionText(_messages[index].createdAt),
-                                  style: const TextStyle(fontStyle: FontStyle.italic),
+                                  style: TextStyle(
+                                    fontStyle: FontStyle.italic,
+                                    fontSize: Theme.of(context).textTheme.labelSmall?.fontSize
+                                  ),
                                 ),
                               )
                             ],
                           ),
                           Row(
-                            mainAxisAlignment: widget.userID == _messages[index].authorID ? MainAxisAlignment.end : MainAxisAlignment.start,
+                            mainAxisAlignment: widget.chatUser.userID == _messages[index].author.userID ? MainAxisAlignment.end : MainAxisAlignment.start,
                             children: [
+                              if(isGroupChat && widget.chatUser.userID != _messages[index].author.userID)
+                              CircleAvatar(
+                                child: _messages[index].author.photoUrl!.isNotEmpty ? Image.network(_messages[index].author.photoUrl!):Text(_messages[index].author.name!.substring(0,1)),
+                              ),
                               Container(
                                 constraints: BoxConstraints.loose(Size.fromWidth(MediaQuery.of(context).size.width*.75)),
                                 child: GestureDetector(
@@ -165,8 +189,13 @@ class _FluChatState extends State<FluChat>{
                                   onLongPress: ()=>debugPrint("Long Press message"),
                                   child: Container(
                                     decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(10),
-                                      color: widget.userID == _messages[index].authorID ? Theme.of(context).primaryColor.withOpacity(.2) : const Color.fromARGB(255, 241, 241, 241),
+                                      borderRadius: BorderRadius.only(
+                                        topLeft: const Radius.circular(10),
+                                        topRight: const Radius.circular(10),
+                                        bottomLeft: widget.chatUser.userID == _messages[index].author.userID ? const Radius.circular(10):Radius.zero,
+                                        bottomRight: widget.chatUser.userID != _messages[index].author.userID ? const Radius.circular(10):Radius.zero,
+                                      ),
+                                      color: widget.chatUser.userID == _messages[index].author.userID ? Theme.of(context).primaryColor.withOpacity(.2) : const Color.fromARGB(255, 241, 241, 241),
                                     ),
                                     padding: EdgeInsets.symmetric(horizontal: _messages[index].type == MessageType.text ? 15 : 2, vertical: _messages[index].type == MessageType.text ? 10 : 2),
                                     margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
