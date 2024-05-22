@@ -7,10 +7,12 @@ import 'package:flutter_chatflow/widgets/image_carousel.dart';
 enum MessageType{
   text,
   image,
+  audio,
   video,
+  pdf,
+  doc,
   file,
-  custom,
-  partition
+  custom
 }
 
 abstract class Message{
@@ -35,8 +37,50 @@ class ImageMessage extends Message{
     required super.author,
     required super.createdAt,
     required this.uri,
-    this.text
+    this.text,
+    super.meta,
   });
+}
+
+class AudioMessage extends Message{
+  final String uri;
+  String? text;
+  AudioMessage({
+    super.type = MessageType.image,
+    required super.author,
+    required super.createdAt,
+    required this.uri,
+    this.text,
+    super.meta,
+  });
+}
+
+class VideoMessage extends Message{
+  final String uri;
+  String? text;
+  VideoMessage({
+    super.type = MessageType.video,
+    required super.author,
+    required super.createdAt,
+    required this.uri,
+    this.text,
+    super.meta,
+  });
+  
+}
+
+class PdfMessage extends Message{
+  final String uri;
+  String? text;
+  PdfMessage({
+    super.type = MessageType.video,
+    required super.author,
+    required super.createdAt,
+    required this.uri,
+    this.text,
+    super.meta,
+  });
+  
 }
 
 class TextMessage extends Message{
