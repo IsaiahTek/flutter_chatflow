@@ -2,10 +2,10 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 
-class ImageWidget extends StatelessWidget{
+class AudioWidget extends StatelessWidget{
 
   final String uri;
-  const ImageWidget({
+  const AudioWidget({
     super.key,
     required this.uri
   });

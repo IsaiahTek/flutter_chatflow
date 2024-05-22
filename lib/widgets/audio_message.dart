@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_chatflow/widgets/image_widget.dart';
 
-class ImageMessageWidget extends StatelessWidget{
+class AudioMessageWidget extends StatelessWidget{
   final String uri;
   final String? text;
-  const ImageMessageWidget({
+  const AudioMessageWidget({
     super.key,
     required this.uri,
     this.text
   });
-
 
   @override
   Widget build(BuildContext context) {
