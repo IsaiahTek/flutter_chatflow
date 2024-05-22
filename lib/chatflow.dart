@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_chatflow/notifier.dart';
 import 'package:flutter_chatflow/widgets/chat_avatar.dart';
 import 'package:flutter_chatflow/widgets/computed_widget.dart';
-import 'package:flutter_chatflow/widgets/image_carousel.dart';
+import 'package:flutter_chatflow/widgets/image/image_carousel.dart';
 
 enum MessageType{
   text,

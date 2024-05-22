@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_chatflow/chatflow.dart';
-import 'package:flutter_chatflow/widgets/audio_message.dart';
-import 'package:flutter_chatflow/widgets/image_message.dart';
-import 'package:flutter_chatflow/widgets/video_message.dart';
+import 'package:flutter_chatflow/widgets/audio/audio_message.dart';
+import 'package:flutter_chatflow/widgets/image/image_message.dart';
+import 'package:flutter_chatflow/widgets/video/video_message.dart';
 
 class ComputedMessage extends StatelessWidget{
   
