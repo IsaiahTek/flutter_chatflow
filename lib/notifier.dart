@@ -1,5 +1,8 @@
 import 'dart:async';
 
+/// Notification class for features like watching and streaming
+/// user typing activity and other related features
+
 class FluChatNotifier{
 
   static final FluChatNotifier instance = FluChatNotifier._internal();

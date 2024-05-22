@@ -19,6 +19,8 @@ class ComputedMessage extends StatelessWidget{
         ImageMessage imageMessage = message as ImageMessage;
         result = ImageMessageWidget(uri: imageMessage.uri, text: imageMessage.text,);
         break;
+      case MessageType.video:
+        
       default:
         TextMessage textMessage = message as TextMessage;
         result = Text(textMessage.text);

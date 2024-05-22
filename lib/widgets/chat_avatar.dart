@@ -25,10 +25,13 @@ class ChatAvatar extends StatelessWidget{
     return Wrap(
       children: [
         if(isGroupChat && chatUser.userID != author.userID)
-        CircleAvatar(
-          child: hasPhoto
-            ? Image.network(author.photoUrl!)
-            : Text(avatarText)
+        Container(
+          margin: const EdgeInsets.only(left: 5),
+          child: CircleAvatar(
+            child: hasPhoto
+              ? Image.network(author.photoUrl!)
+              : Text(avatarText)
+          ),
         ),
       ],
     );
