@@ -106,7 +106,7 @@ class ChatUser{
   });
 }
 
-class FluChat extends StatefulWidget{
+class ChatFlow extends StatefulWidget{
   
   final List<Message> messages;
   final ChatUser chatUser;
@@ -118,7 +118,7 @@ class FluChat extends StatefulWidget{
   final bool? showUserAvatarInChat; // Used to show user photo or name initial in group chat
   final Theme? theme;
   
-  const FluChat({
+  const ChatFlow({
     super.key,
     required this.messages,
     required this.chatUser,
@@ -136,7 +136,7 @@ class FluChat extends StatefulWidget{
 
 }
 
-class _FluChatState extends State<FluChat>{
+class _FluChatState extends State<ChatFlow>{
 
   final TextEditingController _textEditingController = TextEditingController();
 

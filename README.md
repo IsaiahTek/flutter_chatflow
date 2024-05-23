@@ -60,15 +60,41 @@ class MyApp extends StatelessWidget {
 }
 
 class ChatScreen extends StatelessWidget {
+
+  List<Message> _messages = [];
+  ChatUser author = ChatUser({
+    /// It should be unique and persistent for each user
+    userID: 'randomID'
+    name: 'Name of user',
+    photoUrl: 'url of the photo on server'
+  })
+
+  void _addMessage(Message message) {
+    /// Handle sending message to server
+    _messages.insert(0, message)
+  }
+
+  void _handleSendPressed(String message) {
+    int createdAt = DateTime.now().millisecondsSinceEpoch;
+    
+    final textMessage = TextMessage(
+      author: author,
+      createdAt: createdAt,
+      text: message,
+    );
+
+    _addMessage(textMessage);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('Chat')),
       body: ChatFlow(
-        currentUser: 'user1',
-        onSend: (message) {
-          // Handle sending messages
-        },
+        messages: _messages,
+        chatUser: author,
+        onSendPressed: _handleSendPressed,
+        onAttachmentPressed: _handleImageSelection
       ),
     );
   }
