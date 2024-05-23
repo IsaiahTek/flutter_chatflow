@@ -225,35 +225,52 @@ class _FluChatState extends State<FluChat>{
                               ),
                               Container(
                                 constraints: BoxConstraints.loose(Size.fromWidth(MediaQuery.of(context).size.width*.75)),
-                                child: GestureDetector(
-                                  onTap: (){
-                                    debugPrint("Taped message");
-                                    int currentImageIndex = _imageMessages.indexWhere((element) => element.createdAt == _messages[index].createdAt);
-                                    if(_messages[index].type == MessageType.image){
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: ((context) => ImageCarousel(imageMessages: _imageMessages, currentIndex: currentImageIndex,))
-                                        )
-                                      );
-                                    }
-                                  },
-                                  onLongPress: ()=>debugPrint("Long Press message"),
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.only(
-                                        topLeft: const Radius.circular(10),
-                                        topRight: const Radius.circular(10),
-                                        bottomLeft: widget.chatUser.userID == _messages[index].author.userID ? const Radius.circular(10):Radius.zero,
-                                        bottomRight: widget.chatUser.userID != _messages[index].author.userID ? const Radius.circular(10):Radius.zero,
+                                child: Column(
+                                  children: [
+                                    if (showUserAvatarInChat)
+                                    Container(
+                                      decoration: BoxDecoration(
+                                        color: Theme.of(context).primaryColor.withOpacity(.1)
                                       ),
-                                      color: widget.chatUser.userID == _messages[index].author.userID ? Theme.of(context).primaryColor.withOpacity(.2) : const Color.fromARGB(255, 241, 241, 241),
+                                      child: Text(
+                                        _messages[index].author.name??_messages[index].author.userID,
+                                        style: const TextStyle(
+                                          overflow: TextOverflow.ellipsis,
+                                          fontStyle: FontStyle.italic
+                                        ),
+                                      ),
                                     ),
-                                    padding: EdgeInsets.symmetric(horizontal: _messages[index].type == MessageType.text ? 15 : 2, vertical: _messages[index].type == MessageType.text ? 10 : 2),
-                                    margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                                    child: ComputedMessage(message: _messages[index]),
-                                  ),
-                                ),
+                                    GestureDetector(
+                                      onTap: (){
+                                        debugPrint("Taped message");
+                                        int currentImageIndex = _imageMessages.indexWhere((element) => element.createdAt == _messages[index].createdAt);
+                                        if(_messages[index].type == MessageType.image){
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: ((context) => ImageCarousel(imageMessages: _imageMessages, currentIndex: currentImageIndex,))
+                                            )
+                                          );
+                                        }
+                                      },
+                                      onLongPress: ()=>debugPrint("Long Press message"),
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.only(
+                                            topLeft: const Radius.circular(10),
+                                            topRight: const Radius.circular(10),
+                                            bottomLeft: widget.chatUser.userID == _messages[index].author.userID ? const Radius.circular(10):Radius.zero,
+                                            bottomRight: widget.chatUser.userID != _messages[index].author.userID ? const Radius.circular(10):Radius.zero,
+                                          ),
+                                          color: widget.chatUser.userID == _messages[index].author.userID ? Theme.of(context).primaryColor.withOpacity(.2) : const Color.fromARGB(255, 241, 241, 241),
+                                        ),
+                                        padding: EdgeInsets.symmetric(horizontal: _messages[index].type == MessageType.text ? 15 : 2, vertical: _messages[index].type == MessageType.text ? 10 : 2),
+                                        margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                                        child: ComputedMessage(message: _messages[index]),
+                                      ),
+                                    ),
+                                  ],
+                                )
                               )
                             ],
                           )
