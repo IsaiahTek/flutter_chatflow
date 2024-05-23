@@ -86,6 +86,12 @@ class ChatScreen extends StatelessWidget {
     _addMessage(textMessage);
   }
 
+  void _handleOnAttachmentPressed() async {
+    /// logic for adding image to chat.
+    /// You could use a dialog to choose between different media types
+    /// And rename the function accordingly
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -94,7 +100,7 @@ class ChatScreen extends StatelessWidget {
         messages: _messages,
         chatUser: author,
         onSendPressed: _handleSendPressed,
-        onAttachmentPressed: _handleImageSelection
+        onAttachmentPressed: _handleOnAttachmentPressed
       ),
     );
   }
