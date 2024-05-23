@@ -7,10 +7,13 @@ import 'package:flutter_chatflow/widgets/video/video_message.dart';
 class ComputedMessage extends StatelessWidget{
   
   final Message message;
+
+  final bool isAuthor;
   
   const ComputedMessage({
     super.key,
-    required this.message
+    required this.message,
+    required this.isAuthor,
   });
   
   @override
@@ -19,7 +22,7 @@ class ComputedMessage extends StatelessWidget{
     switch (message.type) {
       case MessageType.image:
         ImageMessage imageMessage = message as ImageMessage;
-        result = ImageMessageWidget(uri: imageMessage.uri, text: imageMessage.text,);
+        result = ImageMessageWidget(uri: imageMessage.uri, text: imageMessage.text, isAuthor: isAuthor,);
         break;
       case MessageType.video:
         VideoMessage videoMessage = message as VideoMessage;

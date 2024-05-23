@@ -284,7 +284,10 @@ class _FluChatState extends State<FluChat>{
                                         ),
                                         Container(
                                           padding: showUserAvatarInChat && widget.chatUser.userID != _messages[index].author.userID && _messages[index].type == MessageType.text? const EdgeInsets.only(left: 15, right: 15, top: 3, bottom: 8) : const EdgeInsets.all(0),
-                                          child: ComputedMessage(message: _messages[index]),
+                                          child: ComputedMessage(
+                                            message: _messages[index],
+                                            isAuthor: _messages[index].author.userID == widget.chatUser.userID,
+                                          ),
                                         ),
                                       ],
                                     )
