@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_chatflow/chatflow.dart';
+import 'package:flutter_chatflow/utils.dart';
 
 class ChatAvatar extends StatelessWidget{
   final bool showUserAvatarInChat;
@@ -28,6 +29,7 @@ class ChatAvatar extends StatelessWidget{
         Container(
           margin: const EdgeInsets.only(left: 5),
           child: CircleAvatar(
+            backgroundColor: createColorFromHashCode(author.userID.hashCode),
             child: hasPhoto
               ? Image.network(author.photoUrl!)
               : Text(avatarText)
