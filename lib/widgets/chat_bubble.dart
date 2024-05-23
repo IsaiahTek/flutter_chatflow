@@ -67,14 +67,20 @@ class ChatBubble extends StatelessWidget{
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
-              decoration: const BoxDecoration(color: Colors.white10),
               margin: const EdgeInsets.symmetric(vertical: 15),
               child: Container(
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
+                  borderRadius: BorderRadius.circular(5),
                   color: Colors.white,
+                  boxShadow: const [
+                    BoxShadow(
+                      offset: Offset(0.00, 0.5),
+                      color: Colors.black26,
+                    )
+                  ]
+                  
                 ),
-                padding: const EdgeInsets.all(5),
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                 child: Text(
                   computeTimePartitionText(message.createdAt),
                   style: TextStyle(
@@ -97,13 +103,20 @@ class ChatBubble extends StatelessWidget{
             Container(
               constraints: BoxConstraints.loose(Size.fromWidth(MediaQuery.of(context).size.width*.75)),
               decoration: BoxDecoration(
+                boxShadow: const [
+                  BoxShadow(
+                    offset: Offset(0.00, 1),
+                    color: Colors.black26,
+                    // blurRadius: 10.0,
+                  )
+                ],
                 borderRadius: BorderRadius.only(
                   topLeft: const Radius.circular(10),
                   topRight: const Radius.circular(10),
                   bottomLeft: chatUser.userID == message.author.userID ? const Radius.circular(10):Radius.zero,
                   bottomRight: chatUser.userID != message.author.userID ? const Radius.circular(10):Radius.zero,
                 ),
-                color: chatUser.userID == message.author.userID ? Theme.of(context).primaryColor.withOpacity(.2) : Colors.white,
+                color: chatUser.userID == message.author.userID ? Theme.of(context).primaryColor.withOpacity(.2) : Colors.white
               ),
               padding: showUserAvatarInChat && chatUser.userID != message.author.userID? const EdgeInsets.only(top: 0, right: 0, bottom: 0) : EdgeInsets.symmetric(
                 horizontal: message.type == MessageType.text ? 15 : 2,
