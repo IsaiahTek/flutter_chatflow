@@ -1,11 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_chatflow/notifier.dart';
-import 'package:flutter_chatflow/utils.dart';
-import 'package:flutter_chatflow/widgets/chat_avatar.dart';
 import 'package:flutter_chatflow/widgets/chat_bubble.dart';
-import 'package:flutter_chatflow/widgets/computed_widget.dart';
-import 'package:flutter_chatflow/widgets/image/image_carousel.dart';
 
 enum MessageType{
   text,
@@ -184,7 +179,15 @@ class _FluChatState extends State<ChatFlow>{
                     itemCount: _messages.length,
                     physics: const NeverScrollableScrollPhysics(),
                     itemBuilder: (context, index){
-                      return ChatBubble(message: _messages[index], chatUser: widget.chatUser, imageMessages: _imageMessages, showUserAvatarInChat: showUserAvatarInChat, previousMessageCreatedAt: index>1?_messages[index-1].createdAt:null);
+                      return ChatBubble(
+                        message: _messages[index],
+                        chatUser: widget.chatUser,
+                        imageMessages: _imageMessages,
+                        showUserAvatarInChat: showUserAvatarInChat,
+                        previousMessageCreatedAt: index > 0 
+                          ?_messages[index-1].createdAt
+                          :null
+                      );
                     }
                   ),
                 ],

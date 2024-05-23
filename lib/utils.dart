@@ -48,14 +48,7 @@ Duration getDurationTillNow(DateTime pastTime){
 }
 
 String getSentAt(int millisecondsSinceEpoch){
-  String sentAt = '';
   DateTime date = DateTime.fromMillisecondsSinceEpoch(millisecondsSinceEpoch);
-  Duration longAgo = getDurationTillNow(date);
-  int durationInDays = longAgo.inDays;
-  if(durationInDays > date.weekday ){
-    sentAt = '${date.year} ${getMonthName(date.month).toString().substring(0,3)} ${date.day} ${getWeekDayName(date.weekday).toString().substring(0,3)} ${date.hour} ${date.minute} ${date.second}';
-  }else{
-    sentAt = '${getWeekDayName(date.weekday).toString().substring(0,3)} ${date.hour}:${date.minute}:${date.second}';
-  }
+  String sentAt = '${date.hour}:${date.minute}';
   return sentAt;
 }

@@ -33,10 +33,26 @@ class ChatBubble extends StatelessWidget{
     
 
   String computeTimePartitionText(int millisecondsSinceEpoch){
-    int year = DateTime.fromMillisecondsSinceEpoch(millisecondsSinceEpoch).year;
-    int month = DateTime.fromMillisecondsSinceEpoch(millisecondsSinceEpoch).month;
-    int day = DateTime.fromMillisecondsSinceEpoch(millisecondsSinceEpoch).day;
-    return '$day/$month/$year';
+    DateTime date = DateTime.fromMillisecondsSinceEpoch(millisecondsSinceEpoch);
+    DateTime now = DateTime.now();
+    int longAgo = now.day - date.day;
+    String result;
+    switch (longAgo) {
+      case 0:
+        result = "TODAY";
+        break;
+      case 1:
+        result = "YESTERDAY";
+        break;
+      default:
+        if(longAgo <= 6){
+          result = getWeekDayName(date.weekday);
+        }else{
+          result = '${date.day}/${date.month}/${date.year}';
+        }
+
+    }
+    return result;
   }
 
   @override
@@ -53,11 +69,18 @@ class ChatBubble extends StatelessWidget{
             Container(
               decoration: const BoxDecoration(color: Colors.white10),
               margin: const EdgeInsets.symmetric(vertical: 15),
-              child: Text(
-                computeTimePartitionText(message.createdAt),
-                style: TextStyle(
-                  fontStyle: FontStyle.italic,
-                  fontSize: Theme.of(context).textTheme.labelSmall?.fontSize
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: Colors.white,
+                ),
+                padding: const EdgeInsets.all(5),
+                child: Text(
+                  computeTimePartitionText(message.createdAt),
+                  style: TextStyle(
+                    fontStyle: FontStyle.italic,
+                    fontSize: Theme.of(context).textTheme.labelSmall?.fontSize
+                  ),
                 ),
               ),
             )
