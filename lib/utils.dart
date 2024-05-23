@@ -9,3 +9,53 @@ Color createColorFromHashCode(int hashCode){
   debugPrint("Created Color: $r, $g, $b");
   return Color.fromARGB(255, r, g, b);
 }
+
+List<String> weekDays = [
+  'Monday',
+  'Tuesday',
+  'Wednesday',
+  'Thursday',
+  'Friday',
+  'Saturday',
+  'Sunday'
+];
+
+List<String> months = [
+  'January',
+  'February',
+  'March',
+  'April',
+  'May',
+  'June',
+  'July',
+  'August',
+  'September',
+  'October',
+  'November',
+  'December'
+];
+
+getWeekDayName(int weekday){
+  return weekDays[weekday-1];
+}
+
+getMonthName(int month){
+  return months[month-1];
+}
+
+Duration getDurationTillNow(DateTime pastTime){
+  return DateTime.now().difference(pastTime);
+}
+
+String getSentAt(int millisecondsSinceEpoch){
+  String sentAt = '';
+  DateTime date = DateTime.fromMillisecondsSinceEpoch(millisecondsSinceEpoch);
+  Duration longAgo = getDurationTillNow(date);
+  int durationInDays = longAgo.inDays;
+  if(durationInDays > date.weekday ){
+    sentAt = '${date.year} ${getMonthName(date.month).toString().substring(0,3)} ${date.day} ${getWeekDayName(date.weekday).toString().substring(0,3)} ${date.hour} ${date.minute} ${date.second}';
+  }else{
+    sentAt = '${getWeekDayName(date.weekday).toString().substring(0,3)} ${date.hour}:${date.minute}:${date.second}';
+  }
+  return sentAt;
+}

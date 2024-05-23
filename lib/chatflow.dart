@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_chatflow/notifier.dart';
 import 'package:flutter_chatflow/utils.dart';
 import 'package:flutter_chatflow/widgets/chat_avatar.dart';
+import 'package:flutter_chatflow/widgets/chat_bubble.dart';
 import 'package:flutter_chatflow/widgets/computed_widget.dart';
 import 'package:flutter_chatflow/widgets/image/image_carousel.dart';
 
@@ -144,22 +146,7 @@ class _FluChatState extends State<ChatFlow>{
 
   bool showUserAvatarInChat = false;
 
-  bool isSameDay(int? previousMessageTime, int currentMessageTime){
-    int? previousDay = previousMessageTime != null ? DateTime.fromMillisecondsSinceEpoch(previousMessageTime).day: null;
-    int currentDay = DateTime.fromMillisecondsSinceEpoch(currentMessageTime).day;
-    int deltaDay = previousDay != null? currentDay - previousDay : 1;
 
-    return deltaDay == 0;
-  }
-
-    
-
-  String computeTimePartitionText(int millisecondsSinceEpoch){
-    int year = DateTime.fromMillisecondsSinceEpoch(millisecondsSinceEpoch).year;
-    int month = DateTime.fromMillisecondsSinceEpoch(millisecondsSinceEpoch).month;
-    int day = DateTime.fromMillisecondsSinceEpoch(millisecondsSinceEpoch).day;
-    return '$day/$month/$year';
-  }
 
   // Passed to image carousel for viewing all images in current chat
   List<ImageMessage> get _imageMessages => _messages.where((element) => element.type == MessageType.image).cast<ImageMessage>().toList();
@@ -197,107 +184,7 @@ class _FluChatState extends State<ChatFlow>{
                     itemCount: _messages.length,
                     physics: const NeverScrollableScrollPhysics(),
                     itemBuilder: (context, index){
-                      return Column(
-                        children: [
-                          if(!isSameDay(
-                            index>0? _messages[index-1].createdAt:null,
-                            _messages[index].createdAt
-                          ))
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Container(
-                                decoration: const BoxDecoration(color: Colors.white10),
-                                margin: const EdgeInsets.symmetric(vertical: 15),
-                                child: Text(
-                                  computeTimePartitionText(_messages[index].createdAt),
-                                  style: TextStyle(
-                                    fontStyle: FontStyle.italic,
-                                    fontSize: Theme.of(context).textTheme.labelSmall?.fontSize
-                                  ),
-                                ),
-                              )
-                            ],
-                          ),
-                          Row(
-                            mainAxisAlignment: widget.chatUser.userID == _messages[index].author.userID ? MainAxisAlignment.end : MainAxisAlignment.start,
-                            children: [
-                              ChatAvatar(
-                                showUserAvatarInChat: showUserAvatarInChat,
-                                author: _messages[index].author,
-                                chatUser: widget.chatUser,
-                              ),
-                              Container(
-                                constraints: BoxConstraints.loose(Size.fromWidth(MediaQuery.of(context).size.width*.75)),
-                                child: 
-                                GestureDetector(
-                                  onTap: (){
-                                    debugPrint("Taped message");
-                                    int currentImageIndex = _imageMessages.indexWhere((element) => element.createdAt == _messages[index].createdAt);
-                                    if(_messages[index].type == MessageType.image){
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: ((context) => ImageCarousel(imageMessages: _imageMessages, currentIndex: currentImageIndex,))
-                                        )
-                                      );
-                                    }
-                                  },
-                                  onLongPress: ()=>debugPrint("Long Press message"),
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.only(
-                                        topLeft: const Radius.circular(10),
-                                        topRight: const Radius.circular(10),
-                                        bottomLeft: widget.chatUser.userID == _messages[index].author.userID ? const Radius.circular(10):Radius.zero,
-                                        bottomRight: widget.chatUser.userID != _messages[index].author.userID ? const Radius.circular(10):Radius.zero,
-                                      ),
-                                      color: widget.chatUser.userID == _messages[index].author.userID ? Theme.of(context).primaryColor.withOpacity(.2) : Colors.white,
-                                    ),
-                                    padding: showUserAvatarInChat && widget.chatUser.userID != _messages[index].author.userID? const EdgeInsets.only(top: 0, right: 0, bottom: 0) : EdgeInsets.symmetric(
-                                      horizontal: _messages[index].type == MessageType.text ? 15 : 2,
-                                      vertical: _messages[index].type == MessageType.text ? 10 : 2
-                                    ),
-                                    margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        if (showUserAvatarInChat && widget.chatUser.userID != _messages[index].author.userID)
-                                        Container(
-                                          width: MediaQuery.of(context).size.width,
-                                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
-                                          decoration: BoxDecoration(
-                                            color: Colors.black.withOpacity(.003),
-                                            borderRadius: const BorderRadius.only(
-                                              topLeft: Radius.circular(10),
-                                              topRight: Radius.circular(10),
-                                            ),
-                                          ),
-                                          child: Text(
-                                            "~${_messages[index].author.name??_messages[index].author.userID}",
-                                            style: TextStyle(
-                                              overflow: TextOverflow.ellipsis,
-                                              fontStyle: FontStyle.italic,
-                                              color: createColorFromHashCode(_messages[index].author.userID.hashCode)
-                                            ),
-                                          ),
-                                        ),
-                                        Container(
-                                          padding: showUserAvatarInChat && widget.chatUser.userID != _messages[index].author.userID && _messages[index].type == MessageType.text? const EdgeInsets.only(left: 15, right: 15, top: 3, bottom: 8) : const EdgeInsets.all(0),
-                                          child: ComputedMessage(
-                                            message: _messages[index],
-                                            isAuthor: _messages[index].author.userID == widget.chatUser.userID,
-                                          ),
-                                        ),
-                                      ],
-                                    )
-                                  ),
-                                ),
-                              )
-                            ],
-                          )
-                        ],
-                      );
+                      return ChatBubble(message: _messages[index], chatUser: widget.chatUser, imageMessages: _imageMessages, showUserAvatarInChat: showUserAvatarInChat, previousMessageCreatedAt: index>1?_messages[index-1].createdAt:null);
                     }
                   ),
                 ],
