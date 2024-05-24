@@ -112,7 +112,8 @@ class ChatFlow extends StatefulWidget{
   final void Function()? onMessageLongPressed;
   final void Function()? onMessageSwipedLeft;
   final void Function()? onMessageSwipedRight;
-  final bool? showUserAvatarInChat; // Used to show user photo or name initial in group chat
+  final bool? showUserAvatarInChat;
+  final void Function(List<Message> messages)? onDeleteMessages;
   final Theme? theme;
   
   const ChatFlow({
@@ -125,6 +126,7 @@ class ChatFlow extends StatefulWidget{
     this.onMessageSwipedLeft,
     this.onMessageSwipedRight,
     this.showUserAvatarInChat,
+    this.onDeleteMessages,
     this.theme
   });
 
@@ -146,6 +148,13 @@ class _FluChatState extends State<ChatFlow>{
   // Passed to image carousel for viewing all images in current chat
   List<ImageMessage> get _imageMessages => _messages.where((element) => element.type == MessageType.image).cast<ImageMessage>().toList();
 
+  List<Message> selectedMessages = [];
+
+  handleSetSelectedMessage(List<Message> list){
+    setState(() {
+      selectedMessages = list;
+    });
+  }
   @override
   void initState() {
     _textEditingController.addListener(() {
@@ -167,84 +176,122 @@ class _FluChatState extends State<ChatFlow>{
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
-      child: Column(
+      child: Stack(
         children: [
-          Expanded(
-            child: SingleChildScrollView(
-              reverse: true,
-              child: Column(
-                children: [
-                  ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: _messages.length,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemBuilder: (context, index){
-                      return ChatBubble(
-                        message: _messages[index],
-                        chatUser: widget.chatUser,
-                        imageMessages: _imageMessages,
-                        showUserAvatarInChat: showUserAvatarInChat,
-                        previousMessageCreatedAt: index > 0 
-                          ?_messages[index-1].createdAt
-                          :null
-                      );
-                    }
-                  ),
-                ],
-              ),
-            )
-          ),
-
-          Container(
-            width: MediaQuery.of(context).size.width,
-            padding: const EdgeInsets.only(left: 4, top: 4, bottom: 4),
-            margin: const EdgeInsets.all(2),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(30),
-              color: Theme.of(context).primaryColor
-            ),
-            child: Row(
-              children: [
-                IconButton.filledTonal(
-                  onPressed: (){
-                    if(widget.onAttachmentPressed != null){
-                      widget.onAttachmentPressed!();
-                    }
-                  },
-                  icon: const Icon(
-                    Icons.add,
-                    color: Colors.white,
-                  ),
-                ),
-                const SizedBox(width: 10,),
-                Expanded(
-                  child: TextField(
-                    decoration: const InputDecoration(
-                      hintText: "Start typing",
-                      border: InputBorder.none,
-                    ),
-                    maxLines: 3,
-                    minLines: 1,
-                    style: const TextStyle(color: Colors.white),
-                    controller: _textEditingController,
-                    onChanged: (e) {
-                      FluChatNotifier.instance.setIsTyping();
-                    },
-                  )
-                ),
-                IconButton.filledTonal(
-                  onPressed: (){
-                    widget.onSendPressed != null ? widget.onSendPressed!(_textEditingController.text) : null;
-                    _textEditingController.clear();
-                  },
-                  icon: const Icon(
-                    Icons.send,
-                    color: Colors.white,
+          Column(
+            children: [
+              Expanded(
+                child: SingleChildScrollView(
+                  reverse: true,
+                  child: Column(
+                    children: [
+                      ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: _messages.length,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemBuilder: (context, index){
+                          return ChatBubble(
+                            message: _messages[index],
+                            chatUser: widget.chatUser,
+                            imageMessages: _imageMessages,
+                            showUserAvatarInChat: showUserAvatarInChat,
+                            previousMessageCreatedAt: index > 0 
+                              ?_messages[index-1].createdAt
+                              :null,
+                            currentMessageIndex: index,
+                            setSelectedMessages: handleSetSelectedMessage,
+                            selectedMessages: selectedMessages,
+                          );
+                        }
+                      ),
+                    ],
                   ),
                 )
-              ],
-            )
+              ),
+
+              Container(
+                width: MediaQuery.of(context).size.width,
+                padding: const EdgeInsets.only(left: 4, top: 4, bottom: 4),
+                margin: const EdgeInsets.all(2),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(30),
+                  color: Theme.of(context).primaryColor
+                ),
+                child: Row(
+                  children: [
+                    IconButton.filledTonal(
+                      onPressed: (){
+                        if(widget.onAttachmentPressed != null){
+                          widget.onAttachmentPressed!();
+                        }
+                      },
+                      icon: const Icon(
+                        Icons.add,
+                        color: Colors.white,
+                      ),
+                    ),
+                    const SizedBox(width: 10,),
+                    Expanded(
+                      child: TextField(
+                        decoration: const InputDecoration(
+                          hintText: "Start typing",
+                          border: InputBorder.none,
+                        ),
+                        maxLines: 3,
+                        minLines: 1,
+                        style: const TextStyle(color: Colors.white),
+                        controller: _textEditingController,
+                        onChanged: (e) {
+                          FluChatNotifier.instance.setIsTyping();
+                        },
+                      )
+                    ),
+                    IconButton.filledTonal(
+                      onPressed: (){
+                        widget.onSendPressed != null ? widget.onSendPressed!(_textEditingController.text) : null;
+                        _textEditingController.clear();
+                      },
+                      icon: const Icon(
+                        Icons.send,
+                        color: Colors.white,
+                      ),
+                    )
+                  ],
+                )
+              ),
+              
+            ],
           ),
+          if(selectedMessages.isNotEmpty)
+          Positioned(
+            top: 5,
+            // left: 5,
+            right: 20,
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(10),
+                boxShadow: const [
+                  BoxShadow(
+                    offset: Offset(0, .5)
+                  )
+                ]
+              ),
+              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 15),
+              // margin: const EdgeInsets.only(top: 10),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  IconButton(onPressed: (){
+                    if(widget.onDeleteMessages != null){
+                      widget.onDeleteMessages!(selectedMessages);
+                    }
+                  }, icon: Icon(Icons.delete, color: Theme.of(context).primaryColor,))
+                ],
+              ),
+            ),
+          ),
+          
         ],
       ),
     );
