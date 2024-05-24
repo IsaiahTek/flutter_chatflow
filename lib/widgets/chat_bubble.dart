@@ -101,13 +101,14 @@ class ChatBubble extends StatelessWidget{
               chatUser: chatUser,
             ),
             Container(
-              constraints: BoxConstraints.loose(Size.fromWidth(MediaQuery.of(context).size.width*.75)),
+              constraints: BoxConstraints.loose(Size.fromWidth(MediaQuery.of(context).size.width*.70)),
               decoration: BoxDecoration(
-                boxShadow: const [
+                boxShadow: [
                   BoxShadow(
-                    offset: Offset(0.00, 1),
-                    color: Colors.black26,
+                    offset: chatUser.userID != message.author.userID ? const Offset(0.00, 1) : const Offset(-3, 4),
+                    color: chatUser.userID != message.author.userID ? Colors.black26 : const Color.fromARGB(255, 238, 238, 238),
                     // blurRadius: 10.0,
+                    
                   )
                 ],
                 borderRadius: BorderRadius.only(

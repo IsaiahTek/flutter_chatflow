@@ -45,8 +45,9 @@ class _ImageCarouselState extends State<ImageCarousel> {
           // Image And Buttons below
           ImagesSwipe(currentIndex: currentIndex, setCurrentIndex: handleSetCurrentIndex, uri: _imageMessages[currentIndex].uri, imagesLength: _imageMessages.length),
           // Text below if available
+          const SizedBox(height: 30,),
           if(_imageMessages[currentIndex].text != null)
-          Text("${_imageMessages[currentIndex].text}")
+          Text("${_imageMessages[currentIndex].text}", style: const TextStyle(color: Colors.white),)
         ],
       )
     );
