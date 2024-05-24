@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_chatflow/chatflow.dart';
-import 'package:flutter_chatflow/widgets/image/image_widget.dart';
+import 'package:flutter_chatflow/widgets/image/image_swipe.dart';
 
 class ImageCarousel extends StatefulWidget{
 
@@ -23,12 +23,16 @@ class _ImageCarouselState extends State<ImageCarousel> {
 
   late int currentIndex;
 
-  double dragDx = 0;
-
   @override
   void initState() {
     currentIndex = widget.currentIndex ?? 0;
     super.initState();
+  }
+
+  handleSetCurrentIndex(int index){
+    setState(() {
+      currentIndex = index;
+    });
   }
   
   @override
@@ -39,42 +43,7 @@ class _ImageCarouselState extends State<ImageCarousel> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           // Image And Buttons below
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              // Left Arror Button
-              
-              // Image
-              GestureDetector(
-                onHorizontalDragUpdate: (details) {
-                  setState(() {
-                    dragDx = details.delta.dx;
-                  });
-                },
-                onHorizontalDragEnd: (details) {
-                  debugPrint("Swiped to $dragDx");
-                  if(dragDx > 0 && currentIndex > 0){
-                    setState(() {
-                      currentIndex -= 1;
-                    });
-                  }else if(dragDx < 0 && _imageMessages.length - 1 > currentIndex){
-                    setState(() {
-                      currentIndex += 1;
-                    });
-                  }
-                },
-                child: ConstrainedBox(
-                  constraints: BoxConstraints.loose(
-                    Size(MediaQuery.of(context).size.width*0.90, MediaQuery.of(context).size.height*0.80)
-                  ),
-                  child: ImageWidget(uri: _imageMessages[currentIndex].uri),
-                ),
-              ),
-
-              // Right Arrow Button
-
-            ],
-          ),
+          ImagesSwipe(currentIndex: currentIndex, setCurrentIndex: handleSetCurrentIndex, uri: _imageMessages[currentIndex].uri, imagesLength: _imageMessages.length),
           // Text below if available
           if(_imageMessages[currentIndex].text != null)
           Text("${_imageMessages[currentIndex].text}")
