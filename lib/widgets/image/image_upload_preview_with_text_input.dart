@@ -30,14 +30,16 @@ class _ImageUploadPreviewWithTextInputState extends State<ImageUploadPreviewWith
   void initState() {
     currentIndex = widget.currentIndex??0;
     for (var uri in widget.imagesUri) {
-      uploadingMediaWithText.add(MediaSelectionWithText(uri: uri));
+      uploadingMediaWithText.add(
+        MediaSelectionWithText(uri: uri, text: null)
+      );
     }
-    textEditingController.text = uploadingMediaWithText[currentIndex].text??"";
-    textEditingController.addListener(() {
-      MediaSelectionWithText newMediaWithText = MediaSelectionWithText(uri: widget.imagesUri[currentIndex], text: textEditingController.text);
-      uploadingMediaWithText.replaceRange(currentIndex, currentIndex, [newMediaWithText]);
-    });
+    
     super.initState();
+  }
+
+  handleSetMediaSelectionWithText(String text){
+    uploadingMediaWithText[currentIndex].copyWith(text: text);
   }
 
   handleSetCurrentIndex(int index){
@@ -45,8 +47,6 @@ class _ImageUploadPreviewWithTextInputState extends State<ImageUploadPreviewWith
       currentIndex = index;
     });
   }
-
-  TextEditingController textEditingController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -58,15 +58,71 @@ class _ImageUploadPreviewWithTextInputState extends State<ImageUploadPreviewWith
           // Image And Buttons below
           ImagesSwipe(currentIndex: currentIndex, setCurrentIndex: handleSetCurrentIndex, uri: widget.imagesUri[currentIndex], imagesLength: widget.imagesUri.length),
           // Text Input below if available
-          TextField(
-            controller: textEditingController,
-            onSubmitted: (e){
-              widget.setMediaSelectionsWithText(uploadingMediaWithText);
-              Navigator.pop(context);
-            },
+          Container(
+            width: MediaQuery.of(context).size.width,
+            margin: const EdgeInsets.symmetric(horizontal: 20),
+            child: Row(
+              children: [
+                Expanded(
+                  child: ControlledInput(
+                    setMediaSelectionsWithText: handleSetMediaSelectionWithText
+                  )
+                ),
+                IconButton(
+                  onPressed: (){
+                    widget.setMediaSelectionsWithText(uploadingMediaWithText);
+                    Navigator.pop(context);
+                  },
+                  color: Colors.white,
+                  icon: const Icon(Icons.send))
+              ],
+            ),
           )
         ],
       )
+    );
+  }
+}
+
+class ControlledInput extends StatefulWidget{
+  final void Function(String text) setMediaSelectionsWithText;
+  final String? initialText;
+
+  const ControlledInput({
+    super.key,
+    required this.setMediaSelectionsWithText,
+    this.initialText
+  });
+
+  @override
+  State<ControlledInput> createState() => _ControlledInputState();
+}
+
+class _ControlledInputState extends State<ControlledInput> {
+
+  TextEditingController textEditingController = TextEditingController();
+
+  @override
+  void initState() {
+    textEditingController.text = widget.initialText??"";
+    textEditingController.addListener(() {
+      widget.setMediaSelectionsWithText(textEditingController.text);
+    });
+    super.initState();
+  }
+  @override
+  Widget build(BuildContext context) {
+    return TextField(
+      decoration: const InputDecoration(
+        hintStyle: TextStyle(color: Colors.white70),
+        hintText: "Enter image text here"
+      ),
+      
+      controller: textEditingController,
+      onSubmitted: (e){
+        widget.setMediaSelectionsWithText(textEditingController.text);
+        Navigator.pop(context);
+      },
     );
   }
 }

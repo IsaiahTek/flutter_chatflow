@@ -130,6 +130,7 @@ class _ChatBubbleState extends State<ChatBubble> {
                 borderRadius: BorderRadius.circular(3),
                 color: Colors.white
               ),
+              margin: const EdgeInsets.only(left: 10),
               padding: const EdgeInsets.all(3),
               child: GestureDetector(
                 onTap: () {
@@ -142,6 +143,7 @@ class _ChatBubbleState extends State<ChatBubble> {
               constraints: BoxConstraints.loose(Size.fromWidth(MediaQuery.of(context).size.width*.70)),
               decoration: BoxDecoration(
                 boxShadow: [
+                  if(widget.chatUser.userID != widget.message.author.userID)
                   BoxShadow(
                     offset: widget.chatUser.userID != widget.message.author.userID ? const Offset(0.00, 1) : const Offset(-3, 4),
                     color: widget.chatUser.userID != widget.message.author.userID ? Colors.black26 : const Color.fromARGB(255, 238, 238, 238),
@@ -155,7 +157,7 @@ class _ChatBubbleState extends State<ChatBubble> {
                   bottomLeft: widget.chatUser.userID == widget.message.author.userID ? const Radius.circular(10):Radius.zero,
                   bottomRight: widget.chatUser.userID != widget.message.author.userID ? const Radius.circular(10):Radius.zero,
                 ),
-                color: widget.chatUser.userID == widget.message.author.userID ? Theme.of(context).primaryColor.withOpacity(.2) : Colors.white
+                color: widget.chatUser.userID == widget.message.author.userID ? Theme.of(context).primaryColor.withOpacity(.1) : Colors.white
               ),
               padding: widget.showUserAvatarInChat && widget.chatUser.userID != widget.message.author.userID? const EdgeInsets.only(top: 0, right: 0, bottom: 0) : EdgeInsets.symmetric(
                 horizontal: widget.message.type == MessageType.text ? 15 : 2,

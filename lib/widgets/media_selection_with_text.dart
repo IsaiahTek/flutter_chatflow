@@ -1,8 +1,12 @@
 class MediaSelectionWithText{
   final String uri;
-  final String? text;
+  String? text;
   MediaSelectionWithText({
     required this.uri,
     this.text
   });
+
+  copyWith({required String text}){
+    this.text = text;
+  }
 }

@@ -12,10 +12,19 @@ class ImageMessageWidget extends StatelessWidget{
     required this.isAuthor
   });
 
+  bool hasText(){
+    if(text is String){
+      return text!.isNotEmpty;
+    }else{
+      return false;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           ClipRRect(
             borderRadius: 
@@ -34,7 +43,10 @@ class ImageMessageWidget extends StatelessWidget{
             ),
             child: ImageWidget(uri: uri),
           ),
-          if(text != null) Text(text!)
+          if(text != null && text!.isNotEmpty) Container(
+            padding: const EdgeInsets.all(5),
+            child: Text(text!),
+          )
         ],
       )
     );

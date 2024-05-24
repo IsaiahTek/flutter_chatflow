@@ -283,10 +283,18 @@ class _FluChatState extends State<ChatFlow>{
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   IconButton(onPressed: (){
+                    setState(() {
+                      selectedMessages = [];
+                    });
+                  }, icon: const Icon(Icons.cancel, color: Colors.black54,)),
+                  IconButton(onPressed: (){
                     if(widget.onDeleteMessages != null){
                       widget.onDeleteMessages!(selectedMessages);
+                      setState(() {
+                        selectedMessages = [];
+                      });
                     }
-                  }, icon: Icon(Icons.delete, color: Theme.of(context).primaryColor,))
+                  }, icon: Icon(Icons.delete, color: Theme.of(context).primaryColor,)),
                 ],
               ),
             ),
