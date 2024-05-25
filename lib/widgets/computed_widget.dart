@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_chatflow/chatflow.dart';
+import 'package:flutter_chatflow/models.dart';
+import 'package:flutter_chatflow/utils/types.dart';
 import 'package:flutter_chatflow/widgets/audio/audio_message.dart';
 import 'package:flutter_chatflow/widgets/image/image_message.dart';
 import 'package:flutter_chatflow/widgets/video/video_message.dart';

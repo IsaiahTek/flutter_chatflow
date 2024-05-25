@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_chatflow/chatflow.dart';
-import 'package:flutter_chatflow/utils.dart';
+import 'package:flutter_chatflow/models.dart';
+import 'package:flutter_chatflow/utils/types.dart';
+import 'package:flutter_chatflow/utils/utils.dart';
 import 'package:flutter_chatflow/widgets/chat_avatar.dart';
 import 'package:flutter_chatflow/widgets/computed_widget.dart';
 import 'package:flutter_chatflow/widgets/image/image_carousel.dart';
