@@ -44,8 +44,15 @@ class _ImageUploadPreviewWithTextInputState extends State<ImageUploadPreviewWith
 
   handleSetCurrentIndex(int index){
     setState(() {
+      debugPrint("Leaving intialText ${uploadingMediaWithText[currentIndex].text}");
       currentIndex = index;
+      debugPrint("Leaving intialText ${uploadingMediaWithText[currentIndex].text}");
     });
+  }
+
+  void handleOnSumitted(){
+    widget.setMediaSelectionsWithText(uploadingMediaWithText);
+    Navigator.pop(context);
   }
 
   @override
@@ -54,7 +61,12 @@ class _ImageUploadPreviewWithTextInputState extends State<ImageUploadPreviewWith
       backgroundColor: Colors.black,
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
+          Container(
+            padding: const EdgeInsets.symmetric(vertical: 20),
+            child: Text("${currentIndex+1} of ${widget.imagesUri.length}", style: const TextStyle(color: Colors.white),),
+          ),
           // Image And Buttons below
           ImagesSwipe(currentIndex: currentIndex, setCurrentIndex: handleSetCurrentIndex, uri: widget.imagesUri[currentIndex], imagesLength: widget.imagesUri.length),
           // Text Input below if available
@@ -65,14 +77,13 @@ class _ImageUploadPreviewWithTextInputState extends State<ImageUploadPreviewWith
               children: [
                 Expanded(
                   child: ControlledInput(
-                    setMediaSelectionsWithText: handleSetMediaSelectionWithText
+                    setMediaSelectionsWithText: handleSetMediaSelectionWithText,
+                    initialText: uploadingMediaWithText[currentIndex].text,
+                    onSubmitted: handleOnSumitted,
                   )
                 ),
                 IconButton(
-                  onPressed: (){
-                    widget.setMediaSelectionsWithText(uploadingMediaWithText);
-                    Navigator.pop(context);
-                  },
+                  onPressed: handleOnSumitted,
                   color: Colors.white,
                   icon: const Icon(Icons.send))
               ],
@@ -86,12 +97,14 @@ class _ImageUploadPreviewWithTextInputState extends State<ImageUploadPreviewWith
 
 class ControlledInput extends StatefulWidget{
   final void Function(String text) setMediaSelectionsWithText;
+  final void Function() onSubmitted;
   final String? initialText;
 
   const ControlledInput({
     super.key,
     required this.setMediaSelectionsWithText,
-    this.initialText
+    this.initialText,
+    required this.onSubmitted
   });
 
   @override
@@ -102,13 +115,27 @@ class _ControlledInputState extends State<ControlledInput> {
 
   TextEditingController textEditingController = TextEditingController();
 
+  String get initialText => widget.initialText??"";
+
   @override
   void initState() {
-    textEditingController.text = widget.initialText??"";
     textEditingController.addListener(() {
       widget.setMediaSelectionsWithText(textEditingController.text);
     });
     super.initState();
+  }
+
+  @override
+  void didUpdateWidget(covariant ControlledInput oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    textEditingController.text = widget.initialText ?? "";
+  }
+
+  @override
+  void dispose() {
+    textEditingController.clear();
+    super.dispose();
   }
   @override
   Widget build(BuildContext context) {
@@ -120,8 +147,7 @@ class _ControlledInputState extends State<ControlledInput> {
       
       controller: textEditingController,
       onSubmitted: (e){
-        widget.setMediaSelectionsWithText(textEditingController.text);
-        Navigator.pop(context);
+        widget.onSubmitted();
       },
     );
   }
