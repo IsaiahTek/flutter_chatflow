@@ -25,11 +25,12 @@ class ChatAvatar extends StatelessWidget{
 
   bool get hasPhoto {
     String? photoUrl = author.photoUrl;
+    debugPrint("PHOTO SEEN $photoUrl NULLITY ${photoUrl == null}");
     return photoUrl != null && photoUrl.isNotEmpty;
   }
 
-  bool get hasName => author.name != null;
-  String get avatarText => hasName?author.name!.substring(0,1):author.userID.substring(0,1);
+  bool get hasName => author.name != null && author.name!.isNotEmpty;
+  String get avatarText => hasName?author.name!.substring(0,1):author.userID.toString().substring(0,1);
 
   @override
   Widget build(BuildContext context) {
@@ -40,10 +41,8 @@ class ChatAvatar extends StatelessWidget{
           margin: const EdgeInsets.only(left: 5),
           child: CircleAvatar(
             // backgroundColor: createColorFromHashCode(author.userID.hashCode),
-            foregroundImage: NetworkImage(author.photoUrl!),
-            child: isValidUrl
-              ? const SizedBox() 
-              : Text(avatarText)
+            foregroundImage: isValidUrl ? NetworkImage(author.photoUrl!): null,
+            child: Text(avatarText)
           ),
         ),
       ],

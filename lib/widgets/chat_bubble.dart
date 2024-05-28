@@ -58,6 +58,7 @@ class _ChatBubbleState extends State<ChatBubble> {
 
   @override
   Widget build(BuildContext context) {
+    debugPrint("CHAT USER ${widget.chatUser.userID} AND AUTHOR ${widget.message.author.userID}");
     return Column(
       children: [
         if(!isSameDay(
@@ -177,7 +178,6 @@ class _ChatBubbleState extends State<ChatBubble> {
                 children: [
                   GestureDetector(
                     onTap: (){
-                      debugPrint("Taped message");
                       int currentImageIndex = widget.imageMessages.indexWhere((element) => element.createdAt == widget.message.createdAt);
                       if(widget.message.type == MessageType.image){
                         Navigator.push(
@@ -208,7 +208,7 @@ class _ChatBubbleState extends State<ChatBubble> {
                               ),
                             ),
                             child: Text(
-                              "~${widget.message.author.name??widget.message.author.userID}",
+                              "~${widget.message.author.name != null && widget.message.author.name!.isNotEmpty? widget.message.author.name : widget.message.author.userID}",
                               style: TextStyle(
                                 overflow: TextOverflow.ellipsis,
                                 fontStyle: FontStyle.italic,
