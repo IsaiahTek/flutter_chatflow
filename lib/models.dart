@@ -78,6 +78,16 @@ class TextMessage extends Message{
   });
 }
 
+class ChatInfo extends Message{
+  final String info;
+  ChatInfo({
+    super.type = MessageType.info,
+    super.author = const ChatUser(userID: ''),
+    required super.createdAt,
+    required this.info
+  });
+}
+
 class ChatUser{
   final String userID;
   final String? name;

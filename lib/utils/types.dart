@@ -6,5 +6,6 @@ enum MessageType{
   pdf,
   doc,
   file,
+  info,
   custom
 }

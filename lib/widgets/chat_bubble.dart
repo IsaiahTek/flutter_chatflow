@@ -93,6 +93,37 @@ class _ChatBubbleState extends State<ChatBubble> {
             )
           ],
         ),
+        if(widget.message.type == MessageType.info)
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              margin: const EdgeInsets.symmetric(vertical: 15),
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(5),
+                  color: Colors.yellow[50],
+                  boxShadow: const [
+                    BoxShadow(
+                      offset: Offset(0.00, 0.5),
+                      color: Colors.black26,
+                    )
+                  ]
+                  
+                ),
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                child: Text(
+                  (widget.message as ChatInfo).info,
+                  style: TextStyle(
+                    fontStyle: FontStyle.italic,
+                    fontSize: Theme.of(context).textTheme.labelSmall?.fontSize
+                  ),
+                ),
+              ),
+            )
+          ],
+        )
+        else
         Row(
           mainAxisAlignment: widget.chatUser.userID == widget.message.author.userID ? MainAxisAlignment.end : MainAxisAlignment.start,
           children: [
