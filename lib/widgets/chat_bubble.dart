@@ -43,29 +43,6 @@ class _ChatBubbleState extends State<ChatBubble> {
     return deltaDay == 0;
   }
 
-  String computeTimePartitionText(int millisecondsSinceEpoch){
-    DateTime date = DateTime.fromMillisecondsSinceEpoch(millisecondsSinceEpoch);
-    DateTime now = DateTime.now();
-    int longAgo = now.day - date.day;
-    String result;
-    switch (longAgo) {
-      case 0:
-        result = "TODAY";
-        break;
-      case 1:
-        result = "YESTERDAY";
-        break;
-      default:
-        if(longAgo <= 6){
-          result = getWeekDayName(date.weekday);
-        }else{
-          result = '${date.day}/${date.month}/${date.year}';
-        }
-
-    }
-    return result;
-  }
-
   Message get selectedMessage => widget.selectedMessages[widget.selectedMessages.length-1];
 
   List<Message> get selectedMessages => widget.selectedMessages;

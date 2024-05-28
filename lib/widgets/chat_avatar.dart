@@ -40,11 +40,9 @@ class ChatAvatar extends StatelessWidget{
           margin: const EdgeInsets.only(left: 5),
           child: CircleAvatar(
             // backgroundColor: createColorFromHashCode(author.userID.hashCode),
+            foregroundImage: NetworkImage(author.photoUrl!),
             child: isValidUrl
-              ? Image.network(author.photoUrl!, errorBuilder: (context, error, stackTrace) {
-                logError("Photo URL ERROR: $error");
-                return Text(author.photoUrl.toString());
-              },)
+              ? const SizedBox() 
               : Text(avatarText)
           ),
         ),

@@ -52,6 +52,30 @@ String getSentAt(int millisecondsSinceEpoch){
   return sentAt;
 }
 
+String computeTimePartitionText(int millisecondsSinceEpoch){
+  DateTime date = DateTime.fromMillisecondsSinceEpoch(millisecondsSinceEpoch);
+  DateTime now = DateTime.now();
+  int longAgo = now.day - date.day;
+  String result;
+  switch (longAgo) {
+    case 0:
+      result = "TODAY";
+      break;
+    case 1:
+      result = "YESTERDAY";
+      break;
+    default:
+      if(longAgo <= 6){
+        result = getWeekDayName(date.weekday);
+      }else{
+        result = '${date.day}/${date.month}/${date.year}';
+      }
+
+  }
+  return result;
+}
+
+  
 void logError(String message) {
   debugPrint('\x1B[31mERROR: $message\x1B[0m'); // This uses ANSI escape codes to color the text red
 }
