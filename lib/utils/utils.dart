@@ -51,3 +51,7 @@ String getSentAt(int millisecondsSinceEpoch){
   String sentAt = '${date.hour}:${date.minute}';
   return sentAt;
 }
+
+void logError(String message) {
+  debugPrint('\x1B[31mERROR: $message\x1B[0m'); // This uses ANSI escape codes to color the text red
+}

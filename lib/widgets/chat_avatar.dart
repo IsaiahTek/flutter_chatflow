@@ -13,12 +13,22 @@ class ChatAvatar extends StatelessWidget{
     required this.showUserAvatarInChat
   });
 
+  bool get isValidUrl {
+    if(hasPhoto){
+      final uri = Uri.tryParse(author.photoUrl!);
+      bool result = uri != null && (uri.scheme == 'http' || uri.scheme == 'https') && uri.host.isNotEmpty;
+      return result;
+    }else{
+      return false;
+    }
+  }
+
   bool get hasPhoto {
-    String? photoUrl = chatUser.photoUrl;
+    String? photoUrl = author.photoUrl;
     return photoUrl != null && photoUrl.isNotEmpty;
   }
 
-  bool get hasName => chatUser.name != null;
+  bool get hasName => author.name != null;
   String get avatarText => hasName?author.name!.substring(0,1):author.userID.substring(0,1);
 
   @override
@@ -29,9 +39,12 @@ class ChatAvatar extends StatelessWidget{
         Container(
           margin: const EdgeInsets.only(left: 5),
           child: CircleAvatar(
-            backgroundColor: createColorFromHashCode(author.userID.hashCode),
-            child: hasPhoto
-              ? Image.network(author.photoUrl!)
+            // backgroundColor: createColorFromHashCode(author.userID.hashCode),
+            child: isValidUrl
+              ? Image.network(author.photoUrl!, errorBuilder: (context, error, stackTrace) {
+                logError("Photo URL ERROR: $error");
+                return Text(author.photoUrl.toString());
+              },)
               : Text(avatarText)
           ),
         ),

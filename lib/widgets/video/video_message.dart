@@ -4,10 +4,13 @@ import 'package:flutter_chatflow/widgets/image/image_widget.dart';
 class VideoMessageWidget extends StatelessWidget{
   final String uri;
   final String? text;
+  final bool? isAuthor;
+
   const VideoMessageWidget({
     super.key,
     required this.uri,
-    this.text
+    this.text,
+    this.isAuthor
   });
 
   @override

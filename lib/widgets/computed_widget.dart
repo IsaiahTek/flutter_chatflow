@@ -27,11 +27,11 @@ class ComputedMessage extends StatelessWidget{
         break;
       case MessageType.video:
         VideoMessage videoMessage = message as VideoMessage;
-        result = VideoMessageWidget(uri: videoMessage.uri, text: videoMessage.text,);
+        result = VideoMessageWidget(uri: videoMessage.uri, text: videoMessage.text, isAuthor: isAuthor);
         break;
       case MessageType.audio:
         AudioMessage audioMessage = message as AudioMessage;
-        result = AudioMessageWidget(uri: audioMessage.uri, text: audioMessage.text,);
+        result = AudioMessageWidget(uri: audioMessage.uri, text: audioMessage.text, isAuthor: isAuthor);
       default:
         TextMessage textMessage = message as TextMessage;
         result = Text(textMessage.text);
