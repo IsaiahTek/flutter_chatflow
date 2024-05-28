@@ -51,7 +51,6 @@ class _ChatBubbleState extends State<ChatBubble> {
 
   @override
   Widget build(BuildContext context) {
-    debugPrint("CHAT USER ${widget.chatUser.userID} AND AUTHOR ${widget.message.author.userID}");
     return Column(
       children: [
 
@@ -264,7 +263,8 @@ class InfoMessage extends StatelessWidget{
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Container(
-          margin: const EdgeInsets.symmetric(vertical: 15),
+          constraints: BoxConstraints.loose(MediaQuery.of(context).size),
+          padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
           child: Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(5),
@@ -280,6 +280,7 @@ class InfoMessage extends StatelessWidget{
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
             child: Text(
               (message as ChatInfo).info,
+              textAlign: TextAlign.center,
               style: TextStyle(
                 fontStyle: FontStyle.italic,
                 fontSize: Theme.of(context).textTheme.labelSmall?.fontSize
