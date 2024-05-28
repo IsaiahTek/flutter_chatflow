@@ -52,6 +52,14 @@ String getSentAt(int millisecondsSinceEpoch){
   return sentAt;
 }
 
+bool isSameDay(int? previousMessageTime, int currentMessageTime){
+  int? previousDay = previousMessageTime != null ? DateTime.fromMillisecondsSinceEpoch(previousMessageTime).day: null;
+  int currentDay = DateTime.fromMillisecondsSinceEpoch(currentMessageTime).day;
+  int deltaDay = previousDay != null? currentDay - previousDay : 1;
+
+  return deltaDay == 0;
+}
+
 String computeTimePartitionText(int millisecondsSinceEpoch){
   DateTime date = DateTime.fromMillisecondsSinceEpoch(millisecondsSinceEpoch);
   DateTime now = DateTime.now();
