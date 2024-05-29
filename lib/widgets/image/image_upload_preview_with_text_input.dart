@@ -59,37 +59,40 @@ class _ImageUploadPreviewWithTextInputState extends State<ImageUploadPreviewWith
     return Scaffold(
       backgroundColor: Colors.black,
       body: SingleChildScrollView(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Container(
-              padding: const EdgeInsets.symmetric(vertical: 20),
-              child: Text("${currentIndex+1} of ${widget.imagesUri.length}", style: const TextStyle(color: Colors.white),),
-            ),
-            // Image And Buttons below
-            ImagesSwipe(currentIndex: currentIndex, setCurrentIndex: handleSetCurrentIndex, uri: widget.imagesUri[currentIndex], imagesLength: widget.imagesUri.length),
-            // Text Input below if available
-            Container(
-              width: MediaQuery.of(context).size.width,
-              margin: const EdgeInsets.symmetric(horizontal: 20),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: ControlledInput(
-                      setMediaSelectionsWithText: handleSetMediaSelectionWithText,
-                      initialText: uploadingMediaWithText[currentIndex].text,
-                      onSubmitted: handleOnSumitted,
-                    )
-                  ),
-                  IconButton(
-                    onPressed: handleOnSumitted,
-                    color: Colors.white,
-                    icon: const Icon(Icons.send))
-                ],
+        child: SizedBox(
+          height: MediaQuery.of(context).size.height,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Container(
+                padding: const EdgeInsets.symmetric(vertical: 20),
+                child: Text("${currentIndex+1} of ${widget.imagesUri.length}", style: const TextStyle(color: Colors.white),),
               ),
-            )
-          ],
+              // Image And Buttons below
+              ImagesSwipe(currentIndex: currentIndex, setCurrentIndex: handleSetCurrentIndex, uri: widget.imagesUri[currentIndex], imagesLength: widget.imagesUri.length),
+              // Text Input below if available
+              Container(
+                width: MediaQuery.of(context).size.width,
+                margin: const EdgeInsets.symmetric(horizontal: 20),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: ControlledInput(
+                        setMediaSelectionsWithText: handleSetMediaSelectionWithText,
+                        initialText: uploadingMediaWithText[currentIndex].text,
+                        onSubmitted: handleOnSumitted,
+                      )
+                    ),
+                    IconButton(
+                      onPressed: handleOnSumitted,
+                      color: Colors.white,
+                      icon: const Icon(Icons.send))
+                  ],
+                ),
+              )
+            ],
+          ),
         ),
       )
     );

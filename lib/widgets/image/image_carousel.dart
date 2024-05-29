@@ -40,16 +40,23 @@ class _ImageCarouselState extends State<ImageCarousel> {
     return Scaffold(
       backgroundColor: Colors.black,
       body: SingleChildScrollView(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            // Image And Buttons below
-            ImagesSwipe(currentIndex: currentIndex, setCurrentIndex: handleSetCurrentIndex, uri: _imageMessages[currentIndex].uri, imagesLength: _imageMessages.length),
-            // Text below if available
-            const SizedBox(height: 30,),
-            if(_imageMessages[currentIndex].text != null)
-            Text("${_imageMessages[currentIndex].text}", style: const TextStyle(color: Colors.white),)
-          ],
+        child: SizedBox(
+          height: MediaQuery.of(context).size.height,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                padding: const EdgeInsets.symmetric(vertical: 20),
+                child: Text("${currentIndex+1} of ${_imageMessages.length}", style: const TextStyle(color: Colors.white),),
+              ),
+              // Image And Buttons below
+              ImagesSwipe(currentIndex: currentIndex, setCurrentIndex: handleSetCurrentIndex, uri: _imageMessages[currentIndex].uri, imagesLength: _imageMessages.length),
+              // Text below if available
+              const SizedBox(height: 30,),
+              if(_imageMessages[currentIndex].text != null)
+              Text("${_imageMessages[currentIndex].text}", style: const TextStyle(color: Colors.white),)
+            ],
+          ),
         ),
       )
     );
