@@ -50,10 +50,14 @@ class _ChatBubbleState extends State<ChatBubble> {
   }
 
   @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-
         TimePartitionText(
           createdAt: widget.message.createdAt,
           previousMessageCreatedAt: widget.previousMessageCreatedAt
@@ -179,21 +183,30 @@ class _ChatBubbleState extends State<ChatBubble> {
                 ),
 
                 // Message Delivery Widget
-                Row(
-                  // alignment: Alignment.bottomRight,
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Container(
-                      margin: const EdgeInsets.only(right: 10, bottom: 10),
-                      child: Text(
-                      getSentAt(widget.message.createdAt),
-                      textAlign: TextAlign.right,
-                      style: TextStyle(
-                        fontSize: Theme.of(context).textTheme.labelSmall?.fontSize
+                Container(
+                  margin: const EdgeInsets.only(right: 10, bottom: 10),
+                  child: Row(
+                    // alignment: Alignment.bottomRight,
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(
+                        getSentAt(widget.message.createdAt),
+                        textAlign: TextAlign.right,
+                        style: TextStyle(
+                          fontSize: Theme.of(context).textTheme.labelSmall?.fontSize
+                        ),
                       ),
-                    ),
-                    )
-                  ]
+                      const SizedBox(width: 3,),
+                      SizedBox(
+                        height: Theme.of(context).textTheme.labelSmall?.fontSize, // Adjust height and width as needed
+                        width: Theme.of(context).textTheme.labelSmall?.fontSize,
+                        child: const CircularProgressIndicator(
+                          strokeWidth: 1.5,
+                        ),
+                      )
+                    ]
+                  )
                 )
               ],
             )
