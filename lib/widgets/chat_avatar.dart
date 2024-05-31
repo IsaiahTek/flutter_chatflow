@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_chatflow/models.dart';
-import 'package:flutter_chatflow/utils/utils.dart';
 
 class ChatAvatar extends StatelessWidget{
   final bool showUserAvatarInChat;

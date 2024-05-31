@@ -9,3 +9,10 @@ enum MessageType{
   info,
   custom
 }
+
+enum DeliveryStatus{
+  sending,
+  sent,
+  delivered,
+  read,
+}

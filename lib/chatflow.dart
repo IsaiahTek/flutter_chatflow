@@ -33,11 +33,11 @@ class ChatFlow extends StatefulWidget{
   });
 
   @override
-  State<StatefulWidget> createState() => _FluChatState();
+  State<StatefulWidget> createState() => _ChatFlowState();
 
 }
 
-class _FluChatState extends State<ChatFlow>{
+class _ChatFlowState extends State<ChatFlow>{
 
   final TextEditingController _textEditingController = TextEditingController();
 
@@ -200,8 +200,7 @@ class _FluChatState extends State<ChatFlow>{
                 ],
               ),
             ),
-          ),
-          
+          ),          
         ],
       ),
     );

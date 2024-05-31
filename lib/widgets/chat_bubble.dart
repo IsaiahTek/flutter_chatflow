@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_chatflow/models.dart';
 import 'package:flutter_chatflow/utils/types.dart';
 import 'package:flutter_chatflow/utils/utils.dart';
@@ -58,13 +57,13 @@ class _ChatBubbleState extends State<ChatBubble> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        TimePartitionText(
+        _TimePartitionText(
           createdAt: widget.message.createdAt,
           previousMessageCreatedAt: widget.previousMessageCreatedAt
         ),
         
         if(widget.message.type == MessageType.info)
-        InfoMessage(message: widget.message)
+        _InfoMessage(message: widget.message)
         
         else
         Row(
@@ -197,13 +196,16 @@ class _ChatBubbleState extends State<ChatBubble> {
                           fontSize: Theme.of(context).textTheme.labelSmall?.fontSize
                         ),
                       ),
-                      const SizedBox(width: 3,),
-                      SizedBox(
-                        height: Theme.of(context).textTheme.labelSmall?.fontSize, // Adjust height and width as needed
-                        width: Theme.of(context).textTheme.labelSmall?.fontSize,
-                        child: const CircularProgressIndicator(
-                          strokeWidth: 1.5,
-                        ),
+                      if(widget.message.status != null)
+                      Wrap(
+                        children: [
+                          const SizedBox(width: 5,),
+                          SizedBox(
+                            height: Theme.of(context).textTheme.labelSmall?.fontSize, // Adjust height and width as needed
+                            width: Theme.of(context).textTheme.labelSmall?.fontSize,
+                            child: _DeliveryStateIcon(deliveryStatus: widget.message.status),
+                          )
+                        ],
                       )
                     ]
                   )
@@ -217,13 +219,12 @@ class _ChatBubbleState extends State<ChatBubble> {
   }
 }
 
-class TimePartitionText extends StatelessWidget{
+class _TimePartitionText extends StatelessWidget{
 
   final int? previousMessageCreatedAt;
   final int createdAt;
 
-  const TimePartitionText({
-    super.key,
+  const _TimePartitionText({
     required this.createdAt,
     this.previousMessageCreatedAt
   });
@@ -267,9 +268,9 @@ class TimePartitionText extends StatelessWidget{
   }
 }
 
-class InfoMessage extends StatelessWidget{
+class _InfoMessage extends StatelessWidget{
   final Message message;
-  const InfoMessage({super.key, required this.message});
+  const _InfoMessage({required this.message});
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -303,5 +304,39 @@ class InfoMessage extends StatelessWidget{
         )
       ],
     );
+  }
+}
+
+class _DeliveryStateIcon extends StatelessWidget{
+
+  final DeliveryStatus? deliveryStatus;
+
+  const _DeliveryStateIcon({
+    this.deliveryStatus
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    late Widget icon;
+    double iconSize = Theme.of(context).textTheme.labelSmall?.fontSize??14;
+    switch (deliveryStatus) {
+      case DeliveryStatus.sending:
+        icon = const CircularProgressIndicator(
+          strokeWidth: 1.5,
+        );
+        break;
+      case DeliveryStatus.sent:
+        icon = Icon(Icons.done_rounded, size: iconSize,);
+        break;
+      case DeliveryStatus.delivered:
+        icon = Icon(Icons.done_all_rounded, size: iconSize,);
+        break;
+      case DeliveryStatus.read:
+        icon = Icon(Icons.done_all_rounded, color: Theme.of(context).primaryColor, size: iconSize,);
+        break;
+      default:
+        icon = const SizedBox();
+    }
+    return icon;
   }
 }

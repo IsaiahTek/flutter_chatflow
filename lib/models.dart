@@ -4,12 +4,14 @@ abstract class Message{
   MessageType type;
   ChatUser author;
   int createdAt;
+  DeliveryStatus? status;
   Map<String, dynamic>? meta;
 
   Message({
     required this.type,
     required this.author,
     required this.createdAt,
+    this.status,
     this.meta
   });
 }
@@ -22,6 +24,7 @@ class ImageMessage extends Message{
     required super.author,
     required super.createdAt,
     required this.uri,
+    super.status,
     this.text,
     super.meta,
   });
@@ -36,6 +39,7 @@ class AudioMessage extends Message{
     required super.createdAt,
     required this.uri,
     this.text,
+    super.status,
     super.meta,
   });
 }
@@ -49,6 +53,7 @@ class VideoMessage extends Message{
     required super.createdAt,
     required this.uri,
     this.text,
+    super.status,
     super.meta,
   });
   
@@ -63,6 +68,7 @@ class PdfMessage extends Message{
     required super.createdAt,
     required this.uri,
     this.text,
+    super.status,
     super.meta,
   });
   
@@ -74,7 +80,8 @@ class TextMessage extends Message{
     super.type = MessageType.text,
     required super.author,
     required super.createdAt,
-    required this.text
+    required this.text,
+    super.status
   });
 }
 
