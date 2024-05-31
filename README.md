@@ -71,7 +71,11 @@ class ChatScreen extends StatelessWidget {
 
   void _addMessage(Message message) {
     /// Handle sending message to server
-    _messages.insert(0, message)
+
+    ///Sending to local collection below [OPTIONAL if sent to server and listened correctly]
+    setState((){
+      _messages.insert(0, message);
+    });
   }
 
   void _handleSendPressed(String message) {
@@ -81,6 +85,7 @@ class ChatScreen extends StatelessWidget {
       author: author,
       createdAt: createdAt,
       text: message,
+      status: DeliveryStatus.sending
     );
 
     _addMessage(textMessage);
