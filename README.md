@@ -13,13 +13,12 @@ and the Flutter guide for
 <br>
 
 <p align="center">
-  <img src="/images/ChatFlow_banner.png" width="288px" alt="ChatFlow Logo" />
+  <img src="https://github.com/IsaiahTek/flutter_chatflow/blob/main/images/ChatFlow_banner.png" width="288px" alt="ChatFlow Logo" />
 </p>
+<p align="center">Create flutter chat apps easily with ChatFlow</p>
 
 <p align="center">
-  <a href="https://flyer.chat">
-    <img alt="Chat Image" src="/images/ChatFlow_featured_image.png" />
-  </a>
+  <img alt="Chat Image" src="https://github.com/IsaiahTek/flutter_chatflow/blob/main/images/ChatFlow_featured_image.png" />
 </p>
 A powerful and flexible chat solution for Flutter apps. Features include real-time messaging, private chats, group chats, customizable UI, user management, media sharing, rich text support, typing user(s), etc.
 
