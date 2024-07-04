@@ -41,7 +41,6 @@ class _ImageSwipeState extends State<ImagesSwipe> {
             });
           },
           onHorizontalDragEnd: (details) {
-            debugPrint("Swiped to $dragDx");
             if(dragDx > 0 && widget.currentIndex > 0){
               widget.setCurrentIndex(widget.currentIndex-1);
             }else if(dragDx < 0 && widget.imagesLength - 1 > widget.currentIndex){

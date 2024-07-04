@@ -13,23 +13,27 @@ and the Flutter guide for
 <br>
 
 <p align="center">
-  <img src="https://github.com/IsaiahTek/flutter_chatflow/blob/main/images/ChatFlow_banner.png" width="288px" alt="ChatFlow Logo" />
+  <img src="https://raw.githubusercontent.com/IsaiahTek/flutter_chatflow/main/images/ChatFlow_banner.png" width="288px" alt="ChatFlow Logo" />
 </p>
 <p align="center">Fast and flexibile chat package with full features for easy app development. Actively maintained, community-driven chat UI implementation</p>
 
 <p align="center">
-  <img alt="Chat Image" src="https://github.com/IsaiahTek/flutter_chatflow/blob/main/images/featured_image.png" />
+  <img alt="Chat Image" src="https://raw.githubusercontent.com/IsaiahTek/flutter_chatflow/main/images/featured_image.png" />
 </p>
 A powerful and flexible chat solution for Flutter apps. Features include real-time messaging, private chats, group chats, customizable UI, user management, media sharing, rich text support, typing user(s), etc.
 
 ## Features
 
-1. Real-time Messaging: Seamless real-time communication using WebSockets or Firebase.
-2. Customizable UI: Easily customizable chat bubbles, themes, and layouts to match your app’s design.
+1. Fast Messaging: The UI updates instantly as soon as it receives a new data. The developing sees to how the application stores the messages and it passes the same messages to the ChatFlow component for either private chats or group chats.
+2. Customizable UI: Easily customizable chat themes, use builders to create more customized UI and layouts to match your app’s design.
 3. User Management: Support for user authentication and profile management.
 4. Media Sharing: Send and receive images, videos, and other media files.
 5. Group Chats: Create and manage group conversations effortlessly.
-6. Rich Text Support: Emoji, links, and formatted text in messages.
+6. Generic Media Type: Aside from the default message types which include Text, Image, Info, Audio, Video, PDF, Doc and File, there's a Custom type for you to extend and do more just in case the already available types aren't enough which we believe should be enough for most use cases.
+7. Typing User: Listen to user typing events and do what you want such as notifying other users in the chat about that event.
+8. Media Preview: By default, chatflow automatically shows a image previews when a user taps on an image message. [See image above]
+9. Select Message: A user can select message(s) in the chat. You get the list of selected message(s) and do what you want by providing a callback. [See API in Documentation]
+<!-- 6. Rich Text Support: Emoji, links, and formatted text in messages. -->
 Etc.
 
 ## Getting started

@@ -43,9 +43,7 @@ class _ImageUploadPreviewWithTextInputState extends State<ImageUploadPreviewWith
 
   handleSetCurrentIndex(int index){
     setState(() {
-      debugPrint("Leaving intialText ${uploadingMediaWithText[currentIndex].text}");
       currentIndex = index;
-      debugPrint("Leaving intialText ${uploadingMediaWithText[currentIndex].text}");
     });
   }
 

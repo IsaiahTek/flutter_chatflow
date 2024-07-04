@@ -1,11 +1,32 @@
 import 'package:flutter/material.dart';
 
+List<int> computeNumbersList(int hashCode){
+  return hashCode.toString().split('').map((e) => num.parse(e).toInt()).toList();
+}
+
+List<int> groupNumbersIntoRGB(List<int> numbers){
+  List<int> rgbList = [];
+  for (var i = 0; i < 3; i++) {
+    String numberList = '';
+    for (var j = 0; j < 3; j++) {
+      if(numbers.isNotEmpty){
+        numberList += numbers.removeAt(0).toString();
+      }else if(numberList.isEmpty){
+        numberList += '0';
+      }
+    }
+    rgbList.add(num.parse(numberList).toInt());
+  }
+  return rgbList;
+}
+
 Color createColorFromHashCode(int hashCode){
-  List<int> hashCodeInts = hashCode.toString().split('').map((e) => num.parse(e).toInt()).toList();
-  int takeSize = (hashCodeInts.length~/3);
-  int r = num.parse(hashCodeInts.join('').substring(0, takeSize)).toInt();
-  int g = num.parse(hashCodeInts.join('').substring(takeSize+1, takeSize+takeSize+1)).toInt();
-  int b = num.parse(hashCodeInts.join('').substring(takeSize+takeSize+1)).toInt();
+  List<int> hashCodeInts = computeNumbersList(hashCode);
+  List<int> computedRGBList = groupNumbersIntoRGB(hashCodeInts);
+  int r = computedRGBList[0];
+  int g = computedRGBList[1];
+  int b = computedRGBList[2];
+
   return Color.fromARGB(255, r, g, b);
 }
 
@@ -85,5 +106,5 @@ String computeTimePartitionText(int millisecondsSinceEpoch){
 
   
 void logError(String message) {
-  debugPrint('\x1B[31mERROR: $message\x1B[0m'); // This uses ANSI escape codes to color the text red
+  debugPrint('\x1B[31mERROR: $message\x1B[0m');
 }

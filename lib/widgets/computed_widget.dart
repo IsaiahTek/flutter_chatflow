@@ -35,7 +35,6 @@ class ComputedMessage extends StatelessWidget{
         break;
       case MessageType.video:
         if(videoWidgetBuilder != null){
-          debugPrint("FOUND CUSTOM");
           VideoMessage videoMessage = message as VideoMessage;
           result = VideoMessageWidget(uri: videoMessage.uri, text: videoMessage.text, isAuthor: isAuthor, videoWidgetBuilder: videoWidgetBuilder!,);
         }else{

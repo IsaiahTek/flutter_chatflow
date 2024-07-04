@@ -24,7 +24,6 @@ class ChatAvatar extends StatelessWidget{
 
   bool get hasPhoto {
     String? photoUrl = author.photoUrl;
-    debugPrint("PHOTO SEEN $photoUrl NULLITY ${photoUrl == null}");
     return photoUrl != null && photoUrl.isNotEmpty;
   }
 

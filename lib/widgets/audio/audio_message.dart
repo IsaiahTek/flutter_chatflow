@@ -15,13 +15,13 @@ class AudioMessageWidget extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      child: Column(
+      child: const Column(
         children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(10),
-            child: ImageWidget(uri: uri),
-          ),
-          if(text != null) Text(text!)
+          // ClipRRect(
+          //   borderRadius: BorderRadius.circular(10),
+          //   child: ImageWidget(uri: uri),
+          // ),
+          // if(text != null) Text(text!)
         ],
       )
     );
