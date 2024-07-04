@@ -10,7 +10,17 @@ For general information about developing packages, see the Dart guide for
 and the Flutter guide for
 [developing packages and plugins](https://flutter.dev/developing-packages).
 -->
+<br>
 
+<p align="center">
+  <img src="/images/ChatFlow_banner.png" width="288px" alt="ChatFlow Logo" />
+</p>
+
+<p align="center">
+  <a href="https://flyer.chat">
+    <img alt="Chat Image" src="/images/ChatFlow_featured_image.png" />
+  </a>
+</p>
 A powerful and flexible chat solution for Flutter apps. Features include real-time messaging, private chats, group chats, customizable UI, user management, media sharing, rich text support, typing user(s), etc.
 
 ## Features
