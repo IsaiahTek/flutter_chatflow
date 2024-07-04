@@ -15,7 +15,7 @@ and the Flutter guide for
 <p align="center">
   <img src="https://github.com/IsaiahTek/flutter_chatflow/blob/main/images/ChatFlow_banner.png" width="288px" alt="ChatFlow Logo" />
 </p>
-<p align="center">Create flutter chat apps easily with ChatFlow</p>
+<p align="center">Fast and flexibile chat package with full features for easy app development. Actively maintained, community-driven chat UI implementation</p>
 
 <p align="center">
   <img alt="Chat Image" src="https://github.com/IsaiahTek/flutter_chatflow/blob/main/images/featured_image.png" />
