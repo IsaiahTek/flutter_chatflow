@@ -17,7 +17,7 @@ class ImageWidget extends StatelessWidget{
       builder: ((context, snapshot) {
         if(snapshot.hasData && snapshot.data != null){
           if(snapshot.data!){
-            return Image.file(
+            return Image.file(        
               File(uri),
             );
           }else{

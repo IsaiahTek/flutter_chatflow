@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_chatflow/widgets/image/image_widget.dart';
+import 'package:flutter_chatflow/utils/type_defs.dart';
+import 'package:flutter_chatflow/widgets/video/video_widget.dart';
 
 class VideoMessageWidget extends StatelessWidget{
   final String uri;
   final String? text;
   final bool? isAuthor;
+  final VideoWidgetBuilder videoWidgetBuilder;
 
   const VideoMessageWidget({
     super.key,
     required this.uri,
+    required this.videoWidgetBuilder,
     this.text,
     this.isAuthor
   });
@@ -20,9 +23,9 @@ class VideoMessageWidget extends StatelessWidget{
         children: [
           ClipRRect(
             borderRadius: BorderRadius.circular(10),
-            child: ImageWidget(uri: uri),
+            child: VideoWidget(uri: uri, videoWidgetBuilder: videoWidgetBuilder,),
           ),
-          if(text != null) Text(text!)
+          if(text != null && text!.isNotEmpty) Text(text!)
         ],
       )
     );

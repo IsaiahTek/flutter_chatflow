@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_chatflow/models.dart';
+import 'package:flutter_chatflow/utils/type_defs.dart';
 import 'package:flutter_chatflow/utils/types.dart';
 import 'package:flutter_chatflow/utils/utils.dart';
 import 'package:flutter_chatflow/widgets/chat_avatar.dart';
@@ -16,6 +17,9 @@ class ChatBubble extends StatefulWidget{
   final int? previousMessageCreatedAt;
   final void Function(List<Message> message) setSelectedMessages;
   final List<Message> selectedMessages;
+  final CustomWidgetBuilder? videoWidgetBuilder;
+  final CustomWidgetBuilder? pdfWidgetBuilder;
+  final CustomWidgetBuilder? customWidgetBuilder;
 
   const ChatBubble({
     super.key,
@@ -26,7 +30,10 @@ class ChatBubble extends StatefulWidget{
     required this.showUserAvatarInChat,
     this.previousMessageCreatedAt,
     required this.setSelectedMessages,
-    required this.selectedMessages
+    required this.selectedMessages,
+    this.videoWidgetBuilder,
+    this.pdfWidgetBuilder,
+    this.customWidgetBuilder
   });
 
   @override
@@ -39,11 +46,11 @@ class _ChatBubbleState extends State<ChatBubble> {
 
   List<Message> get selectedMessages => widget.selectedMessages;
 
-  handleSetSelectedMessage(Message index){
-    if(selectedMessages.contains(index)){
-      selectedMessages.remove(index);
+  handleSetSelectedMessage(Message message){
+    if(selectedMessages.contains(message)){
+      selectedMessages.remove(message);
     }else{
-      selectedMessages.add(index);
+      selectedMessages.add(message);
     }
     widget.setSelectedMessages(selectedMessages);
   }
@@ -170,6 +177,9 @@ class _ChatBubbleState extends State<ChatBubble> {
                                 child: ComputedMessage(
                                   message: widget.message,
                                   isAuthor: widget.message.author.userID == widget.chatUser.userID,
+                                  customWidgetBuilder: widget.customWidgetBuilder,
+                                  pdfWidgetBuilder: widget.pdfWidgetBuilder,
+                                  videoWidgetBuilder: widget.videoWidgetBuilder,
                                 ),
                               ),
                             ],
@@ -231,40 +241,37 @@ class _TimePartitionText extends StatelessWidget{
   
   @override
   Widget build(BuildContext context) {
-    return (!isSameDay(
-          previousMessageCreatedAt,
-          createdAt
-        ))?
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-              margin: const EdgeInsets.symmetric(vertical: 15),
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(5),
-                  color: Colors.white,
-                  boxShadow: const [
-                    BoxShadow(
-                      offset: Offset(0.00, 0.5),
-                      color: Colors.black26,
-                    )
-                  ]
-                  
-                ),
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                child: Text(
-                  computeTimePartitionText(createdAt),
-                  style: TextStyle(
-                    fontStyle: FontStyle.italic,
-                    fontSize: Theme.of(context).textTheme.labelSmall?.fontSize
-                  ),
-                ),
+    return ( !isSameDay(previousMessageCreatedAt, createdAt) )
+    ? Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Container(
+          margin: const EdgeInsets.symmetric(vertical: 15),
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(5),
+              color: Colors.white,
+              boxShadow: const [
+                BoxShadow(
+                  offset: Offset(0.00, 0.5),
+                  color: Colors.black26,
+                )
+              ]
+              
+            ),
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+            child: Text(
+              computeTimePartitionText(createdAt),
+              style: TextStyle(
+                fontStyle: FontStyle.italic,
+                fontSize: Theme.of(context).textTheme.labelSmall?.fontSize
               ),
-            )
-          ],
-        ):
-        const SizedBox.shrink();
+            ),
+          ),
+        )
+      ],
+    )
+    : const SizedBox.shrink();
   }
 }
 

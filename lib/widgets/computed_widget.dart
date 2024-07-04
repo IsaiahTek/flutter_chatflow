@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_chatflow/models.dart';
+import 'package:flutter_chatflow/utils/type_defs.dart';
 import 'package:flutter_chatflow/utils/types.dart';
 import 'package:flutter_chatflow/widgets/audio/audio_message.dart';
 import 'package:flutter_chatflow/widgets/image/image_message.dart';
@@ -10,11 +11,18 @@ class ComputedMessage extends StatelessWidget{
   final Message message;
 
   final bool isAuthor;
+
+  final CustomWidgetBuilder? customWidgetBuilder;
+  final CustomWidgetBuilder? videoWidgetBuilder;
+  final CustomWidgetBuilder? pdfWidgetBuilder;
   
   const ComputedMessage({
     super.key,
     required this.message,
     required this.isAuthor,
+    this.customWidgetBuilder,
+    this.videoWidgetBuilder,
+    this.pdfWidgetBuilder,
   });
   
   @override
@@ -26,8 +34,13 @@ class ComputedMessage extends StatelessWidget{
         result = ImageMessageWidget(uri: imageMessage.uri, text: imageMessage.text, isAuthor: isAuthor,);
         break;
       case MessageType.video:
-        VideoMessage videoMessage = message as VideoMessage;
-        result = VideoMessageWidget(uri: videoMessage.uri, text: videoMessage.text, isAuthor: isAuthor);
+        if(videoWidgetBuilder != null){
+          debugPrint("FOUND CUSTOM");
+          VideoMessage videoMessage = message as VideoMessage;
+          result = VideoMessageWidget(uri: videoMessage.uri, text: videoMessage.text, isAuthor: isAuthor, videoWidgetBuilder: videoWidgetBuilder!,);
+        }else{
+          result = const SizedBox();
+        }
         break;
       case MessageType.audio:
         AudioMessage audioMessage = message as AudioMessage;

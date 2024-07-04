@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_chatflow/models.dart';
 import 'package:flutter_chatflow/notifier.dart';
+import 'package:flutter_chatflow/utils/type_defs.dart';
 import 'package:flutter_chatflow/utils/types.dart';
 import 'package:flutter_chatflow/widgets/chat_bubble.dart';
 
@@ -17,6 +18,10 @@ class ChatFlow extends StatefulWidget{
   final bool? showUserAvatarInChat;
   final void Function(List<Message> messages)? onDeleteMessages;
   final Theme? theme;
+  final CustomWidgetBuilder? customWidgetBuilder;
+  final CustomWidgetBuilder? videoWidgetBuilder;
+  final CustomWidgetBuilder? pdfWidgetBuilder;
+
   
   const ChatFlow({
     super.key,
@@ -29,7 +34,10 @@ class ChatFlow extends StatefulWidget{
     this.onMessageSwipedRight,
     this.showUserAvatarInChat,
     this.onDeleteMessages,
-    this.theme
+    this.theme,
+    this.videoWidgetBuilder,
+    this.pdfWidgetBuilder,
+    this.customWidgetBuilder,
   });
 
   @override
@@ -103,6 +111,9 @@ class _ChatFlowState extends State<ChatFlow>{
                             currentMessageIndex: index,
                             setSelectedMessages: handleSetSelectedMessage,
                             selectedMessages: selectedMessages,
+                            videoWidgetBuilder: widget.videoWidgetBuilder,
+                            pdfWidgetBuilder: widget.pdfWidgetBuilder,
+                            customWidgetBuilder: widget.customWidgetBuilder,
                           );
                         }
                       ),
