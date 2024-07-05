@@ -138,9 +138,9 @@ class _ChatFlowState extends State<ChatFlow>{
                           widget.onAttachmentPressed!();
                         }
                       },
-                      icon: const Icon(
+                      icon: Icon(
                         Icons.add,
-                        color: Colors.white,
+                        color: Theme.of(context).primaryColor,
                       ),
                     ),
                     const SizedBox(width: 10,),
@@ -164,9 +164,9 @@ class _ChatFlowState extends State<ChatFlow>{
                         widget.onSendPressed != null ? widget.onSendPressed!(_textEditingController.text) : null;
                         _textEditingController.clear();
                       },
-                      icon: const Icon(
+                      icon: Icon(
                         Icons.send,
-                        color: Colors.white,
+                        color: Theme.of(context).primaryColor,
                       ),
                     )
                   ],
