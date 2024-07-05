@@ -6,16 +6,24 @@ import 'package:flutter_chatflow/widgets/audio/audio_message.dart';
 import 'package:flutter_chatflow/widgets/image/image_message.dart';
 import 'package:flutter_chatflow/widgets/video/video_message.dart';
 
-class ComputedMessage extends StatelessWidget{
-  
+/// Class to dynamically chose which widget to use to display a particular message based on message type
+class ComputedMessage extends StatelessWidget {
+  /// Message
   final Message message;
 
+  /// If true, message is displayed to the right
   final bool isAuthor;
 
+  /// Optional widget to be passed
   final CustomWidgetBuilder? customWidgetBuilder;
+
+  /// Optional widget to be passed
   final CustomWidgetBuilder? videoWidgetBuilder;
+
+  /// Optional widget to be passed
   final CustomWidgetBuilder? pdfWidgetBuilder;
-  
+
+  /// Handle the computation
   const ComputedMessage({
     super.key,
     required this.message,
@@ -24,26 +32,36 @@ class ComputedMessage extends StatelessWidget{
     this.videoWidgetBuilder,
     this.pdfWidgetBuilder,
   });
-  
+
   @override
   Widget build(BuildContext context) {
     Widget result;
     switch (message.type) {
       case MessageType.image:
         ImageMessage imageMessage = message as ImageMessage;
-        result = ImageMessageWidget(uri: imageMessage.uri, text: imageMessage.text, isAuthor: isAuthor,);
+        result = ImageMessageWidget(
+          uri: imageMessage.uri,
+          text: imageMessage.text,
+          isAuthor: isAuthor,
+        );
         break;
       case MessageType.video:
-        if(videoWidgetBuilder != null){
+        if (videoWidgetBuilder != null) {
           VideoMessage videoMessage = message as VideoMessage;
-          result = VideoMessageWidget(uri: videoMessage.uri, text: videoMessage.text, isAuthor: isAuthor, videoWidgetBuilder: videoWidgetBuilder!,);
-        }else{
+          result = VideoMessageWidget(
+            uri: videoMessage.uri,
+            text: videoMessage.text,
+            isAuthor: isAuthor,
+            videoWidgetBuilder: videoWidgetBuilder!,
+          );
+        } else {
           result = const SizedBox();
         }
         break;
       case MessageType.audio:
         AudioMessage audioMessage = message as AudioMessage;
-        result = AudioMessageWidget(uri: audioMessage.uri, text: audioMessage.text, isAuthor: isAuthor);
+        result = AudioMessageWidget(
+            uri: audioMessage.uri, text: audioMessage.text, isAuthor: isAuthor);
       default:
         TextMessage textMessage = message as TextMessage;
         result = Text(textMessage.text);

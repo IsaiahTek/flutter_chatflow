@@ -1,14 +1,12 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 
-class AudioWidget extends StatelessWidget{
-
+/// Audio Widget
+class AudioWidget extends StatelessWidget {
+  /// uri/url or path of the audio file
   final String uri;
-  const AudioWidget({
-    super.key,
-    required this.uri
-  });
+
+  /// Pass in the uri
+  const AudioWidget({super.key, required this.uri});
 
   @override
   Widget build(BuildContext context) {
@@ -30,5 +28,4 @@ class AudioWidget extends StatelessWidget{
     //   },
     // );
   }
-  
 }

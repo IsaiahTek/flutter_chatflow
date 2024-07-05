@@ -1,10 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_chatflow/widgets/image/image_widget.dart';
 
-class AudioMessageWidget extends StatelessWidget{
+/// Audio message widget
+class AudioMessageWidget extends StatelessWidget {
+  /// uri/url or local file path
   final String uri;
+
+  /// [Optional] text
   final String? text;
+
+  /// If set to true, widget is displayed to the right
   final bool? isAuthor;
+
+  /// Audio message widget to display an audio message type
   const AudioMessageWidget({
     super.key,
     required this.uri,
@@ -15,16 +22,14 @@ class AudioMessageWidget extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      child: const Column(
-        children: [
-          // ClipRRect(
-          //   borderRadius: BorderRadius.circular(10),
-          //   child: ImageWidget(uri: uri),
-          // ),
-          // if(text != null) Text(text!)
-        ],
-      )
-    );
+        child: const Column(
+      children: [
+        // ClipRRect(
+        //   borderRadius: BorderRadius.circular(10),
+        //   child: ImageWidget(uri: uri),
+        // ),
+        // if(text != null) Text(text!)
+      ],
+    ));
   }
-  
 }

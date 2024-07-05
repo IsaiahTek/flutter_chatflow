@@ -2,52 +2,57 @@ import 'package:flutter/material.dart';
 import 'package:flutter_chatflow/widgets/image/image_swipe.dart';
 import 'package:flutter_chatflow/widgets/media_selection_with_text.dart';
 
-class ImageUploadPreviewWithTextInput extends StatefulWidget{
-
+/// This class should be called for handling selected images preview and text addition before sending to list of messages or server
+class ImageUploadPreviewWithTextInput extends StatefulWidget {
+  /// The image uri/url or local file path
   final List<String> imagesUri;
-  final int? currentIndex;
-  final void Function(List<MediaSelectionWithText> selectionsWithText) setMediaSelectionsWithText;
 
-  const ImageUploadPreviewWithTextInput({
-    super.key,
-    required this.imagesUri,
-    this.currentIndex,
-    required this.setMediaSelectionsWithText
-  });
+  /// Current index of all images selected by the user
+  final int? currentIndex;
+
+  /// Callback to set state of selected image with optional text entered by the user at preview
+  final void Function(List<MediaSelectionWithText> selectionsWithText)
+      setMediaSelectionsWithText;
+
+  /// Pass in the required parameters.
+  const ImageUploadPreviewWithTextInput(
+      {super.key,
+      required this.imagesUri,
+      this.currentIndex,
+      required this.setMediaSelectionsWithText});
 
   @override
-  State<ImageUploadPreviewWithTextInput> createState() => _ImageUploadPreviewWithTextInputState();
+  State<ImageUploadPreviewWithTextInput> createState() =>
+      _ImageUploadPreviewWithTextInputState();
 }
 
-class _ImageUploadPreviewWithTextInputState extends State<ImageUploadPreviewWithTextInput> {
-  
+class _ImageUploadPreviewWithTextInputState
+    extends State<ImageUploadPreviewWithTextInput> {
   late int currentIndex;
 
   late List<MediaSelectionWithText> uploadingMediaWithText = [];
-  
+
   @override
   void initState() {
-    currentIndex = widget.currentIndex??0;
+    currentIndex = widget.currentIndex ?? 0;
     for (var uri in widget.imagesUri) {
-      uploadingMediaWithText.add(
-        MediaSelectionWithText(uri: uri, text: null)
-      );
+      uploadingMediaWithText.add(MediaSelectionWithText(uri: uri, text: null));
     }
-    
+
     super.initState();
   }
 
-  handleSetMediaSelectionWithText(String text){
+  handleSetMediaSelectionWithText(String text) {
     uploadingMediaWithText[currentIndex].copyWith(text: text);
   }
 
-  handleSetCurrentIndex(int index){
+  handleSetCurrentIndex(int index) {
     setState(() {
       currentIndex = index;
     });
   }
 
-  void handleOnSumitted(){
+  void handleOnSumitted() {
     widget.setMediaSelectionsWithText(uploadingMediaWithText);
     Navigator.pop(context);
   }
@@ -55,69 +60,73 @@ class _ImageUploadPreviewWithTextInputState extends State<ImageUploadPreviewWith
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
-      body: SingleChildScrollView(
-        child: SizedBox(
-          height: MediaQuery.of(context).size.height,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Container(
-                padding: const EdgeInsets.symmetric(vertical: 20),
-                child: Text("${currentIndex+1} of ${widget.imagesUri.length}", style: const TextStyle(color: Colors.white),),
-              ),
-              // Image And Buttons below
-              ImagesSwipe(currentIndex: currentIndex, setCurrentIndex: handleSetCurrentIndex, uri: widget.imagesUri[currentIndex], imagesLength: widget.imagesUri.length),
-              // Text Input below if available
-              Container(
-                width: MediaQuery.of(context).size.width,
-                margin: const EdgeInsets.symmetric(horizontal: 20),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: ControlledInput(
-                        setMediaSelectionsWithText: handleSetMediaSelectionWithText,
+        backgroundColor: Colors.black,
+        body: SingleChildScrollView(
+          child: SizedBox(
+            height: MediaQuery.of(context).size.height,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Container(
+                  padding: const EdgeInsets.symmetric(vertical: 20),
+                  child: Text(
+                    "${currentIndex + 1} of ${widget.imagesUri.length}",
+                    style: const TextStyle(color: Colors.white),
+                  ),
+                ),
+                // Image And Buttons below
+                ImagesSwipe(
+                    currentIndex: currentIndex,
+                    setCurrentIndex: handleSetCurrentIndex,
+                    uri: widget.imagesUri[currentIndex],
+                    imagesLength: widget.imagesUri.length),
+                // Text Input below if available
+                Container(
+                  width: MediaQuery.of(context).size.width,
+                  margin: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Row(
+                    children: [
+                      Expanded(
+                          child: ControlledInput(
+                        setMediaSelectionsWithText:
+                            handleSetMediaSelectionWithText,
                         initialText: uploadingMediaWithText[currentIndex].text,
                         onSubmitted: handleOnSumitted,
-                      )
-                    ),
-                    IconButton(
-                      onPressed: handleOnSumitted,
-                      color: Colors.white,
-                      icon: const Icon(Icons.send))
-                  ],
-                ),
-              )
-            ],
+                      )),
+                      IconButton(
+                          onPressed: handleOnSumitted,
+                          color: Colors.white,
+                          icon: const Icon(Icons.send))
+                    ],
+                  ),
+                )
+              ],
+            ),
           ),
-        ),
-      )
-    );
+        ));
   }
 }
 
-class ControlledInput extends StatefulWidget{
+class ControlledInput extends StatefulWidget {
   final void Function(String text) setMediaSelectionsWithText;
   final void Function() onSubmitted;
   final String? initialText;
 
-  const ControlledInput({
-    super.key,
-    required this.setMediaSelectionsWithText,
-    this.initialText,
-    required this.onSubmitted
-  });
+  const ControlledInput(
+      {super.key,
+      required this.setMediaSelectionsWithText,
+      this.initialText,
+      required this.onSubmitted});
 
   @override
   State<ControlledInput> createState() => _ControlledInputState();
 }
 
 class _ControlledInputState extends State<ControlledInput> {
-
   TextEditingController textEditingController = TextEditingController();
 
-  String get initialText => widget.initialText??"";
+  String get initialText => widget.initialText ?? "";
 
   @override
   void initState() {
@@ -139,16 +148,15 @@ class _ControlledInputState extends State<ControlledInput> {
     textEditingController.clear();
     super.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
     return TextField(
       decoration: const InputDecoration(
-        hintStyle: TextStyle(color: Colors.white70),
-        hintText: "Enter image text here"
-      ),
-      
+          hintStyle: TextStyle(color: Colors.white70),
+          hintText: "Enter image text here"),
       controller: textEditingController,
-      onSubmitted: (e){
+      onSubmitted: (e) {
         widget.onSubmitted();
       },
     );

@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 
-typedef VideoWidgetBuilder = Widget Function({required BuildContext context, required String uri});
+/// Video Widget Builder Callback
+typedef VideoWidgetBuilder = Widget Function(
+    {required BuildContext context, required String uri});
 
-typedef CustomWidgetBuilder = Widget Function({required BuildContext context, required String uri});
+/// Custom Widget Builder Callback
+typedef CustomWidgetBuilder = Widget Function(
+    {required BuildContext context, required String uri});

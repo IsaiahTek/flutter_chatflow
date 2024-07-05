@@ -1,24 +1,41 @@
 import 'package:flutter_chatflow/utils/types.dart';
 
-abstract class Message{
+/// Base Message class and should'nt be used directly. Can be extended to create other message types
+
+abstract class Message {
+  /// Internal Message type. Must be one of the types in types file
   MessageType type;
+
+  /// Message sender
   ChatUser author;
+
+  /// Timestamp
   int createdAt;
+
+  /// Delivery status could be any of the follow `sending, sent, delivered, read`
   DeliveryStatus? status;
+
+  /// Store other details you need here.
   Map<String, dynamic>? meta;
 
-  Message({
-    required this.type,
-    required this.author,
-    required this.createdAt,
-    this.status,
-    this.meta
-  });
+  ///Create the class
+  Message(
+      {required this.type,
+      required this.author,
+      required this.createdAt,
+      this.status,
+      this.meta});
 }
 
-class ImageMessage extends Message{
+/// Image message
+class ImageMessage extends Message {
+  /// uri/url or local file path
   final String uri;
+
+  /// [Optional] text
   String? text;
+
+  /// Create
   ImageMessage({
     super.type = MessageType.image,
     required super.author,
@@ -30,9 +47,15 @@ class ImageMessage extends Message{
   });
 }
 
-class AudioMessage extends Message{
+/// Audio message
+class AudioMessage extends Message {
+  /// uri/url or local file path
   final String uri;
+
+  /// [Optional] text
   String? text;
+
+  /// Create
   AudioMessage({
     super.type = MessageType.image,
     required super.author,
@@ -44,9 +67,15 @@ class AudioMessage extends Message{
   });
 }
 
-class VideoMessage extends Message{
+/// Video message
+class VideoMessage extends Message {
+  /// uri/url or local file path
   final String uri;
+
+  /// [Optional] text
   String? text;
+
+  /// Create
   VideoMessage({
     super.type = MessageType.video,
     required super.author,
@@ -56,12 +85,17 @@ class VideoMessage extends Message{
     super.status,
     super.meta,
   });
-  
 }
 
-class PdfMessage extends Message{
+/// PDF
+class PdfMessage extends Message {
+  /// uri/url or local file path
   final String uri;
+
+  /// [Optional] text
   String? text;
+
+  /// Create class
   PdfMessage({
     super.type = MessageType.video,
     required super.author,
@@ -71,38 +105,46 @@ class PdfMessage extends Message{
     super.status,
     super.meta,
   });
-  
 }
 
-class TextMessage extends Message{
+/// Text message
+class TextMessage extends Message {
+  /// Message text
   final String text;
-  TextMessage({
-    super.type = MessageType.text,
-    required super.author,
-    required super.createdAt,
-    required this.text,
-    super.status
-  });
+
+  /// Create the class
+  TextMessage(
+      {super.type = MessageType.text,
+      required super.author,
+      required super.createdAt,
+      required this.text,
+      super.status});
 }
 
-class ChatInfo extends Message{
+/// Chat info could be anything like announcement or in-chat notification
+class ChatInfo extends Message {
+  /// Text information
   final String info;
-  ChatInfo({
-    super.type = MessageType.info,
-    super.author = const ChatUser(userID: ''),
-    required super.createdAt,
-    required this.info
-  });
+
+  /// Create the class
+  ChatInfo(
+      {super.type = MessageType.info,
+      super.author = const ChatUser(userID: ''),
+      required super.createdAt,
+      required this.info});
 }
 
-class ChatUser{
+/// Chat User
+class ChatUser {
+  /// Unique for identifying each user in chat
   final String userID;
+
+  /// Name
   final String? name;
+
+  /// Photo url on server
   final String? photoUrl;
 
-  const ChatUser({
-    required this.userID,
-    this.name,
-    this.photoUrl
-  });
+  /// Create user
+  const ChatUser({required this.userID, this.name, this.photoUrl});
 }

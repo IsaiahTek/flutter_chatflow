@@ -48,8 +48,9 @@ Or
 Add flutter_chatflow to your pubspec.yaml:
 ```yaml
 dependencies:
-  flutter_chatflow: ^1.0.0
+  flutter_chatflow: ^0.0.1
 ```
+Check for current version number as newer version might be available.
 Then run `flutter pub get` to install the package.
 
 ## Usage
@@ -57,7 +58,7 @@ Then run `flutter pub get` to install the package.
 Here is a basic example to get you started:
 
 ```dart
-import 'package:flutter_chatflow/flutter_chatflow.dart';
+import 'package:flutter_chatflow/chatflow.dart';
 
 void main() {
   runApp(MyApp());
@@ -78,8 +79,6 @@ class ChatScreen extends StatelessWidget {
   ChatUser author = ChatUser({
     /// It should be unique and persistent for each user
     userID: 'randomID'
-    name: 'Name of user',
-    photoUrl: 'url of the photo on server'
   })
 
   void _addMessage(Message message) {
@@ -127,9 +126,12 @@ class ChatScreen extends StatelessWidget {
 
 ## Additional information
 
+For support kindly send a mail to [Engr. Isaiah Pius](mailto://isaiahtech1@gmail.com)
+
 ### Contributing
+
 We welcome contributions! Please see our contributing guidelines for more information.
 
 ### License
-flutter_chatflow is released under the MIT License.
 
+flutter_chatflow is released under the [BSD license.](https://github.com/IsaiahTek/flutter_chatflow/blob/main/LICENSE)
