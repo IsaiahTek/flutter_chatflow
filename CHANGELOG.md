@@ -1,3 +1,9 @@
+## 0.0.5
+* Showing `onSendPressed` Button only when text field is not empty
+* Showing `onAttachmentPressed` Button only if onAttachmentPressed callback is provided
+* Fixed time partition for intervals with different months
+* Added missing documentations more
+
 ## 0.0.4
 
 * Updated the description.

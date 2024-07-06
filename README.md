@@ -48,7 +48,7 @@ Or
 Add flutter_chatflow to your pubspec.yaml:
 ```yaml
 dependencies:
-  flutter_chatflow: ^0.0.1
+  flutter_chatflow: ^0.0.5
 ```
 Check for current version number as newer version might be available.
 Then run `flutter pub get` to install the package.

@@ -101,7 +101,7 @@ bool isSameDay(int? previousMessageTime, int currentMessageTime) {
 String computeTimePartitionText(int millisecondsSinceEpoch) {
   DateTime date = DateTime.fromMillisecondsSinceEpoch(millisecondsSinceEpoch);
   DateTime now = DateTime.now();
-  int longAgo = now.day - date.day;
+  int longAgo = now.difference(date).inDays;
   String result;
   switch (longAgo) {
     case 0:

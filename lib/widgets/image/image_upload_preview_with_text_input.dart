@@ -108,11 +108,16 @@ class _ImageUploadPreviewWithTextInputState
   }
 }
 
+/// Input widget for uploading media with text
 class ControlledInput extends StatefulWidget {
+  /// Callback to handle setting the media selected with the input text
   final void Function(String text) setMediaSelectionsWithText;
+  /// Callback for handling onSubmit of picked media with text
   final void Function() onSubmitted;
+  /// [Optional] Initial text passed to the input
   final String? initialText;
 
+  /// Input for adding text to selected media
   const ControlledInput(
       {super.key,
       required this.setMediaSelectionsWithText,

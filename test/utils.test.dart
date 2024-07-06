@@ -19,5 +19,15 @@ void main() {
               DateTime.now().millisecondsSinceEpoch),
           true);
     });
+    DateTime twoWeeksAgo = DateTime(2024, 6, 22);
+    test('return Time Partition For more than 6 days ago', () {
+      expect(computeTimePartitionText(twoWeeksAgo.millisecondsSinceEpoch),
+          '22/6/2024');
+    });
+    DateTime fiveWeeksAgo = DateTime(2024, 7, 1);
+    test('return Time Partition For more than 6 days ago', () {
+      expect(computeTimePartitionText(fiveWeeksAgo.millisecondsSinceEpoch),
+          'Monday');
+    });
   });
 }
