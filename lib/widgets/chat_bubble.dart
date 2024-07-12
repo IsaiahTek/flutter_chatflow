@@ -6,6 +6,7 @@ import 'package:flutter_chatflow/utils/utils.dart';
 import 'package:flutter_chatflow/widgets/chat_avatar.dart';
 import 'package:flutter_chatflow/widgets/computed_widget.dart';
 import 'package:flutter_chatflow/widgets/image/image_carousel.dart';
+import 'package:flutter_chatflow/widgets/replied_message_widget.dart';
 
 /// Chat Bubble Class
 class ChatBubble extends StatefulWidget {
@@ -141,7 +142,7 @@ class _ChatBubbleState extends State<ChatBubble> {
               color: selectedMessages.contains(widget.message)
                   ? Theme.of(context).primaryColor.withOpacity(.08)
                   : Colors.transparent,
-              // margin: const EdgeInsets.only(bottom: 5),
+              padding: const EdgeInsets.only(bottom: 5),
               child: Row(
                   mainAxisAlignment:
                       widget.chatUser.userID == widget.message.author.userID
@@ -186,7 +187,7 @@ class _ChatBubbleState extends State<ChatBubble> {
                                 ),
                                 // Message Delivery Widget
                                 Positioned(
-                                  bottom: -12,
+                                  bottom: -10,
                                   right: 10,
                                   child: _MessageDeliveryWidget(
                                       message: widget.message,
@@ -330,7 +331,11 @@ class _MessageDeliveryWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        margin: const EdgeInsets.only(right: 10, bottom: 10),
+        margin: const EdgeInsets.only(right: 1, bottom: 10),
+        padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 10),
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            color: Theme.of(context).primaryColor.withOpacity(0.04)),
         child: Row(
             // alignment: Alignment.bottomRight,
             mainAxisAlignment: MainAxisAlignment.end,
@@ -420,11 +425,13 @@ class _MessageWidget extends StatelessWidget {
                 : Colors.white),
         padding:
             showUserAvatarInChat && chatUser.userID != message.author.userID
-                ? const EdgeInsets.only(top: 0, right: 0, bottom: 0)
-                : EdgeInsets.symmetric(
-                    horizontal: message.type == MessageType.text ? 15 : 2,
-                    vertical: message.type == MessageType.text ? 10 : 2),
-        margin: const EdgeInsets.only(left: 10, right: 10, top: 10),
+                ? const EdgeInsets.only(top: 0, right: 0, bottom: 20)
+                : EdgeInsets.only(
+                    left: message.type == MessageType.text ? 15 : 2,
+                    right: message.type == MessageType.text ? 15 : 2,
+                    top: message.type == MessageType.text ? 10 : 2,
+                    bottom: message.type == MessageType.text ? 20 : 2),
+        margin: const EdgeInsets.only(left: 10, right: 10, top: 5),
         child: GestureDetector(
           onTap: () {
             if (message.type == MessageType.image) {
@@ -444,6 +451,8 @@ class _MessageWidget extends StatelessWidget {
               child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              if (message.repliedTo != null)
+                RepliedMessageWidget(replyMessage: message.repliedTo!),
               if (showUserAvatarInChat &&
                   chatUser.userID != message.author.userID)
                 Container(

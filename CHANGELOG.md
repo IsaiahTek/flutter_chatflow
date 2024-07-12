@@ -1,6 +1,11 @@
-## 0.0.6
-* Fixed minor issue of typing notifier stream to avoid updating typing state when input field just loses focus.
+## 0.1.0
+* Fixed minor issue of typing notifier stream to avoid updating typing state when input field just loss focus.
 * Fixed minor `onSendPressed` button visibility to be instantly reactive to typing activity.
+* Added Message Swipe
+* Added Reply To Message Model
+* Added RepliedTo Widget To Input Section If Marked
+* Added RepliedTo Widget to MessageWidget
+
 ## 0.0.5
 * Showing `onSendPressed` Button only when text field is not empty
 * Showing `onAttachmentPressed` Button only if onAttachmentPressed callback is provided

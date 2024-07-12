@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_chatflow/models.dart';
 import 'package:flutter_chatflow/notifier.dart';
+import 'package:flutter_chatflow/utils/type_defs.dart';
 import 'package:flutter_chatflow/widgets/computed_widget.dart';
+import 'package:flutter_chatflow/widgets/replied_message_widget.dart';
 
 /// Not for your usage
 class ChatInputWidget extends StatefulWidget {
@@ -15,7 +17,7 @@ class ChatInputWidget extends StatefulWidget {
       this.unsetReplyMessage});
 
   /// The callback to handle the event when a user sends a text message.
-  final void Function(String message)? onSendPressed;
+  final OnSendPressed onSendPressed;
 
   /// The callback for handling attachment button click.
   final void Function()? onAttachmentPressed;
@@ -61,44 +63,28 @@ class _ChatInputWidgetState extends State<ChatInputWidget> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         if (widget.replyMessage != null)
-          Container(
-            decoration: BoxDecoration(
-                border: Border(
-                    left: BorderSide(
-                        width: 6, color: Theme.of(context).primaryColor)),
-                borderRadius: const BorderRadius.all(Radius.circular(6)),
-                color: Theme.of(context).primaryColor.withOpacity(.2)),
-            width: MediaQuery.of(context).size.width,
-            margin: const EdgeInsets.symmetric(horizontal: 5),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(
+          Stack(
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 5),
+                child: RepliedMessageWidget(replyMessage: widget.replyMessage!),
+              ),
+              Positioned(
+                  top: 0,
+                  right: 0,
                   child: Container(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 20, horizontal: 10),
-                    constraints: BoxConstraints.loose(const Size(80, 80)),
-                    child: Container(
-                      color: Colors.white,
-                      child: ComputedMessage(
-                          message: widget.replyMessage!, isAuthor: true),
+                    height: 20,
+                    width: 20,
+                    margin: const EdgeInsets.only(top: 5, right: 5),
+                    child: GestureDetector(
+                      onTap: widget.unsetReplyMessage,
+                      child: const Icon(
+                        Icons.close,
+                        size: 18,
+                      ),
                     ),
-                  ),
-                ),
-                Container(
-                  height: 20,
-                  width: 20,
-                  margin: const EdgeInsets.only(top: 5, right: 5),
-                  child: GestureDetector(
-                    onTap: widget.unsetReplyMessage,
-                    child: const Icon(
-                      Icons.close,
-                      size: 18,
-                    ),
-                  ),
-                )
-              ],
-            ),
+                  ))
+            ],
           ),
         ClipRRect(
             borderRadius: BorderRadius.only(
@@ -155,13 +141,17 @@ class _ChatInputWidgetState extends State<ChatInputWidget> {
                         onPressed: () {
                           // try {
                           widget.onSendPressed != null
-                              ? widget
-                                  .onSendPressed!(_textEditingController.text)
+                              ? widget.onSendPressed!(
+                                  _textEditingController.text,
+                                  repliedTo: widget.replyMessage)
                               : null;
                           // } catch (e) {
                           //   logError("Error on onSendPressed: $e");
                           // }
                           _textEditingController.clear();
+                          if (widget.unsetReplyMessage != null) {
+                            widget.unsetReplyMessage!();
+                          }
                         },
                         icon: Icon(
                           Icons.send,

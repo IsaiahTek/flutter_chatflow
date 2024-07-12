@@ -16,7 +16,7 @@ class ChatFlow extends StatefulWidget {
   final ChatUser chatUser;
 
   /// The callback to handle the event when a user sends a text message.
-  final void Function(String message, {Message? repliedTo})? onSendPressed;
+  final OnSendPressed onSendPressed;
 
   /// The callback for handling attachment button click.
   final void Function()? onAttachmentPressed;
@@ -132,7 +132,7 @@ class _ChatFlowState extends State<ChatFlow> {
                         itemBuilder: (context, index) {
                           return Container(
                             width: MediaQuery.of(context).size.width,
-                            margin: const EdgeInsets.only(bottom: 20),
+                            margin: const EdgeInsets.only(bottom: 10),
                             child: ChatBubble(
                               message: _messages[index],
                               chatUser: widget.chatUser,
