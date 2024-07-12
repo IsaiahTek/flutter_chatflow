@@ -18,13 +18,21 @@ abstract class Message {
   /// Store other details you need here.
   Map<String, dynamic>? meta;
 
+  /// [Optional] The Message that `this` message is replied
+  ///
+  /// Ensure you pass this in if you want the reply to apply to the replied message.
+  ///
+  /// When a messsage is marked as a repliedTo message, ChatFlow will include it in the payload passed to either the onSendPressed or the onAttachmentPressed callback.
+  Message? repliedTo;
+
   ///Create the class
   Message(
       {required this.type,
       required this.author,
       required this.createdAt,
       this.status,
-      this.meta});
+      this.meta,
+      this.repliedTo});
 }
 
 /// Image message
@@ -44,6 +52,7 @@ class ImageMessage extends Message {
     super.status,
     this.text,
     super.meta,
+    super.repliedTo,
   });
 }
 
@@ -64,6 +73,7 @@ class AudioMessage extends Message {
     this.text,
     super.status,
     super.meta,
+    super.repliedTo,
   });
 }
 
@@ -84,6 +94,7 @@ class VideoMessage extends Message {
     this.text,
     super.status,
     super.meta,
+    super.repliedTo,
   });
 }
 
@@ -104,6 +115,7 @@ class PdfMessage extends Message {
     this.text,
     super.status,
     super.meta,
+    super.repliedTo,
   });
 }
 
@@ -118,7 +130,8 @@ class TextMessage extends Message {
       required super.author,
       required super.createdAt,
       required this.text,
-      super.status});
+      super.status,
+      super.repliedTo});
 }
 
 /// Chat info could be anything like announcement or in-chat notification

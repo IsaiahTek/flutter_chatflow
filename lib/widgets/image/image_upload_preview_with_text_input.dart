@@ -112,8 +112,10 @@ class _ImageUploadPreviewWithTextInputState
 class ControlledInput extends StatefulWidget {
   /// Callback to handle setting the media selected with the input text
   final void Function(String text) setMediaSelectionsWithText;
+
   /// Callback for handling onSubmit of picked media with text
   final void Function() onSubmitted;
+
   /// [Optional] Initial text passed to the input
   final String? initialText;
 

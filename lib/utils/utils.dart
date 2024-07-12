@@ -26,15 +26,24 @@ List<int> groupNumbersIntoRGB(List<int> numbers) {
   return rgbList;
 }
 
+class ColorPair {
+  final Color background;
+  final Color surface;
+  ColorPair({required this.background, required this.surface});
+}
+
 /// Color equivalence of integer
-Color createColorFromHashCode(int hashCode) {
+ColorPair createColorFromHashCode(int hashCode) {
   List<int> hashCodeInts = computeNumbersList(hashCode);
   List<int> computedRGBList = groupNumbersIntoRGB(hashCodeInts);
   int r = computedRGBList[0];
   int g = computedRGBList[1];
   int b = computedRGBList[2];
-
-  return Color.fromARGB(255, r, g, b);
+  return ColorPair(
+      background: Color.fromARGB(255, r, g, b),
+      surface: Color.fromARGB(255, r, g, b).computeLuminance() > 0.4
+          ? Colors.black
+          : Colors.white);
 }
 
 /// Weekdays

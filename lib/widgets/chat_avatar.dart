@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_chatflow/models.dart';
+import 'package:flutter_chatflow/utils/utils.dart';
 
 /// Chat Avatar. This could be profile photo
 class ChatAvatar extends StatelessWidget {
@@ -56,10 +57,16 @@ class ChatAvatar extends StatelessWidget {
           Container(
             margin: const EdgeInsets.only(left: 5),
             child: CircleAvatar(
-                // backgroundColor: createColorFromHashCode(author.userID.hashCode),
+                backgroundColor:
+                    createColorFromHashCode(author.userID.hashCode).background,
                 foregroundImage:
                     isValidUrl ? NetworkImage(author.photoUrl!) : null,
-                child: Text(avatarText)),
+                child: Text(
+                  avatarText,
+                  style: TextStyle(
+                      color: createColorFromHashCode(author.userID.hashCode)
+                          .surface),
+                )),
           ),
       ],
     );
