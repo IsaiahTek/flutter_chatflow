@@ -166,36 +166,33 @@ class _ChatBubbleState extends State<ChatBubble> {
                           widget.chatUser.userID ==
                               widget.message.author.userID),
                       child: Transform.translate(
-                          offset: Offset(
-                              _left ?? (_right != null ? 0 - _right! : 0), 0),
-                          child: Container(
-                            child: Stack(
-                              children: [
-                                // Message Container
-                                _MessageWidget(
-                                  message: widget.message,
-                                  chatUser: widget.chatUser,
-                                  imageMessages: widget.imageMessages,
-                                  handleSetSelectedMessage:
-                                      handleSetSelectedMessage,
-                                  customWidgetBuilder:
-                                      widget.customWidgetBuilder,
-                                  pdfWidgetBuilder: widget.pdfWidgetBuilder,
-                                  videoWidgetBuilder: widget.videoWidgetBuilder,
-                                  showUserAvatarInChat:
-                                      widget.showUserAvatarInChat,
-                                ),
-                                // Message Delivery Widget
-                                Positioned(
-                                  bottom: -10,
-                                  right: 10,
-                                  child: _MessageDeliveryWidget(
-                                      message: widget.message,
-                                      chatUser: widget.chatUser),
-                                )
-                              ],
+                        offset: Offset(
+                            _left ?? (_right != null ? 0 - _right! : 0), 0),
+                        child: Stack(
+                          children: [
+                            // Message Container
+                            _MessageWidget(
+                              message: widget.message,
+                              chatUser: widget.chatUser,
+                              imageMessages: widget.imageMessages,
+                              handleSetSelectedMessage:
+                                  handleSetSelectedMessage,
+                              customWidgetBuilder: widget.customWidgetBuilder,
+                              pdfWidgetBuilder: widget.pdfWidgetBuilder,
+                              videoWidgetBuilder: widget.videoWidgetBuilder,
+                              showUserAvatarInChat: widget.showUserAvatarInChat,
                             ),
-                          )),
+                            // Message Delivery Widget
+                            Positioned(
+                              bottom: -10,
+                              right: 10,
+                              child: _MessageDeliveryWidget(
+                                  message: widget.message,
+                                  chatUser: widget.chatUser),
+                            )
+                          ],
+                        ),
+                      ),
                     ),
                   ]),
             ),

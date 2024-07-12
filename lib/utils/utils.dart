@@ -26,9 +26,15 @@ List<int> groupNumbersIntoRGB(List<int> numbers) {
   return rgbList;
 }
 
+/// Used internally.
 class ColorPair {
+  /// main color
   final Color background;
+
+  /// pair color
   final Color surface;
+
+  /// Constructor
   ColorPair({required this.background, required this.surface});
 }
 
