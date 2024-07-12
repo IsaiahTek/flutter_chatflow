@@ -2,9 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_chatflow/models.dart';
 import 'package:flutter_chatflow/widgets/computed_widget.dart';
 
+/// To be used internally by the package developers and contributors
+/// 
+/// Do not directly use this. The package uses it behind the scene.
 class RepliedMessageWidget extends StatelessWidget {
+
+  /// The message to be replied to.
   final Message replyMessage;
 
+  /// Constructor to build everything here.
   const RepliedMessageWidget({required this.replyMessage, super.key});
 
   @override
