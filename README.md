@@ -33,6 +33,7 @@ A powerful and flexible chat solution for Flutter apps. Features include real-ti
 7. Typing User: Listen to user typing events and do what you want such as notifying other users in the chat about that event.
 8. Media Preview: By default, chatflow automatically shows a image previews when a user taps on an image message. [See image above]
 9. Select Message: A user can select message(s) in the chat. You get the list of selected message(s) and do what you want by providing a callback. [See API in Documentation]
+10. Message Reply: Messages can be replied to easily. This makes your app more intuitive, modern and engaging.
 <!-- 6. Rich Text Support: Emoji, links, and formatted text in messages. -->
 Etc.
 
