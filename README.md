@@ -59,7 +59,18 @@ Then run `flutter pub get` to install the package.
 Here is a basic example to get you started:
 
 ```dart
+import 'dart:io';
+import 'dart:math';
+
+import 'package:flutter/material.dart';
 import 'package:flutter_chatflow/chatflow.dart';
+import 'package:flutter_chatflow/models.dart';
+import 'package:flutter_chatflow/notifier.dart';
+import 'package:flutter_chatflow/utils/types.dart';
+import 'package:flutter_chatflow/widgets/image/image_upload_preview_with_text_input.dart';
+import 'package:flutter_chatflow/widgets/media_selection_with_text.dart';
+
+
 
 void main() {
   runApp(MyApp());
