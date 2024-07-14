@@ -152,7 +152,8 @@ List<ConsecutiveOccurrence> getConsecutives(
       if (items[index].type == check.type &&
           items[index - 1].type == check.type &&
           items[index].author.userID == items[index - 1].author.userID &&
-          isSameDay(items[index - 1].createdAt, items[index].createdAt)) {
+          isSameDay(items[index - 1].createdAt, items[index].createdAt) &&
+          results.isNotEmpty) {
         found += 1;
         results[results.length - 1].updateEndIndex(index);
       } else if (found >= 0 && items[index].type == check.type) {

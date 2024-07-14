@@ -58,7 +58,7 @@ class _HomeState extends State<Home> {
 
   void onSendPressed(String message, {Message? repliedTo}) {
     TextMessage textMessage = TextMessage(
-        author: users[(Random().nextDouble() * 5)
+        author: users[(Random().nextDouble() * users.length)
             .toInt()], // Switching author for testing
         createdAt: DateTime.now().millisecondsSinceEpoch,
         text: message,
@@ -95,7 +95,7 @@ class _HomeState extends State<Home> {
           for (var element in selectionWithText) {
             int createdAt = DateTime.now().millisecondsSinceEpoch;
             final message = ImageMessage(
-                author: users[(Random().nextDouble() * users.length).toInt()],
+                author: users[1],
                 createdAt: createdAt,
                 repliedTo: repliedTo,
                 uri: element.uri,

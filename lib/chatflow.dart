@@ -24,13 +24,16 @@ class ChatFlow extends StatefulWidget {
   /// The callback for handling attachment button click.
   final OnAttachmentPressed onAttachmentPressed;
 
-  /// The callback when the user presses down a message for long. By default, the message is selected
-  final void Function()? onMessageLongPressed;
+  /// The callback when the user presses down a message for long. By default, the message is selected.
+  final void Function(Message message)? onMessageLongPressed;
 
-  /// Callback for when a message is swiped _left
+  /// Use this flag to use or prevent default effect of message long press
+  // final bool shouldOverrideDefaultMessageLongPress;
+
+  /// Callback for when a message is swiped left
   final void Function(Message swipedMessage)? onMessageSwipedLeft;
 
-  /// Callback for when a message is swiped _right
+  /// Callback for when a message is swiped right
   final void Function(Message swipedMessage)? onMessageSwipedRight;
 
   /// Set this as true if you want peer user avatar/profile photo to be shown in chat. This is typically used in group chat
@@ -179,10 +182,24 @@ class _ChatFlowState extends State<ChatFlow> {
                             width: MediaQuery.of(context).size.width,
                             child: (indexIsInConsecutivesAndIsFirstTake(
                                     groupedImages, index))
-                                ? GroupedImages(
-                                    images: getGroupedImageMessages(
-                                        _messages, groupedImages, index),
-                                    chatUser: widget.chatUser,
+                                ? Column(
+                                    children: [
+                                      _TimePartitionText(
+                                          createdAt: _messages[index].createdAt,
+                                          previousMessageCreatedAt:
+                                              _messages[index - 1].createdAt),
+                                      if (_messages[index].type ==
+                                          MessageType.info)
+                                        _InfoMessage(message: _messages[index]),
+                                      GroupedImages(
+                                        images: getGroupedImageMessages(
+                                            _messages, groupedImages, index),
+                                        chatUser: widget.chatUser,
+                                        isGroupChat:
+                                            widget.showUserAvatarInChat ??
+                                                false,
+                                      ),
+                                    ],
                                   )
                                 : (indexIsInConsecutives(groupedImages, index))
                                     ? const SizedBox.shrink()
@@ -240,5 +257,83 @@ class ChatFlowEvent {
   /// Used when closing/exiting selected messages
   static void unselectAllMessages() {
     EventManager.instance.unselectAllMessages();
+  }
+}
+
+class _TimePartitionText extends StatelessWidget {
+  final int? previousMessageCreatedAt;
+  final int createdAt;
+
+  const _TimePartitionText(
+      {required this.createdAt, this.previousMessageCreatedAt});
+
+  @override
+  Widget build(BuildContext context) {
+    return (!isSameDay(previousMessageCreatedAt, createdAt))
+        ? Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                margin: const EdgeInsets.symmetric(vertical: 15),
+                child: Container(
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(5),
+                      color: Colors.white,
+                      boxShadow: const [
+                        BoxShadow(
+                          offset: Offset(0.00, 0.5),
+                          color: Colors.black26,
+                        )
+                      ]),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                  child: Text(
+                    computeTimePartitionText(createdAt),
+                    style: TextStyle(
+                        fontStyle: FontStyle.italic,
+                        fontSize:
+                            Theme.of(context).textTheme.labelSmall?.fontSize),
+                  ),
+                ),
+              )
+            ],
+          )
+        : const SizedBox.shrink();
+  }
+}
+
+class _InfoMessage extends StatelessWidget {
+  final Message message;
+  const _InfoMessage({required this.message});
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Container(
+          constraints: BoxConstraints.loose(MediaQuery.of(context).size),
+          padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
+          child: Container(
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(5),
+                color: Colors.yellow[50],
+                boxShadow: const [
+                  BoxShadow(
+                    offset: Offset(0.00, 0.5),
+                    color: Colors.black26,
+                  )
+                ]),
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+            child: Text(
+              (message as ChatInfo).info,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                  fontStyle: FontStyle.italic,
+                  fontSize: Theme.of(context).textTheme.labelSmall?.fontSize),
+            ),
+          ),
+        )
+      ],
+    );
   }
 }

@@ -3,10 +3,13 @@
 * 1. Removed the `onDeleteMessages` callback with the top floating menu for deleting messages that have been selected by the user.
 * 2. Added a `onMessageSelectionChanged` callback that passes all the selected messages. Use this callback to get all the selected messages and build a context menu of your choice and have full control of customization and manipulation.
 * 3. Added a flag `shouldGroupConsecutiveImages` to allow grouping of four (4) or more consecutive images into a grid-like view. The default is true. So turn it off if you don't want it by passing false to it.
+* 4. Added an optional `minImagesToGroup` property to configure the minimum number of consecutive images by the same author/sender and on the same day to take as a group of images displayed in a grid-like view.
 * Other Changes:
 * Fixed color for image_upload_preview_with_text_input to white on a dark background.
-* Added repliedTo message to onAttachmentPress for replying marked message when handling attachment callback.
+* Added repliedTo message to onAttachmentPress callback argument for replying marked message when handling attachment callback.
 * Fixed repliedMessage widget overflow to make it look good and responsive (fluid).
+<!-- * Added `shouldOverrideDefaultMessageLongPress` to either ovveride the default message long press effect. -->
+
 * Added ChatFlowEvent class to help with ChatFlow handling event emitted from your Widget like your custom context menu for showing options/actions for selected messages
 Example:
 ```dart
@@ -15,6 +18,8 @@ handleOnExitMenu(){
     // Add other logic here
   }
 ```
+
+* Fixed all issues found in previous version.
 
 ## 0.1.0
 * Fixed minor issue of typing notifier stream to avoid updating typing state when input field just loss focus.
