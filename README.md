@@ -18,7 +18,7 @@ and the Flutter guide for
 <p align="center">Fast and flexibile chat package with full features for easy app development. Actively maintained, community-driven chat UI implementation</p>
 
 <p align="center">
-  <img alt="Chat Image" src="https://raw.githubusercontent.com/IsaiahTek/flutter_chatflow/main/images/featured_image.png" />
+  <img alt="Chat Image" src="https://raw.githubusercontent.com/IsaiahTek/flutter_chatflow/main/images/chatflow_featured_v1.0.0.png" />
 </p>
 A powerful and flexible chat solution for Flutter apps. Features include real-time messaging, private chats, group chats, customizable UI, user management, media sharing, rich text support, typing user(s), etc.
 
@@ -91,7 +91,7 @@ class ChatScreen extends StatelessWidget {
     });
   }
 
-  void _handleSendPressed(String message) {
+  void _handleSendPressed(String message, {Message? repliedTo}) {
     int createdAt = DateTime.now().millisecondsSinceEpoch;
     
     final textMessage = TextMessage(
@@ -104,7 +104,7 @@ class ChatScreen extends StatelessWidget {
     _addMessage(textMessage);
   }
 
-  void _handleOnAttachmentPressed() async {
+  void _handleOnAttachmentPressed({Message? repliedTo}) async {
     /// logic for adding image to chat.
     /// You could use a dialog to choose between different media types
     /// And rename the function accordingly

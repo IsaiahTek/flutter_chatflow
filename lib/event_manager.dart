@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-
 /// Needed for triggering event from within your controlled UI then ChatFlow listens to your events.
 class EventManager {
   // Singleton pattern for a single instance of EventManager

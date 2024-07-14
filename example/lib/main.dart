@@ -95,7 +95,8 @@ class _HomeState extends State<Home> {
           for (var element in selectionWithText) {
             int createdAt = DateTime.now().millisecondsSinceEpoch;
             final message = ImageMessage(
-                author: users[1],
+                author: users[(Random().nextDouble() * users.length)
+            .toInt()],
                 createdAt: createdAt,
                 repliedTo: repliedTo,
                 uri: element.uri,
