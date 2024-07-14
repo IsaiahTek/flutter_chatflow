@@ -52,7 +52,7 @@ class ImageWidget extends StatelessWidget {
               ])),
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 50),
               child: Text(
-                "Fetching image \n${Uri.file(uri).pathSegments[Uri.file(uri).pathSegments.length - 1]}\nEnsure you internet connection is healthy",
+                "Fetching image \n${Uri.file(uri).pathSegments[Uri.file(uri).pathSegments.length - 1]}\nEnsure your internet connection is healthy",
                 style: const TextStyle(
                     fontStyle: FontStyle.italic, color: Colors.white),
               ),

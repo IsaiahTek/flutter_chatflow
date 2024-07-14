@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_chatflow/models.dart';
+import 'package:flutter_chatflow/utils/types.dart';
 
 /// convert a number digits to list of individual digits
 List<int> computeNumbersList(int hashCode) {
@@ -29,13 +31,13 @@ List<int> groupNumbersIntoRGB(List<int> numbers) {
 /// Used internally.
 class ColorPair {
   /// main color
-  final Color background;
+  final Color main;
 
   /// pair color
   final Color surface;
 
   /// Constructor
-  ColorPair({required this.background, required this.surface});
+  ColorPair({required this.main, required this.surface});
 }
 
 /// Color equivalence of integer
@@ -46,7 +48,7 @@ ColorPair createColorFromHashCode(int hashCode) {
   int g = computedRGBList[1];
   int b = computedRGBList[2];
   return ColorPair(
-      background: Color.fromARGB(255, r, g, b),
+      main: Color.fromARGB(255, r, g, b),
       surface: Color.fromARGB(255, r, g, b).computeLuminance() > 0.4
           ? Colors.black
           : Colors.white);
@@ -138,4 +140,137 @@ String computeTimePartitionText(int millisecondsSinceEpoch) {
 /// Error message printer
 void logError(String message) {
   debugPrint('\x1B[31mERROR: $message\x1B[0m');
+}
+
+///
+List<ConsecutiveOccurrence> getConsecutives(
+    {required List<Message> items, required Message check, int? amount}) {
+  int found = 0;
+  List<ConsecutiveOccurrence> results = [];
+  for (var index = 0; index < items.length; index++) {
+    if (index > 0) {
+      if (items[index].type == check.type &&
+          items[index - 1].type == check.type &&
+          items[index].author.userID == items[index - 1].author.userID &&
+          isSameDay(items[index - 1].createdAt, items[index].createdAt)) {
+        found += 1;
+        results[results.length - 1].updateEndIndex(index);
+      } else if (found >= 0 && items[index].type == check.type) {
+        found = 1;
+        results.add(ConsecutiveOccurrence(startIndex: index));
+      }
+    }
+  }
+  results = results.where((result) {
+    return (result.endIndex ?? -1) - result.startIndex + 1 >= (amount ?? 4);
+  }).toList();
+  return results;
+}
+
+/// For internal use only
+bool indexIsInConsecutives(List<ConsecutiveOccurrence> items, int index) {
+  return items.any((element) {
+    if ((element.endIndex != null && element.endIndex! >= index) &&
+        (element.startIndex <= index)) {
+      return true;
+    } else {
+      return false;
+    }
+  });
+}
+
+/// Internal use only
+bool indexIsInConsecutivesAndIsFirstTake(
+    List<ConsecutiveOccurrence> items, int index) {
+  return items.any((element) {
+    if ((element.endIndex != null && element.endIndex! >= index) &&
+        (element.startIndex == index)) {
+      return true;
+    } else {
+      return false;
+    }
+  });
+}
+
+/// Internal use only
+List<ImageMessage> getGroupedImageMessages(List<Message> messages,
+    List<ConsecutiveOccurrence> consecutiveOccurrences, int startIndex) {
+  ConsecutiveOccurrence occurrence = consecutiveOccurrences
+      .firstWhere((element) => element.startIndex == startIndex);
+
+  List<ImageMessage> groupedImageMessages = [];
+
+  for (var i = 0; i <= occurrence.endIndex! - occurrence.startIndex; i++) {
+    groupedImageMessages
+        .add(messages[i + occurrence.startIndex] as ImageMessage);
+  }
+  return groupedImageMessages;
+}
+
+///
+abstract class TestMessage extends Message {
+  ///
+  TestMessage()
+      : super(
+            author: const ChatUser(userID: "userID"),
+            createdAt: 0,
+            type: MessageType.custom);
+}
+
+///
+class TestImageMessage extends TestMessage {
+  ///
+  TestImageMessage() {
+    super.type = MessageType.image;
+  }
+}
+
+///
+class TestTextMessage extends TestMessage {
+  ///
+  TestTextMessage() {
+    super.type = MessageType.text;
+  }
+}
+
+///
+class TestVideoMessage extends TestMessage {
+  ///
+  TestVideoMessage() {
+    super.type = MessageType.video;
+  }
+}
+
+///
+class TestDocMessage extends TestMessage {
+  ///
+  TestDocMessage() {
+    super.type = MessageType.doc;
+  }
+}
+
+/// Internal use only
+class ConsecutiveOccurrence {
+  /// Internal use only
+  final int startIndex;
+
+  /// Internal use only
+  int? endIndex;
+
+  /// Internal use only
+  ///
+  updateEndIndex(int newIndex) {
+    endIndex = newIndex;
+  }
+
+  /// Number of items found
+  get total => (endIndex ?? -1) - startIndex + 1;
+
+  @override
+  toString() {
+    return 'ConsecutiveOccurrence of ($total) items: FROM:$startIndex TO:$endIndex';
+  }
+
+  ///
+  ConsecutiveOccurrence({required this.startIndex, this.endIndex});
 }

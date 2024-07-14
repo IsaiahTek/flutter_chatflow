@@ -63,13 +63,13 @@ class _ImageCarouselState extends State<ImageCarousel> {
                     uri: _imageMessages[currentIndex].uri,
                     imagesLength: _imageMessages.length),
                 // Text below if available
-                const SizedBox(
-                  height: 30,
-                ),
                 if (_imageMessages[currentIndex].text != null)
-                  Text(
-                    "${_imageMessages[currentIndex].text}",
-                    style: const TextStyle(color: Colors.white),
+                  Container(
+                    margin: const EdgeInsets.only(top: 30, left: 20, right: 20),
+                    child: Text(
+                      "${_imageMessages[currentIndex].text}",
+                      style: const TextStyle(color: Colors.white),
+                    ),
                   )
               ],
             ),

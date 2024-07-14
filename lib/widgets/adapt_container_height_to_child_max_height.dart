@@ -17,7 +17,6 @@ class _MeasureSizeState extends State<MeasureSize> {
   final GlobalKey _widgetKey = GlobalKey();
 
   void _afterLayout(_) {
-    debugPrint("CURRENT CONTEXT: $_widgetKey");
     final context = _widgetKey.currentContext;
     if (context == null) return;
 
@@ -32,8 +31,6 @@ class _MeasureSizeState extends State<MeasureSize> {
     WidgetsBinding.instance.addPostFrameCallback(_afterLayout);
     return LayoutBuilder(
       builder: (context, constraints) {
-        debugPrint(
-            "MEASURED SIZE: WIDTH: ${_size?.width} HEIGHT: ${_size?.height}");
         return Container(
           color: Colors.amber,
           height: _size?.height ?? 20,

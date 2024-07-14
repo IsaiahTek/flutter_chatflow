@@ -58,7 +58,7 @@ class ChatAvatar extends StatelessWidget {
             margin: const EdgeInsets.only(left: 5),
             child: CircleAvatar(
                 backgroundColor:
-                    createColorFromHashCode(author.userID.hashCode).background,
+                    createColorFromHashCode(author.userID.hashCode).main,
                 foregroundImage:
                     isValidUrl ? NetworkImage(author.photoUrl!) : null,
                 child: Text(

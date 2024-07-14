@@ -11,20 +11,36 @@ class ChatInputWidget extends StatefulWidget {
       {super.key,
       required this.onSendPressed,
       required this.onAttachmentPressed,
+      required this.isAuthor,
       this.replyMessage,
-      this.unsetReplyMessage});
+      this.unsetReplyMessage,
+      this.customWidgetBuilder,
+      this.pdfWidgetBuilder,
+      this.videoWidgetBuilder});
 
   /// The callback to handle the event when a user sends a text message.
   final OnSendPressed onSendPressed;
 
   /// The callback for handling attachment button click.
-  final void Function()? onAttachmentPressed;
+  final OnAttachmentPressed onAttachmentPressed;
 
   /// The swiped message to be replied to
   final Message? replyMessage;
 
+  /// Internall use
+  final bool isAuthor;
+
   /// Internal Callback to unset reply message
   final void Function()? unsetReplyMessage;
+
+  /// Optional widget to be passed
+  final CustomWidgetBuilder? customWidgetBuilder;
+
+  /// Optional widget to be passed
+  final CustomWidgetBuilder? videoWidgetBuilder;
+
+  /// Optional widget to be passed
+  final CustomWidgetBuilder? pdfWidgetBuilder;
 
   @override
   State<ChatInputWidget> createState() => _ChatInputWidgetState();
@@ -65,7 +81,13 @@ class _ChatInputWidgetState extends State<ChatInputWidget> {
             children: [
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 5),
-                child: RepliedMessageWidget(replyMessage: widget.replyMessage!),
+                child: RepliedMessageWidget(
+                  replyMessage: widget.replyMessage!,
+                  isAuthor: widget.isAuthor,
+                  customWidgetBuilder: widget.customWidgetBuilder,
+                  videoWidgetBuilder: widget.videoWidgetBuilder,
+                  pdfWidgetBuilder: widget.pdfWidgetBuilder,
+                ),
               ),
               Positioned(
                   top: 0,
@@ -108,7 +130,11 @@ class _ChatInputWidgetState extends State<ChatInputWidget> {
                       IconButton.filledTonal(
                         onPressed: () {
                           if (widget.onAttachmentPressed != null) {
-                            widget.onAttachmentPressed!();
+                            widget.onAttachmentPressed!(
+                                repliedTo: widget.replyMessage);
+                            if (widget.unsetReplyMessage != null) {
+                              widget.unsetReplyMessage!();
+                            }
                           }
                         },
                         icon: Icon(

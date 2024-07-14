@@ -23,15 +23,23 @@ class ComputedMessage extends StatelessWidget {
   /// Optional widget to be passed
   final CustomWidgetBuilder? pdfWidgetBuilder;
 
+  /// [Optional] If false or not provide the text will be displayed under the image.
+  /// Otherwise, the text will not be displayed.
+  final bool? shouldHideText;
+
+  /// [Optional] Internally used to scale image to fit available box
+  final bool? shouldFitToAvailableSize;
+
   /// Handle the computation
-  const ComputedMessage({
-    super.key,
-    required this.message,
-    required this.isAuthor,
-    this.customWidgetBuilder,
-    this.videoWidgetBuilder,
-    this.pdfWidgetBuilder,
-  });
+  const ComputedMessage(
+      {super.key,
+      required this.message,
+      required this.isAuthor,
+      this.customWidgetBuilder,
+      this.videoWidgetBuilder,
+      this.pdfWidgetBuilder,
+      this.shouldHideText,
+      this.shouldFitToAvailableSize});
 
   @override
   Widget build(BuildContext context) {
@@ -43,6 +51,8 @@ class ComputedMessage extends StatelessWidget {
           uri: imageMessage.uri,
           text: imageMessage.text,
           isAuthor: isAuthor,
+          shouldHideText: shouldHideText,
+          shouldFitToAvailableSize: shouldFitToAvailableSize,
         );
         break;
       case MessageType.video:
@@ -53,6 +63,8 @@ class ComputedMessage extends StatelessWidget {
             text: videoMessage.text,
             isAuthor: isAuthor,
             videoWidgetBuilder: videoWidgetBuilder!,
+            shouldHideText: shouldHideText,
+            shouldFitToAvailableSize: shouldFitToAvailableSize,
           );
         } else {
           result = const SizedBox();

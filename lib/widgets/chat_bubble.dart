@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_chatflow/models.dart';
 import 'package:flutter_chatflow/utils/type_defs.dart';
 import 'package:flutter_chatflow/utils/types.dart';
@@ -140,9 +141,9 @@ class _ChatBubbleState extends State<ChatBubble> {
             },
             child: Container(
               color: selectedMessages.contains(widget.message)
-                  ? Theme.of(context).primaryColor.withOpacity(.08)
+                  ? Theme.of(context).primaryColor.withOpacity(.2)
                   : Colors.transparent,
-              padding: const EdgeInsets.only(bottom: 5),
+              padding: const EdgeInsets.only(bottom: 10),
               child: Row(
                   mainAxisAlignment:
                       widget.chatUser.userID == widget.message.author.userID
@@ -342,7 +343,14 @@ class _MessageDeliveryWidget extends StatelessWidget {
                 getSentAt(message.createdAt),
                 textAlign: TextAlign.right,
                 style: TextStyle(
-                    fontSize: Theme.of(context).textTheme.labelSmall?.fontSize),
+                    fontSize: Theme.of(context).textTheme.labelSmall?.fontSize,
+                    shadows: const [
+                      Shadow(
+                        offset: Offset(1, 1),
+                        color: Colors.white,
+                        // blurRadius: 2
+                      )
+                    ]),
               ),
               if (message.status != null &&
                   message.author.userID == chatUser.userID)
@@ -393,7 +401,8 @@ class _MessageWidget extends StatelessWidget {
       },
       child: Container(
         constraints: BoxConstraints.loose(
-            Size.fromWidth(MediaQuery.of(context).size.width * .70)),
+          Size.fromWidth(MediaQuery.of(context).size.width * .60),
+        ),
         decoration: BoxDecoration(
             boxShadow: [
               if (chatUser.userID != message.author.userID)
@@ -422,7 +431,7 @@ class _MessageWidget extends StatelessWidget {
                 : Colors.white),
         padding:
             showUserAvatarInChat && chatUser.userID != message.author.userID
-                ? const EdgeInsets.only(top: 0, right: 0, bottom: 20)
+                ? const EdgeInsets.only(top: 2, right: 2, bottom: 2, left: 2)
                 : EdgeInsets.only(
                     left: message.type == MessageType.text ? 15 : 2,
                     right: message.type == MessageType.text ? 15 : 2,
@@ -432,8 +441,8 @@ class _MessageWidget extends StatelessWidget {
         child: GestureDetector(
           onTap: () {
             if (message.type == MessageType.image) {
-              int currentImageIndex = imageMessages.indexWhere(
-                  (element) => element.createdAt == message.createdAt);
+              int currentImageIndex =
+                  imageMessages.indexWhere((element) => element == message);
               Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -449,7 +458,10 @@ class _MessageWidget extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               if (message.repliedTo != null)
-                RepliedMessageWidget(replyMessage: message.repliedTo!),
+                RepliedMessageWidget(
+                  replyMessage: message.repliedTo!,
+                  isAuthor: message.author.userID == chatUser.userID,
+                ),
               if (showUserAvatarInChat &&
                   chatUser.userID != message.author.userID)
                 Container(
@@ -471,7 +483,7 @@ class _MessageWidget extends StatelessWidget {
                         fontStyle: FontStyle.italic,
                         color: createColorFromHashCode(
                                 message.author.userID.hashCode)
-                            .background),
+                            .main),
                   ),
                 ),
               Container(
@@ -479,7 +491,7 @@ class _MessageWidget extends StatelessWidget {
                         chatUser.userID != message.author.userID &&
                         message.type == MessageType.text
                     ? const EdgeInsets.only(
-                        left: 15, right: 15, top: 3, bottom: 8)
+                        left: 15, right: 15, top: 3, bottom: 16)
                     : const EdgeInsets.all(0),
                 child: ComputedMessage(
                   message: message,
