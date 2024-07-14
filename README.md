@@ -18,7 +18,7 @@ and the Flutter guide for
 <p align="center">Fast and flexibile chat package with full features for easy app development. Actively maintained, community-driven chat UI implementation</p>
 
 <p align="center">
-  <img alt="Chat Image" src="https://raw.githubusercontent.com/IsaiahTek/flutter_chatflow/main/images/chatflow_featured_v1.0.0.png" />
+  <img alt="Chat Image" src="https://raw.githubusercontent.com/IsaiahTek/flutter_chatflow/main/images/chatflow_featured2_v1.0.0.png" />
 </p>
 A powerful and flexible chat solution for Flutter apps. Features include real-time messaging, private chats, group chats, customizable UI, user management, media sharing, rich text support, typing user(s), etc.
 
