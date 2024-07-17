@@ -137,22 +137,29 @@ class ChatScreen extends StatelessWidget {
 ```
 
 # Sponsors
-
-## GOLD
-<p align="center">
-  <a href="">
-    <img alt="Chat Image" src="https://raw.githubusercontent.com/IsaiahTek/flutter_chatflow/main/images/sponsors/gold/kostricani.png" />
+A huge thank you to our amazing sponsors! Your support is essential in maintaining and improving this project.
+<div align="center">
+  <h3 style="color:orange">Our Gold Sponsors</h3>
+  <a href="https://kostricani.com">
+    <img width="30%" alt="Chat Image" src="https://raw.githubusercontent.com/IsaiahTek/flutter_chatflow/main/images/sponsors/gold/kostricani.png" />
   </a>
-</p>
+</div>
 
-## Additional information
+
+
+## Become Our Sponsor
+If you or your organization would like to support this project and be featured here, please consider becoming a sponsor. Your contributions help us to keep the project alive and growing.
+
+Thank you for your generosity!
+
+## Reach Out
 
 For support kindly send a mail to [Engr. Isaiah Pius](mailto://isaiahtech1@gmail.com)
 
-### Contributing
+## Contributing
 
 We welcome contributions! Please see our contributing guidelines for more information.
 
-### License
+## License
 
 flutter_chatflow is released under the [BSD license.](https://github.com/IsaiahTek/flutter_chatflow/blob/main/LICENSE)
