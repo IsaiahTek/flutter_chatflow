@@ -143,9 +143,9 @@ A huge thank you to our amazing sponsors! Your support is essential in maintaini
   <a href="https://kostricani.com">
     <img width="30%" alt="Chat Image" src="https://raw.githubusercontent.com/IsaiahTek/flutter_chatflow/main/images/sponsors/gold/kostricani.png" />
   </a>
-  <div style="margin-top:30px">
+  <!-- <div style="margin-top:30px">
     <a href="mailto://isaiahtech1@gmail.com">Become a Gold Sponsor</a>
-  </div>
+  </div> -->
 </div>
 
 
