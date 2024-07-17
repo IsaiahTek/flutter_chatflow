@@ -139,10 +139,13 @@ class ChatScreen extends StatelessWidget {
 # Sponsors
 A huge thank you to our amazing sponsors! Your support is essential in maintaining and improving this project.
 <div align="center">
-  <h3 style="color:orange">Our Gold Sponsors</h3>
+  <h3 style="color:orange">OUR GOLD SPONSORS</h3>
   <a href="https://kostricani.com">
     <img width="30%" alt="Chat Image" src="https://raw.githubusercontent.com/IsaiahTek/flutter_chatflow/main/images/sponsors/gold/kostricani.png" />
   </a>
+  <div style="margin-top:30px">
+    <a href="mailto://isaiahtech1@gmail.com">Become a Gold Sponsor</a>
+  </div>
 </div>
 
 
