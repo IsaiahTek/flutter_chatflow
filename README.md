@@ -49,7 +49,7 @@ Or
 Add flutter_chatflow to your pubspec.yaml:
 ```yaml
 dependencies:
-  flutter_chatflow: ^0.0.5
+  flutter_chatflow: ^1.0.0
 ```
 Check for current version number as newer version might be available.
 Then run `flutter pub get` to install the package.
@@ -135,6 +135,15 @@ class ChatScreen extends StatelessWidget {
   }
 }
 ```
+
+# Sponsors
+
+## GOLD
+<p align="center">
+  <a href="">
+    <img alt="Chat Image" src="https://raw.githubusercontent.com/IsaiahTek/flutter_chatflow/main/images/sponsors/gold/kostricani.png" />
+  </a>
+</p>
 
 ## Additional information
 
