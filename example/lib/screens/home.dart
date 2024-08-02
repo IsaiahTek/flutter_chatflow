@@ -98,7 +98,7 @@ class _HomeState extends State<Home> {
                 fontSize: Theme.of(context).textTheme.titleLarge?.fontSize),
           ),
           title: StreamBuilder(
-              stream: FluChatNotifier.instance.isTypingStream,
+              stream: UserTypingStateStream.instance.isTypingStream,
               builder: (context, data) {
                 if (data.hasData && data.data == true) {
                   return const Text('Typing');
@@ -111,6 +111,10 @@ class _HomeState extends State<Home> {
         chatUser: john,
         onSendPressed: onSendPressed,
         onAttachmentPressed: _handleImageSelection,
+        onMessageLongPressed: (message, defaultAction) {
+          debugPrint("Here is the message long pressed $message");
+          // defaultAction(message);
+        },
         showUserAvatarInChat: true,
       ),
     );

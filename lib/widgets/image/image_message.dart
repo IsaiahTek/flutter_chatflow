@@ -1,6 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:flutter_chatflow/widgets/image/image_widget.dart';
+part of '../../library.dart';
 
 /// Image Message Widget for displaying images.
 class ImageMessageWidget extends StatelessWidget {

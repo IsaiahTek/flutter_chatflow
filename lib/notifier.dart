@@ -1,3 +1,4 @@
+
 import 'dart:async';
 
 /// Notification class for features like watching and streaming
@@ -6,7 +7,7 @@ import 'dart:async';
 /// Sample Code Below:
 /// ```dart
 /// StreamBuilder(
-///   stream: FluChatNotifier.instance.isTypingStream,
+///   stream: UserTypingStateStream.instance.isTypingStream,
 ///     builder: (context, data){
 ///       if(data.hasData && data.data == true){
 ///         return const Text('Typing');
@@ -22,11 +23,11 @@ import 'dart:async';
 ///
 /// Like sending the event to the server and listening to it at the other users end to notify in chat
 
-class FluChatNotifier {
+class UserTypingStateStream {
   /// Single instance
-  static final FluChatNotifier instance = FluChatNotifier._internal();
+  static final UserTypingStateStream instance = UserTypingStateStream._internal();
 
-  FluChatNotifier._internal() {
+  UserTypingStateStream._internal() {
     _isTypingStreamController = StreamController<bool>.broadcast();
   }
 
@@ -41,8 +42,8 @@ class FluChatNotifier {
   /// Boolean value
   bool _isTypingLastState = false;
 
-  /// set typing state
-  void setIsTyping() async {
+  // Private method
+  void _hanldeSetTyping(){
     _lastTypedAt = DateTime.now().millisecondsSinceEpoch;
     if (!_isTypingLastState) {
       _isTypingStreamController.add(true);
@@ -56,5 +57,10 @@ class FluChatNotifier {
         }
       }
     });
+  }
+
+  /// set typing state
+  void setIsTyping() async {
+    _hanldeSetTyping();
   }
 }

@@ -45,15 +45,6 @@ To get started with flutter_chatflow, check out the documentation for installati
 
 Easiest way is to run the `flutter pub add flutter_chatflow`
 
-Or
-Add flutter_chatflow to your pubspec.yaml:
-```yaml
-dependencies:
-  flutter_chatflow: ^1.0.0
-```
-Check for current version number as newer version might be available.
-Then run `flutter pub get` to install the package.
-
 ## Usage
 
 Here is a basic example to get you started:

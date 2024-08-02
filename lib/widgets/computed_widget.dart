@@ -1,10 +1,11 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_chatflow/models.dart';
-import 'package:flutter_chatflow/utils/type_defs.dart';
-import 'package:flutter_chatflow/utils/types.dart';
-import 'package:flutter_chatflow/widgets/audio/audio_message.dart';
-import 'package:flutter_chatflow/widgets/image/image_message.dart';
-import 'package:flutter_chatflow/widgets/video/video_message.dart';
+part of '../library.dart';
+// import 'package:flutter/material.dart';
+// import 'package:flutter_chatflow/models.dart';
+// import 'package:flutter_chatflow/utils/type_defs.dart';
+// import 'package:flutter_chatflow/utils/types.dart';
+// import 'package:flutter_chatflow/widgets/audio/audio_message.dart';
+// import 'package:flutter_chatflow/widgets/image/image_message.dart';
+// import 'package:flutter_chatflow/widgets/video/video_message.dart';
 
 /// Class to dynamically chose which widget to use to display a particular message based on message type
 class ComputedMessage extends StatelessWidget {

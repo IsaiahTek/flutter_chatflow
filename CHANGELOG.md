@@ -1,3 +1,11 @@
+## 2.0.0
+* BREAKING CHANGES:
+* 1. Renamed FluChatNotifier to UserTypingStateStream
+* 2. Added an optional onMessageDoubleTap callback
+MINOR FIX:
+* Added minimum container size to contain message delivery overflow
+
+
 ## 1.0.0
 * BREAKING CHANGES:
 * 1. Removed the `onDeleteMessages` callback with the top floating menu for deleting messages that have been selected by the user.

@@ -16,3 +16,9 @@ typedef OnSendPressed = void Function(String message, {Message? repliedTo})?;
 ///
 /// Starting from v1.0.0, the callback passes a message to reply to if the user marks a message for replying.
 typedef OnAttachmentPressed = void Function({Message? repliedTo})?;
+
+/// Default action for a particular message gesture defined
+typedef DefaultAction = void Function(Message message);
+
+/// A particular message gesture like onLongPressed, onSwipedLeft, onDoubleTapped, etc.
+typedef OnMessageGesture = void Function(Message message, DefaultAction defaultAction);

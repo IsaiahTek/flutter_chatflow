@@ -4,7 +4,7 @@ import 'package:flutter_chatflow/utils/type_defs.dart';
 import 'package:flutter_chatflow/utils/types.dart';
 import 'package:flutter_chatflow/utils/utils.dart';
 import 'package:flutter_chatflow/widgets/chat_avatar.dart';
-import 'package:flutter_chatflow/widgets/computed_widget.dart';
+import '../library.dart';
 import 'package:flutter_chatflow/widgets/image/image_carousel.dart';
 import 'package:flutter_chatflow/widgets/replied_message_widget.dart';
 
@@ -27,6 +27,9 @@ class ChatBubble extends StatefulWidget {
 
   /// timestamp of previous message
   final int? previousMessageCreatedAt;
+
+  /// Callback for onLongPressed
+  final OnMessageGesture? onLongPressed;
 
   /// Callback to set selected messages
   final void Function(List<Message> message) setSelectedMessages;
@@ -53,6 +56,7 @@ class ChatBubble extends StatefulWidget {
       required this.currentMessageIndex,
       required this.chatUser,
       required this.imageMessages,
+      this.onLongPressed,
       required this.showUserAvatarInChat,
       this.previousMessageCreatedAt,
       required this.setSelectedMessages,
@@ -101,7 +105,7 @@ class _ChatBubbleState extends State<ChatBubble> {
     });
   }
 
-  handleSetSelectedMessage(Message message) {
+  _handleSetSelectedMessage(Message message) {
     if (selectedMessages.contains(message)) {
       selectedMessages.remove(message);
     } else {
@@ -133,7 +137,7 @@ class _ChatBubbleState extends State<ChatBubble> {
           GestureDetector(
             onTap: () {
               if (selectedMessages.isNotEmpty) {
-                handleSetSelectedMessage(widget.message);
+                _handleSetSelectedMessage(widget.message);
               } else {
                 FocusScope.of(context).unfocus();
               }
@@ -175,8 +179,9 @@ class _ChatBubbleState extends State<ChatBubble> {
                               message: widget.message,
                               chatUser: widget.chatUser,
                               imageMessages: widget.imageMessages,
+                              onLongPressed: widget.onLongPressed,
                               handleSetSelectedMessage:
-                                  handleSetSelectedMessage,
+                                  _handleSetSelectedMessage,
                               customWidgetBuilder: widget.customWidgetBuilder,
                               pdfWidgetBuilder: widget.pdfWidgetBuilder,
                               videoWidgetBuilder: widget.videoWidgetBuilder,
@@ -378,6 +383,7 @@ class _MessageWidget extends StatelessWidget {
   final bool showUserAvatarInChat;
   final List<ImageMessage> imageMessages;
   final void Function(Message message) handleSetSelectedMessage;
+  final OnMessageGesture? onLongPressed;
   final CustomWidgetBuilder? customWidgetBuilder;
   final CustomWidgetBuilder? videoWidgetBuilder;
   final CustomWidgetBuilder? pdfWidgetBuilder;
@@ -388,6 +394,7 @@ class _MessageWidget extends StatelessWidget {
       required this.imageMessages,
       required this.showUserAvatarInChat,
       required this.handleSetSelectedMessage,
+      this.onLongPressed,
       required this.customWidgetBuilder,
       required this.pdfWidgetBuilder,
       required this.videoWidgetBuilder});
@@ -396,11 +403,16 @@ class _MessageWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onLongPress: () {
-        handleSetSelectedMessage(message);
+        if(onLongPressed != null){
+          onLongPressed!(message, handleSetSelectedMessage);
+        }else{
+          handleSetSelectedMessage(message);
+        }
       },
       child: Container(
-        constraints: BoxConstraints.loose(
-          Size.fromWidth(MediaQuery.of(context).size.width * .60),
+        constraints: BoxConstraints(
+          minWidth: 63,
+          maxWidth: MediaQuery.of(context).size.width * .60
         ),
         decoration: BoxDecoration(
             boxShadow: [

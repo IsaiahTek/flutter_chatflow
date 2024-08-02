@@ -9,6 +9,9 @@ abstract class Message {
   /// Message sender
   ChatUser author;
 
+  /// Message ID
+  String? messageID;
+
   /// Timestamp
   int createdAt;
 
@@ -30,6 +33,7 @@ abstract class Message {
       {required this.type,
       required this.author,
       required this.createdAt,
+      this.messageID,
       this.status,
       this.meta,
       this.repliedTo});
@@ -50,6 +54,7 @@ class ImageMessage extends Message {
     required super.createdAt,
     required this.uri,
     super.status,
+    super.messageID,
     this.text,
     super.meta,
     super.repliedTo,
@@ -72,6 +77,7 @@ class AudioMessage extends Message {
     required this.uri,
     this.text,
     super.status,
+    super.messageID,
     super.meta,
     super.repliedTo,
   });
@@ -93,6 +99,7 @@ class VideoMessage extends Message {
     required this.uri,
     this.text,
     super.status,
+    super.messageID,
     super.meta,
     super.repliedTo,
   });
@@ -114,6 +121,7 @@ class PdfMessage extends Message {
     required this.uri,
     this.text,
     super.status,
+    super.messageID,
     super.meta,
     super.repliedTo,
   });
@@ -131,6 +139,7 @@ class TextMessage extends Message {
       required super.createdAt,
       required this.text,
       super.status,
+      super.messageID,
       super.repliedTo});
 }
 
@@ -143,6 +152,7 @@ class ChatInfo extends Message {
   ChatInfo(
       {super.type = MessageType.info,
       super.author = const ChatUser(userID: ''),
+      super.messageID,
       required super.createdAt,
       required this.info});
 }

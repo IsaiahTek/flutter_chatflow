@@ -7,7 +7,7 @@ import 'package:flutter_chatflow/utils/type_defs.dart';
 import 'package:flutter_chatflow/utils/types.dart';
 import 'package:flutter_chatflow/utils/utils.dart';
 import 'package:flutter_chatflow/widgets/chat_bubble.dart';
-import 'package:flutter_chatflow/widgets/chat_input.dart';
+import 'library.dart';
 import 'package:flutter_chatflow/widgets/image/grouped_images.dart';
 
 /// Entry point to using the ChatFlow.
@@ -25,10 +25,10 @@ class ChatFlow extends StatefulWidget {
   final OnAttachmentPressed onAttachmentPressed;
 
   /// The callback when the user presses down a message for long. By default, the message is selected.
-  final void Function(Message message)? onMessageLongPressed;
+  final OnMessageGesture? onMessageLongPressed;
 
-  /// Use this flag to use or prevent default effect of message long press
-  // final bool shouldOverrideDefaultMessageLongPress;
+  /// The callback when the user presses down a message for long. By default, the message is selected.
+  final void Function(Message message)? onMessageDoubleTaped;
 
   /// Callback for when a message is swiped left
   final void Function(Message swipedMessage)? onMessageSwipedLeft;
@@ -70,6 +70,7 @@ class ChatFlow extends StatefulWidget {
       this.onSendPressed,
       this.onAttachmentPressed,
       this.onMessageLongPressed,
+      this.onMessageDoubleTaped,
       this.onMessageSwipedLeft,
       this.onMessageSwipedRight,
       this.showUserAvatarInChat,
@@ -107,11 +108,11 @@ class _ChatFlowState extends State<ChatFlow> {
     });
   }
 
-  handleSetSelectedMessage(List<Message> list) {
-    setState(() {
-      selectedMessages = list;
-    });
+  _handleSetSelectedMessage(List<Message> list) {
     if (widget.onMessageSelectionChanged != null) {
+      setState(() {
+        selectedMessages = list;
+      });
       widget.onMessageSelectionChanged!(list);
     }
   }
@@ -207,6 +208,7 @@ class _ChatFlowState extends State<ChatFlow> {
                                         message: _messages[index],
                                         chatUser: widget.chatUser,
                                         imageMessages: _imageMessages,
+                                        onLongPressed: widget.onMessageLongPressed,
                                         showUserAvatarInChat:
                                             showUserAvatarInChat,
                                         previousMessageCreatedAt: index > 0
@@ -215,7 +217,7 @@ class _ChatFlowState extends State<ChatFlow> {
                                         currentMessageIndex: index,
                                         setReplyMessage: handleSetReplyMessage,
                                         setSelectedMessages:
-                                            handleSetSelectedMessage,
+                                            _handleSetSelectedMessage,
                                         selectedMessages: selectedMessages,
                                         videoWidgetBuilder:
                                             widget.videoWidgetBuilder,

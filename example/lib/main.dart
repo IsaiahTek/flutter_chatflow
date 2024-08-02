@@ -216,7 +216,7 @@ class _HomeState extends State<Home> {
                                       ?.fontSize),
                             ),
                             StreamBuilder(
-                                stream: FluChatNotifier.instance.isTypingStream,
+                                stream: UserTypingStateStream.instance.isTypingStream,
                                 builder: (context, data) {
                                   if (data.hasData && data.data == true) {
                                     return const Text(

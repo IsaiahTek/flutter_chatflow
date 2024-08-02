@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_chatflow/models.dart';
 import 'package:flutter_chatflow/utils/utils.dart';
 import 'package:flutter_chatflow/widgets/chat_avatar.dart';
-import 'package:flutter_chatflow/widgets/image/image_widget.dart';
+import 'package:flutter_chatflow/library.dart';
 
 /// Internal use only
 class GroupedImages extends StatelessWidget {

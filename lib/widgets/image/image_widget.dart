@@ -1,6 +1,4 @@
-import 'dart:io';
-
-import 'package:flutter/material.dart';
+part of '../../library.dart';
 
 /// Image widget to display image messages
 class ImageWidget extends StatelessWidget {

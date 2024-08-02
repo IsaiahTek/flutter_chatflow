@@ -1,8 +1,9 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_chatflow/models.dart';
-import 'package:flutter_chatflow/notifier.dart';
-import 'package:flutter_chatflow/utils/type_defs.dart';
-import 'package:flutter_chatflow/widgets/replied_message_widget.dart';
+part of "../library.dart";
+// import 'package:flutter/material.dart';
+// import 'package:flutter_chatflow/models.dart';
+// import 'package:flutter_chatflow/utils/type_defs.dart';
+// import 'package:flutter_chatflow/widgets/replied_message_widget.dart';
+
 
 /// Not for your usage
 class ChatInputWidget extends StatefulWidget {
@@ -56,7 +57,7 @@ class _ChatInputWidgetState extends State<ChatInputWidget> {
     textIsNotEmpty = _textEditingController.text.isNotEmpty;
     _textEditingController.addListener(() {
       if (textInputFocusNode.hasFocus) {
-        FluChatNotifier.instance.setIsTyping();
+        UserTypingStateStream.instance.setIsTyping();
       }
       setState(() {
         textIsNotEmpty = _textEditingController.text.isNotEmpty;
@@ -157,7 +158,7 @@ class _ChatInputWidgetState extends State<ChatInputWidget> {
                       controller: _textEditingController,
                       focusNode: textInputFocusNode,
                       // onChanged: (e) {
-                      //   FluChatNotifier.instance.setIsTyping();
+                      //   UserTypingStateStream.instance.setIsTyping();
                       // },
                     )),
                     if (textIsNotEmpty)
