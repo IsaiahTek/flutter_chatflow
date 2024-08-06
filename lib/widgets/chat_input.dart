@@ -4,7 +4,6 @@ part of "../library.dart";
 // import 'package:flutter_chatflow/utils/type_defs.dart';
 // import 'package:flutter_chatflow/widgets/replied_message_widget.dart';
 
-
 /// Not for your usage
 class ChatInputWidget extends StatefulWidget {
   /// Internal use only.
@@ -49,11 +48,12 @@ class ChatInputWidget extends StatefulWidget {
 
 class _ChatInputWidgetState extends State<ChatInputWidget> {
   final TextEditingController _textEditingController = TextEditingController();
-  late bool textIsNotEmpty;
+  bool textIsNotEmpty = false;
   final FocusNode textInputFocusNode = FocusNode();
 
   @override
   initState() {
+    textInputFocusNode.skipTraversal = true;
     textIsNotEmpty = _textEditingController.text.isNotEmpty;
     _textEditingController.addListener(() {
       if (textInputFocusNode.hasFocus) {
@@ -69,6 +69,7 @@ class _ChatInputWidgetState extends State<ChatInputWidget> {
   @override
   void dispose() {
     _textEditingController.dispose();
+    textInputFocusNode.dispose();
     super.dispose();
   }
 
@@ -157,9 +158,6 @@ class _ChatInputWidgetState extends State<ChatInputWidget> {
                       style: const TextStyle(color: Colors.white),
                       controller: _textEditingController,
                       focusNode: textInputFocusNode,
-                      // onChanged: (e) {
-                      //   UserTypingStateStream.instance.setIsTyping();
-                      // },
                     )),
                     if (textIsNotEmpty)
                       IconButton.filledTonal(

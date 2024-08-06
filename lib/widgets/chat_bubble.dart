@@ -4,6 +4,7 @@ import 'package:flutter_chatflow/utils/type_defs.dart';
 import 'package:flutter_chatflow/utils/types.dart';
 import 'package:flutter_chatflow/utils/utils.dart';
 import 'package:flutter_chatflow/widgets/chat_avatar.dart';
+import 'package:flutter_chatflow/widgets/sent_at.dart';
 import '../library.dart';
 import 'package:flutter_chatflow/widgets/image/image_carousel.dart';
 import 'package:flutter_chatflow/widgets/replied_message_widget.dart';
@@ -304,12 +305,14 @@ class _DeliveryStateIcon extends StatelessWidget {
         icon = Icon(
           Icons.done_rounded,
           size: iconSize,
+          color: Colors.white,
         );
         break;
       case DeliveryStatus.delivered:
         icon = Icon(
           Icons.done_all_rounded,
           size: iconSize,
+          color: Colors.white,
         );
         break;
       case DeliveryStatus.read:
@@ -326,6 +329,18 @@ class _DeliveryStateIcon extends StatelessWidget {
   }
 }
 
+bool _deliveryIsShownAtTextPoint(Message message){
+  final MessageType messageType = message.type;
+  bool messageHasText = false;
+  switch (messageType) {
+    case MessageType.text:
+      messageHasText = true;
+      break;
+    default:
+  }
+  return messageHasText;
+}
+
 class _MessageDeliveryWidget extends StatelessWidget {
   final Message message;
   final ChatUser chatUser;
@@ -333,29 +348,18 @@ class _MessageDeliveryWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        margin: const EdgeInsets.only(right: 1, bottom: 10),
+        margin: EdgeInsets.only(right: 5, bottom: message.type != MessageType.text  ?15:5),
         padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 10),
-        decoration: BoxDecoration(
+        decoration: !_deliveryIsShownAtTextPoint(message) ? BoxDecoration(
             borderRadius: BorderRadius.circular(10),
-            color: Theme.of(context).primaryColor.withOpacity(0.04)),
+            color: Colors.black.withOpacity(0.2),
+        ):null,
         child: Row(
             // alignment: Alignment.bottomRight,
             mainAxisAlignment: MainAxisAlignment.end,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Text(
-                getSentAt(message.createdAt),
-                textAlign: TextAlign.right,
-                style: TextStyle(
-                    fontSize: Theme.of(context).textTheme.labelSmall?.fontSize,
-                    shadows: const [
-                      Shadow(
-                        offset: Offset(1, 1),
-                        color: Colors.white,
-                        // blurRadius: 2
-                      )
-                    ]),
-              ),
+              SentAt(type: message.type, timestamp: message.createdAt),
               if (message.status != null &&
                   message.author.userID == chatUser.userID)
                 Wrap(

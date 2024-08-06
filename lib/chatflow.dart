@@ -24,7 +24,30 @@ class ChatFlow extends StatefulWidget {
   /// The callback for handling attachment button click.
   final OnAttachmentPressed onAttachmentPressed;
 
-  /// The callback when the user presses down a message for long. By default, the message is selected.
+  /// The callback when the user presses down a message for long.
+  /// 
+  /// By default, the message is selected.
+  /// 
+  /// Example of how to intercept the default gesture event on message.
+  /// 
+  /// Calling the second argument `defaultAction` implements the default action together with your custom action.
+  /// Sample code below
+  /// ```dart
+  /// ChatFlow(
+  ///   messages: messages,
+  ///   chatUser: chatUsers,
+  ///   onSendPressed: onSendPressed,
+  ///   onAttachmentPressed: _handleImageSelection,
+  ///   onMessageLongPressed: (Message message, Function(Message message) defaultAction) {
+  ///     debugPrint("Here is the message long pressed $message");
+  ///     defaultAction(message);
+  ///   },
+  ///   onMessageSelectionChanged: _handleMessageSelectionChange,
+  /// ),
+  /// ```
+  /// In the example we executed a custom code before calling the default action which is to select the message.
+  /// 
+  /// Feel free to use it as you want!
   final OnMessageGesture? onMessageLongPressed;
 
   /// The callback when the user presses down a message for long. By default, the message is selected.

@@ -99,6 +99,7 @@ class _HomeState extends State<Home> {
                 createdAt: createdAt,
                 repliedTo: repliedTo,
                 uri: element.uri,
+                status: DeliveryStatus.read,
                 text: element.text);
 
             messages.insert(0, message);
@@ -216,7 +217,8 @@ class _HomeState extends State<Home> {
                                       ?.fontSize),
                             ),
                             StreamBuilder(
-                                stream: UserTypingStateStream.instance.isTypingStream,
+                                stream: UserTypingStateStream
+                                    .instance.isTypingStream,
                                 builder: (context, data) {
                                   if (data.hasData && data.data == true) {
                                     return const Text(
@@ -234,6 +236,11 @@ class _HomeState extends State<Home> {
                   chatUser: john,
                   onSendPressed: onSendPressed,
                   onAttachmentPressed: _handleImageSelection,
+                  onMessageLongPressed: (Message message,
+                      Function(Message message) defaultAction) {
+                    debugPrint("Here is the message long pressed $message");
+                    defaultAction(message);
+                  },
                   showUserAvatarInChat: true,
                   minImagesToGroup: 3,
                   onMessageSelectionChanged: _handleMessageSelectionChange,

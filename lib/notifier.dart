@@ -44,19 +44,19 @@ class UserTypingStateStream {
 
   // Private method
   void _hanldeSetTyping(){
-    _lastTypedAt = DateTime.now().millisecondsSinceEpoch;
-    if (!_isTypingLastState) {
-      _isTypingStreamController.add(true);
-      _isTypingLastState = true;
-    }
-    Future.delayed(const Duration(milliseconds: 500), () async {
-      if (_lastTypedAt + 400 <= DateTime.now().millisecondsSinceEpoch) {
-        if (_isTypingLastState && !_isTypingStreamController.isPaused) {
-          _isTypingStreamController.add(false);
-          _isTypingLastState = false;
-        }
-      }
-    });
+    // _lastTypedAt = DateTime.now().millisecondsSinceEpoch;
+    // if (!_isTypingLastState) {
+    //   _isTypingStreamController.add(true);
+    //   _isTypingLastState = true;
+    // }
+    // Future.delayed(const Duration(milliseconds: 500), () async {
+    //   if (_lastTypedAt + 400 <= DateTime.now().millisecondsSinceEpoch) {
+    //     if (_isTypingLastState && !_isTypingStreamController.isPaused) {
+    //       _isTypingStreamController.add(false);
+    //       _isTypingLastState = false;
+    //     }
+    //   }
+    // });
   }
 
   /// set typing state
