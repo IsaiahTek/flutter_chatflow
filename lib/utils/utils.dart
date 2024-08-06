@@ -275,3 +275,12 @@ class ConsecutiveOccurrence {
   ///
   ConsecutiveOccurrence({required this.startIndex, this.endIndex});
 }
+
+/// Util function to detect urls in a text. Feel free to use if you need it!
+List<String> detectUrls(String text) {
+  String urlPattern = r'(?:(?:https?|ftp):\/\/)?(?:[\w-]+\.)+[a-z]{2,}(?:\/\S*)?';
+  final regex = RegExp(urlPattern, caseSensitive: false);
+  final matches = regex.allMatches(text);
+
+  return matches.map((match) => match.group(0)!).toList();
+}

@@ -57,5 +57,11 @@ void main() {
               getConsecutives(items: numbers, check: TestTextMessage()), 0),
           false);
     });
+    test('URL Detector', () {
+      expect(
+          detectUrls('I know who I am at http:google.com, http://google.com, https://google.com and google.com before telling you I am a link'),
+          ['google.com', 'http://google.com', 'https://google.com', 'google.com']
+      );
+    });
   });
 }

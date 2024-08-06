@@ -1,14 +1,19 @@
-import 'package:flutter/material.dart';
-import 'dart:convert';
-import 'dart:io';
+part of "../library.dart";
 
+/// This class is only to be modified by package maintainers/contributors.
 class LinkPreviewer extends StatefulWidget {
+  
+  /// The uri/url text
   final String url;
 
-  LinkPreviewer({required this.url});
+  /// Constructor
+  const LinkPreviewer({
+    super.key,
+    required this.url
+  });
 
   @override
-  _LinkPreviewerState createState() => _LinkPreviewerState();
+  State<LinkPreviewer> createState() => _LinkPreviewerState();
 }
 
 class _LinkPreviewerState extends State<LinkPreviewer> {
@@ -89,8 +94,8 @@ class _LinkPreviewerState extends State<LinkPreviewer> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  if (_title != null) Text(_title!, style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-                  if (_description != null) Text(_description!, style: TextStyle(fontSize: 14)),
+                  if (_title != null) Text(_title!, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                  if (_description != null) Text(_description!, style: const TextStyle(fontSize: 14)),
                 ],
               ),
             ),
