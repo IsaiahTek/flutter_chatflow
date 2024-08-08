@@ -135,73 +135,110 @@ class _ChatBubbleState extends State<ChatBubble> {
         if (widget.message.type == MessageType.info)
           _InfoMessage(message: widget.message)
         else
-          GestureDetector(
-            onTap: () {
-              if (selectedMessages.isNotEmpty) {
-                _handleSetSelectedMessage(widget.message);
-              } else {
-                FocusScope.of(context).unfocus();
-              }
-            },
-            child: Container(
-              color: selectedMessages.contains(widget.message)
-                  ? Theme.of(context).primaryColor.withOpacity(.2)
-                  : Colors.transparent,
-              padding: const EdgeInsets.only(bottom: 10),
-              child: Row(
-                  mainAxisAlignment:
-                      widget.chatUser.userID == widget.message.author.userID
-                          ? MainAxisAlignment.end
-                          : MainAxisAlignment.start,
-                  children: [
-                    ChatAvatar(
-                      showUserAvatarInChat: widget.showUserAvatarInChat,
-                      author: widget.message.author,
-                      chatUser: widget.chatUser,
-                    ),
-
-                    // Message And Delivery Info Widget
-                    GestureDetector(
-                      onHorizontalDragUpdate: (u) => _onHorizontalDragUpdate(
-                          u,
-                          widget.chatUser.userID ==
-                              widget.message.author.userID),
-                      onHorizontalDragEnd: (e) => _onHorizontalDragEnd(
-                          e,
-                          widget.chatUser.userID ==
-                              widget.message.author.userID),
-                      child: Transform.translate(
-                        offset: Offset(
-                            _left ?? (_right != null ? 0 - _right! : 0), 0),
-                        child: Stack(
-                          children: [
-                            // Message Container
-                            _MessageWidget(
-                              message: widget.message,
-                              chatUser: widget.chatUser,
-                              imageMessages: widget.imageMessages,
-                              onLongPressed: widget.onLongPressed,
-                              handleSetSelectedMessage:
-                                  _handleSetSelectedMessage,
-                              customWidgetBuilder: widget.customWidgetBuilder,
-                              pdfWidgetBuilder: widget.pdfWidgetBuilder,
-                              videoWidgetBuilder: widget.videoWidgetBuilder,
-                              showUserAvatarInChat: widget.showUserAvatarInChat,
-                            ),
-                            // Message Delivery Widget
-                            Positioned(
-                              bottom: -10,
-                              right: 10,
-                              child: _MessageDeliveryWidget(
-                                  message: widget.message,
-                                  chatUser: widget.chatUser),
-                            )
-                          ],
+          Row(
+            children: [
+              if (selectedMessages.isNotEmpty)
+                GestureDetector(
+                  onTap: () {
+                    if (selectedMessages.isNotEmpty) {
+                      _handleSetSelectedMessage(widget.message);
+                    } else {
+                      FocusScope.of(context).unfocus();
+                    }
+                  },
+                  child: Container(
+                    width: 25,
+                    height: 25,
+                    margin: const EdgeInsets.symmetric(horizontal: 10),
+                    decoration: BoxDecoration(
+                        border: Border.all(
+                            width: 4, color: Theme.of(context).primaryColor),
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(50)),
+                        boxShadow: const [
+                          BoxShadow(
+                              offset: Offset(0, 0),
+                              blurRadius: 4,
+                              color: Colors.white)
+                        ]),
+                    child: selectedMessages.contains(widget.message)
+                        ? Container(
+                            margin: const EdgeInsets.all(2),
+                            width: 5,
+                            height: 5,
+                            decoration: BoxDecoration(
+                                color: Theme.of(context).primaryColor,
+                                borderRadius: const BorderRadius.all(
+                                    Radius.circular(50))),
+                          )
+                        : Container(
+                            color: Colors.transparent,
+                          ),
+                  ),
+                ),
+              Expanded(
+                child: Container(
+                  padding: const EdgeInsets.only(bottom: 10),
+                  child: Row(
+                      mainAxisAlignment:
+                          widget.chatUser.userID == widget.message.author.userID
+                              ? MainAxisAlignment.end
+                              : MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        ChatAvatar(
+                          showUserAvatarInChat: widget.showUserAvatarInChat,
+                          author: widget.message.author,
+                          chatUser: widget.chatUser,
                         ),
-                      ),
-                    ),
-                  ]),
-            ),
+
+                        // Message And Delivery Info Widget
+                        GestureDetector(
+                          onHorizontalDragUpdate: (u) =>
+                              _onHorizontalDragUpdate(
+                                  u,
+                                  widget.chatUser.userID ==
+                                      widget.message.author.userID),
+                          onHorizontalDragEnd: (e) => _onHorizontalDragEnd(
+                              e,
+                              widget.chatUser.userID ==
+                                  widget.message.author.userID),
+                          child: Transform.translate(
+                            offset: Offset(
+                                _left ?? (_right != null ? 0 - _right! : 0), 0),
+                            child: Stack(
+                              children: [
+                                // Message Container
+                                _MessageWidget(
+                                  message: widget.message,
+                                  chatUser: widget.chatUser,
+                                  imageMessages: widget.imageMessages,
+                                  onLongPressed: widget.onLongPressed,
+                                  handleSetSelectedMessage:
+                                      _handleSetSelectedMessage,
+                                  customWidgetBuilder:
+                                      widget.customWidgetBuilder,
+                                  pdfWidgetBuilder: widget.pdfWidgetBuilder,
+                                  videoWidgetBuilder: widget.videoWidgetBuilder,
+                                  showUserAvatarInChat:
+                                      widget.showUserAvatarInChat,
+                                ),
+                                // Message Delivery Widget
+                                Positioned(
+                                  bottom: -10,
+                                  right: 10,
+                                  child: _MessageDeliveryWidget(
+                                      message: widget.message,
+                                      chatUser: widget.chatUser),
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                      ]),
+                ),
+              ),
+            ],
           )
       ],
     );
@@ -329,7 +366,7 @@ class _DeliveryStateIcon extends StatelessWidget {
   }
 }
 
-bool _deliveryIsShownAtTextPoint(Message message){
+bool _deliveryIsShownAtTextPoint(Message message) {
   final MessageType messageType = message.type;
   bool messageHasText = false;
   switch (messageType) {
@@ -348,12 +385,15 @@ class _MessageDeliveryWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        margin: EdgeInsets.only(right: 5, bottom: message.type != MessageType.text  ?15:5),
+        margin: EdgeInsets.only(
+            right: 5, bottom: message.type != MessageType.text ? 15 : 5),
         padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 10),
-        decoration: !_deliveryIsShownAtTextPoint(message) ? BoxDecoration(
-            borderRadius: BorderRadius.circular(10),
-            color: Colors.black.withOpacity(0.2),
-        ):null,
+        decoration: !_deliveryIsShownAtTextPoint(message)
+            ? BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                color: Colors.black.withOpacity(0.2),
+              )
+            : null,
         child: Row(
             // alignment: Alignment.bottomRight,
             mainAxisAlignment: MainAxisAlignment.end,
@@ -407,17 +447,15 @@ class _MessageWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onLongPress: () {
-        if(onLongPressed != null){
+        if (onLongPressed != null) {
           onLongPressed!(message, handleSetSelectedMessage);
-        }else{
+        } else {
           handleSetSelectedMessage(message);
         }
       },
       child: Container(
         constraints: BoxConstraints(
-          minWidth: 63,
-          maxWidth: MediaQuery.of(context).size.width * .60
-        ),
+            minWidth: 63, maxWidth: MediaQuery.of(context).size.width * .60),
         decoration: BoxDecoration(
             boxShadow: [
               if (chatUser.userID != message.author.userID)

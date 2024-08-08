@@ -41,8 +41,7 @@ class SentAt extends StatelessWidget {
                     color: Colors.white,
                     // blurRadius: 2
                   )
-                ])
-            ,
+                ]),
           );
   }
 }

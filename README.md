@@ -22,6 +22,13 @@ and the Flutter guide for
 </p>
 A powerful and flexible chat solution for Flutter apps. Features include real-time messaging, private chats, group chats, customizable UI, user management, media sharing, rich text support, typing user(s), etc.
 
+## Current Status
+
+[![pub package](https://img.shields.io/pub/v/flutter_chatflow.svg)](https://pub.dev/packages/flutter_chatflow)
+[![pub points](https://img.shields.io/pub/points/flutter_chatflow)](https://pub.dev/packages/flutter_chatflow/score)
+[![popularity](https://img.shields.io/pub/popularity/flutter_chatflow)](https://pub.dev/packages/flutter_chatflow/score)
+[![likes](https://img.shields.io/pub/likes/flutter_chatflow)](https://pub.dev/packages/flutter_chatflow/score)
+
 ## Features
 
 1. Fast Messaging: The UI updates instantly as soon as it receives a new data. The developing sees to how the application stores the messages and it passes the same messages to the ChatFlow component for either private chats or group chats.

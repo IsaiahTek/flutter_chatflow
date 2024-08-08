@@ -25,11 +25,11 @@ class ChatFlow extends StatefulWidget {
   final OnAttachmentPressed onAttachmentPressed;
 
   /// The callback when the user presses down a message for long.
-  /// 
+  ///
   /// By default, the message is selected.
-  /// 
+  ///
   /// Example of how to intercept the default gesture event on message.
-  /// 
+  ///
   /// Calling the second argument `defaultAction` implements the default action together with your custom action.
   /// Sample code below
   /// ```dart
@@ -46,7 +46,7 @@ class ChatFlow extends StatefulWidget {
   /// ),
   /// ```
   /// In the example we executed a custom code before calling the default action which is to select the message.
-  /// 
+  ///
   /// Feel free to use it as you want!
   final OnMessageGesture? onMessageLongPressed;
 
@@ -85,6 +85,19 @@ class ChatFlow extends StatefulWidget {
   /// Widget for displaying pdf files
   final CustomWidgetBuilder? pdfWidgetBuilder;
 
+  /// Option for hiding ChatFlow default input widget.
+  ///
+  /// ChatFlow default input widget contains basically 3 other widgets:
+  ///   1. TextField
+  ///   2. Send Button
+  ///   3. Attachment Button
+  ///
+  /// Developers might want to use custom input widget for better controls. Just pass in the
+  /// `hideDefaultInputWidget:true`
+  ///
+  /// Default: `final hideDefaultInputWidget = false`;
+  final bool? hideDefaultInputWidget;
+
   /// ChatFlow used to add chat features to the app
   const ChatFlow(
       {super.key,
@@ -103,7 +116,8 @@ class ChatFlow extends StatefulWidget {
       this.pdfWidgetBuilder,
       this.customWidgetBuilder,
       this.shouldGroupConsecutiveImages,
-      this.minImagesToGroup});
+      this.minImagesToGroup,
+      this.hideDefaultInputWidget = false});
 
   @override
   State<StatefulWidget> createState() => _ChatFlowState();
@@ -231,7 +245,8 @@ class _ChatFlowState extends State<ChatFlow> {
                                         message: _messages[index],
                                         chatUser: widget.chatUser,
                                         imageMessages: _imageMessages,
-                                        onLongPressed: widget.onMessageLongPressed,
+                                        onLongPressed:
+                                            widget.onMessageLongPressed,
                                         showUserAvatarInChat:
                                             showUserAvatarInChat,
                                         previousMessageCreatedAt: index > 0
@@ -256,21 +271,22 @@ class _ChatFlowState extends State<ChatFlow> {
                   ],
                 ),
               )),
-              Container(
-                decoration: const BoxDecoration(color: Colors.transparent),
-                margin: EdgeInsets.only(bottom: Platform.isIOS ? 30 : 0),
-                child: ChatInputWidget(
-                  onSendPressed: widget.onSendPressed,
-                  onAttachmentPressed: widget.onAttachmentPressed,
-                  replyMessage: replyMessage,
-                  pdfWidgetBuilder: widget.pdfWidgetBuilder,
-                  customWidgetBuilder: widget.customWidgetBuilder,
-                  videoWidgetBuilder: widget.videoWidgetBuilder,
-                  isAuthor:
-                      widget.chatUser.userID == replyMessage?.author.userID,
-                  unsetReplyMessage: handleUnsetReplyMessage,
-                ),
-              )
+              if (!(widget.hideDefaultInputWidget ?? false))
+                Container(
+                  decoration: const BoxDecoration(color: Colors.transparent),
+                  margin: EdgeInsets.only(bottom: Platform.isIOS ? 30 : 0),
+                  child: ChatInputWidget(
+                    onSendPressed: widget.onSendPressed,
+                    onAttachmentPressed: widget.onAttachmentPressed,
+                    replyMessage: replyMessage,
+                    pdfWidgetBuilder: widget.pdfWidgetBuilder,
+                    customWidgetBuilder: widget.customWidgetBuilder,
+                    videoWidgetBuilder: widget.videoWidgetBuilder,
+                    isAuthor:
+                        widget.chatUser.userID == replyMessage?.author.userID,
+                    unsetReplyMessage: handleUnsetReplyMessage,
+                  ),
+                )
             ],
           ),
         ]));

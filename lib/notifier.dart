@@ -1,4 +1,3 @@
-
 import 'dart:async';
 
 /// Notification class for features like watching and streaming
@@ -25,7 +24,8 @@ import 'dart:async';
 
 class UserTypingStateStream {
   /// Single instance
-  static final UserTypingStateStream instance = UserTypingStateStream._internal();
+  static final UserTypingStateStream instance =
+      UserTypingStateStream._internal();
 
   UserTypingStateStream._internal() {
     _isTypingStreamController = StreamController<bool>.broadcast();
@@ -43,20 +43,20 @@ class UserTypingStateStream {
   bool _isTypingLastState = false;
 
   // Private method
-  void _hanldeSetTyping(){
-    // _lastTypedAt = DateTime.now().millisecondsSinceEpoch;
-    // if (!_isTypingLastState) {
-    //   _isTypingStreamController.add(true);
-    //   _isTypingLastState = true;
-    // }
-    // Future.delayed(const Duration(milliseconds: 500), () async {
-    //   if (_lastTypedAt + 400 <= DateTime.now().millisecondsSinceEpoch) {
-    //     if (_isTypingLastState && !_isTypingStreamController.isPaused) {
-    //       _isTypingStreamController.add(false);
-    //       _isTypingLastState = false;
-    //     }
-    //   }
-    // });
+  void _hanldeSetTyping() {
+    _lastTypedAt = DateTime.now().millisecondsSinceEpoch;
+    if (!_isTypingLastState) {
+      _isTypingStreamController.add(true);
+      _isTypingLastState = true;
+    }
+    Future.delayed(const Duration(milliseconds: 500), () async {
+      if (_lastTypedAt + 400 <= DateTime.now().millisecondsSinceEpoch) {
+        if (_isTypingLastState && !_isTypingStreamController.isPaused) {
+          _isTypingStreamController.add(false);
+          _isTypingLastState = false;
+        }
+      }
+    });
   }
 
   /// set typing state

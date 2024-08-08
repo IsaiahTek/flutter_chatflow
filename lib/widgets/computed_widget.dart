@@ -77,7 +77,19 @@ class ComputedMessage extends StatelessWidget {
             uri: audioMessage.uri, text: audioMessage.text, isAuthor: isAuthor);
       default:
         TextMessage textMessage = message as TextMessage;
-        result = Text(textMessage.text);
+        String? firstDetectUrl = detectUrls(textMessage.text).firstOrNull;
+        result = Column(
+          children: [
+            if (firstDetectUrl != null && firstDetectUrl.isNotEmpty)
+              GestureDetector(
+                child: LinkPreviewMain(url: firstDetectUrl),
+              ),
+            Text(
+              textMessage.text,
+              maxLines: shouldHideText ?? false ? 4 : null,
+            ),
+          ],
+        );
     }
     return result;
   }

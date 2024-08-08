@@ -58,10 +58,11 @@ class _ChatInputWidgetState extends State<ChatInputWidget> {
     _textEditingController.addListener(() {
       if (textInputFocusNode.hasFocus) {
         UserTypingStateStream.instance.setIsTyping();
-      }
-      setState(() {
         textIsNotEmpty = _textEditingController.text.isNotEmpty;
-      });
+        setState(() {
+          textIsNotEmpty;
+        });
+      }
     });
     super.initState();
   }
@@ -109,30 +110,32 @@ class _ChatInputWidgetState extends State<ChatInputWidget> {
                   ))
             ],
           ),
-          if(detectedUrls.isNotEmpty)
-        Stack(
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 5),
-              child: LinkPreviewer(url: detectedUrls.first),
-            ),
-            Positioned(
-                top: 0,
-                right: 0,
-                child: Container(
-                  height: 20,
-                  width: 20,
-                  margin: const EdgeInsets.only(top: 5, right: 5),
-                  child: GestureDetector(
-                    onTap: widget.unsetReplyMessage,
-                    child: const Icon(
-                      Icons.close,
-                      size: 18,
+        if (detectedUrls.isNotEmpty)
+          Stack(
+            children: [
+              GestureDetector(
+                child: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+                  child: LinkPreviewTile(url: detectedUrls.first),
+                ),
+              ),
+              Positioned(
+                  top: 0,
+                  right: 0,
+                  child: Container(
+                    height: 20,
+                    width: 20,
+                    margin: const EdgeInsets.only(top: 5, right: 5),
+                    child: GestureDetector(
+                      child: const Icon(
+                        Icons.close,
+                        size: 18,
+                      ),
                     ),
-                  ),
-                ))
-          ],
-        ),
+                  ))
+            ],
+          ),
         ClipRRect(
             borderRadius: BorderRadius.only(
                 topLeft: widget.replyMessage == null

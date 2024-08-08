@@ -6,6 +6,8 @@ version: 1.0.0
 
 repository: 'https://github.com/IsaiahTek/flutter_chatflow.git'
 
+publish_to: 'none'
+
 topics:
   - chat
   - message
@@ -20,6 +22,9 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  link_utils:
+    git:
+      url: 'https://github.com/IsaiahTek/link_utils.git'
 
 dev_dependencies:
   flutter_test:

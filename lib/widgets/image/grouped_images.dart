@@ -292,17 +292,15 @@ class _GroupedImage extends StatelessWidget {
             child: Container(
               padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 10),
               decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: Colors.black.withOpacity(0.2),
+                borderRadius: BorderRadius.circular(10),
+                color: Colors.black.withOpacity(0.2),
               ),
               child: Text(
                 getSentAt(image.createdAt),
-                style: const TextStyle(
-                  shadows: [
-                    Shadow(offset: Offset(1, 1), blurRadius: 1, color: Colors.black)
-                  ],
-                  color: Colors.white
-                ),
+                style: const TextStyle(shadows: [
+                  Shadow(
+                      offset: Offset(1, 1), blurRadius: 1, color: Colors.black)
+                ], color: Colors.white),
               ),
             ))
       ]),
@@ -355,22 +353,20 @@ class _ScrollableImagesView extends StatelessWidget {
                         bottom: 10,
                         right: 10,
                         child: Container(
-                          padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 10),
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 3, horizontal: 10),
                           decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              color: Colors.black.withOpacity(0.2),
+                            borderRadius: BorderRadius.circular(10),
+                            color: Colors.black.withOpacity(0.2),
                           ),
                           child: Text(
                             getSentAt(images[index].createdAt),
-                            style: const TextStyle(
-                              shadows: [
-                                Shadow(
-                                    offset: Offset(1, 1),
-                                    blurRadius: 1,
-                                    color: Colors.black)
-                              ],
-                              color: Colors.white
-                            ),
+                            style: const TextStyle(shadows: [
+                              Shadow(
+                                  offset: Offset(1, 1),
+                                  blurRadius: 1,
+                                  color: Colors.black)
+                            ], color: Colors.white),
                           ),
                         ))
                   ],

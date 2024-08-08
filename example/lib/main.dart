@@ -1,6 +1,8 @@
 import 'dart:io';
 import 'dart:math';
 
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_chatflow/chatflow.dart';
 import 'package:flutter_chatflow/models.dart';
@@ -182,6 +184,42 @@ class _HomeState extends State<Home> {
     });
   }
 
+  void _showMenu(
+      BuildContext context, Message message, Function(Message message) action) {
+    showCupertinoModalPopup(
+      context: context,
+      builder: (BuildContext context) => CupertinoActionSheet(
+        title: const Text('Select an option'),
+        message: const Text('Choose wisely'),
+        actions: <CupertinoActionSheetAction>[
+          CupertinoActionSheetAction(
+            onPressed: () {
+              Navigator.pop(context);
+              action(message);
+            },
+            child: const Text('Delete'),
+          ),
+          CupertinoActionSheetAction(
+            onPressed: () {
+              Navigator.pop(context);
+              // Add your action here
+              if (kDebugMode) {
+                print('Option 2 selected');
+              }
+            },
+            child: const Text('Option 2'),
+          ),
+        ],
+        cancelButton: CupertinoActionSheetAction(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          child: const Text('Cancel'),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return PopScope(
@@ -237,10 +275,9 @@ class _HomeState extends State<Home> {
                   onSendPressed: onSendPressed,
                   onAttachmentPressed: _handleImageSelection,
                   onMessageLongPressed: (Message message,
-                      Function(Message message) defaultAction) {
-                    debugPrint("Here is the message long pressed $message");
-                    defaultAction(message);
-                  },
+                          Function(Message message) defaultAction) =>
+                      _showMenu(context, message, defaultAction),
+                  // hideDefaultInputWidget: true,
                   showUserAvatarInChat: true,
                   minImagesToGroup: 3,
                   onMessageSelectionChanged: _handleMessageSelectionChange,
