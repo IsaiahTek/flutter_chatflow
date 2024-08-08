@@ -200,96 +200,80 @@ class _ChatFlowState extends State<ChatFlow> {
                     ? widget.minImagesToGroup
                     : 4)
             : [];
-    return GestureDetector(
-        onTap: () => FocusScope.of(context).unfocus(),
-        child: Stack(children: [
-          Column(
-            children: [
-              Expanded(
-                  child: SingleChildScrollView(
-                reverse: true,
-                child: Column(
-                  // mainAxisSize: MainAxisSize.min,
-                  children: [
-                    ListView.builder(
-                        shrinkWrap: true,
-                        itemCount: _messages.length,
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemBuilder: (context, index) {
-                          return SizedBox(
-                            width: MediaQuery.of(context).size.width,
-                            child: (indexIsInConsecutivesAndIsFirstTake(
-                                    groupedImages, index))
-                                ? Column(
-                                    children: [
-                                      _TimePartitionText(
-                                          createdAt: _messages[index].createdAt,
-                                          previousMessageCreatedAt:
-                                              _messages[index - 1].createdAt),
-                                      if (_messages[index].type ==
-                                          MessageType.info)
-                                        _InfoMessage(message: _messages[index]),
-                                      GroupedImages(
-                                        images: getGroupedImageMessages(
-                                            _messages, groupedImages, index),
-                                        chatUser: widget.chatUser,
-                                        isGroupChat:
-                                            widget.showUserAvatarInChat ??
-                                                false,
-                                      ),
-                                    ],
-                                  )
-                                : (indexIsInConsecutives(groupedImages, index))
-                                    ? const SizedBox.shrink()
-                                    : ChatBubble(
-                                        message: _messages[index],
-                                        chatUser: widget.chatUser,
-                                        imageMessages: _imageMessages,
-                                        onLongPressed:
-                                            widget.onMessageLongPressed,
-                                        showUserAvatarInChat:
-                                            showUserAvatarInChat,
-                                        previousMessageCreatedAt: index > 0
-                                            ? _messages[index - 1].createdAt
-                                            : null,
-                                        currentMessageIndex: index,
-                                        setReplyMessage: handleSetReplyMessage,
-                                        setSelectedMessages:
-                                            _handleSetSelectedMessage,
-                                        selectedMessages: selectedMessages,
-                                        videoWidgetBuilder:
-                                            widget.videoWidgetBuilder,
-                                        pdfWidgetBuilder:
-                                            widget.pdfWidgetBuilder,
-                                        customWidgetBuilder:
-                                            widget.customWidgetBuilder,
-                                      ),
-                          );
-                        }
-                        // }
-                        ),
-                  ],
-                ),
-              )),
-              if (!(widget.hideDefaultInputWidget ?? false))
-                Container(
-                  decoration: const BoxDecoration(color: Colors.transparent),
-                  margin: EdgeInsets.only(bottom: Platform.isIOS ? 30 : 0),
-                  child: ChatInputWidget(
-                    onSendPressed: widget.onSendPressed,
-                    onAttachmentPressed: widget.onAttachmentPressed,
-                    replyMessage: replyMessage,
-                    pdfWidgetBuilder: widget.pdfWidgetBuilder,
-                    customWidgetBuilder: widget.customWidgetBuilder,
-                    videoWidgetBuilder: widget.videoWidgetBuilder,
-                    isAuthor:
-                        widget.chatUser.userID == replyMessage?.author.userID,
-                    unsetReplyMessage: handleUnsetReplyMessage,
-                  ),
-                )
-            ],
-          ),
-        ]));
+    return Column(
+      children: [
+        Expanded(
+            child: ListView.builder(
+                shrinkWrap: true,
+                reverse: false,
+                itemCount: _messages.length,
+                // physics: const NeverScrollableScrollPhysics(),
+                itemBuilder: (context, index) {
+                  return SizedBox(
+                    width: MediaQuery.of(context).size.width,
+                    child: (indexIsInConsecutivesAndIsFirstTake(
+                            groupedImages, index))
+                        ? Column(
+                            children: [
+                              _TimePartitionText(
+                                  createdAt: _messages[index].createdAt,
+                                  previousMessageCreatedAt:
+                                      _messages[index - 1].createdAt),
+                              if (_messages[index].type == MessageType.info)
+                                _InfoMessage(message: _messages[index]),
+                              GroupedImages(
+                                images: getGroupedImageMessages(
+                                    _messages, groupedImages, index),
+                                chatUser: widget.chatUser,
+                                isGroupChat:
+                                    widget.showUserAvatarInChat ?? false,
+                              ),
+                            ],
+                          )
+                        : (indexIsInConsecutives(groupedImages, index))
+                            ? const SizedBox.shrink()
+                            : ChatBubble(
+                                message: _messages[index],
+                                chatUser: widget.chatUser,
+                                imageMessages: _imageMessages,
+                                onLongPressed: widget.onMessageLongPressed,
+                                showUserAvatarInChat: showUserAvatarInChat,
+                                previousMessageCreatedAt: index > 0
+                                    ? _messages[index - 1].createdAt
+                                    : null,
+                                currentMessageIndex: index,
+                                setReplyMessage: handleSetReplyMessage,
+                                setSelectedMessages:
+                                    _handleSetSelectedMessage,
+                                selectedMessages: selectedMessages,
+                                videoWidgetBuilder:
+                                    widget.videoWidgetBuilder,
+                                pdfWidgetBuilder: widget.pdfWidgetBuilder,
+                                customWidgetBuilder:
+                                    widget.customWidgetBuilder,
+                              ),
+                  );
+                }
+                // }
+                )),
+        if (!(widget.hideDefaultInputWidget ?? false))
+          Container(
+            decoration: const BoxDecoration(color: Colors.transparent),
+            margin: EdgeInsets.only(bottom: Platform.isIOS ? 30 : 0),
+            child: ChatInputWidget(
+              onSendPressed: widget.onSendPressed,
+              onAttachmentPressed: widget.onAttachmentPressed,
+              replyMessage: replyMessage,
+              pdfWidgetBuilder: widget.pdfWidgetBuilder,
+              customWidgetBuilder: widget.customWidgetBuilder,
+              videoWidgetBuilder: widget.videoWidgetBuilder,
+              isAuthor:
+                  widget.chatUser.userID == replyMessage?.author.userID,
+              unsetReplyMessage: handleUnsetReplyMessage,
+            ),
+          )
+      ],
+    );
   }
 }
 

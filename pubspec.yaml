@@ -23,8 +23,9 @@ dependencies:
   flutter:
     sdk: flutter
   link_utils:
-    git:
-      url: 'https://github.com/IsaiahTek/link_utils.git'
+    path: ../link_utils
+    # git:
+    #   url: 'https://github.com/IsaiahTek/link_utils.git'
 
 dev_dependencies:
   flutter_test:
