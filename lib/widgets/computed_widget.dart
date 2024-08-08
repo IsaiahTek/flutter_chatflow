@@ -24,6 +24,10 @@ class ComputedMessage extends StatelessWidget {
   /// Optional widget to be passed
   final CustomWidgetBuilder? pdfWidgetBuilder;
 
+  /// [Optional]
+  /// Callback for onImageMessageTapped
+  final OnMessageGesture? onImageMessageTapped;
+
   /// [Optional] If false or not provide the text will be displayed under the image.
   /// Otherwise, the text will not be displayed.
   final bool? shouldHideText;
@@ -40,6 +44,7 @@ class ComputedMessage extends StatelessWidget {
       this.videoWidgetBuilder,
       this.pdfWidgetBuilder,
       this.shouldHideText,
+      this.onImageMessageTapped,
       this.shouldFitToAvailableSize});
 
   @override

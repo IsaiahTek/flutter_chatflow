@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_chatflow/message_gesture_callback_manager.dart';
 import 'package:flutter_chatflow/models.dart';
 import 'package:flutter_chatflow/utils/type_defs.dart';
 import 'package:flutter_chatflow/utils/types.dart';
@@ -29,8 +30,11 @@ class ChatBubble extends StatefulWidget {
   /// timestamp of previous message
   final int? previousMessageCreatedAt;
 
-  /// Callback for onLongPressed
-  final OnMessageGesture? onLongPressed;
+  // /// Callback for onLongPressed
+  // final OnMessageGesture? onLongPressed;
+
+  // /// Callback for onMessageDoubleTapped
+  // final OnMessageGesture? onDoubleTapped;
 
   /// Callback to set selected messages
   final void Function(List<Message> message) setSelectedMessages;
@@ -57,7 +61,8 @@ class ChatBubble extends StatefulWidget {
       required this.currentMessageIndex,
       required this.chatUser,
       required this.imageMessages,
-      this.onLongPressed,
+      // this.onLongPressed,
+      // this.onDoubleTapped,
       required this.showUserAvatarInChat,
       this.previousMessageCreatedAt,
       required this.setSelectedMessages,
@@ -213,7 +218,8 @@ class _ChatBubbleState extends State<ChatBubble> {
                                   message: widget.message,
                                   chatUser: widget.chatUser,
                                   imageMessages: widget.imageMessages,
-                                  onLongPressed: widget.onLongPressed,
+                                  // onLongPressed: widget.onLongPressed,
+                                  // onDoubleTapped: widget.onDoubleTapped,
                                   handleSetSelectedMessage:
                                       _handleSetSelectedMessage,
                                   customWidgetBuilder:
@@ -427,7 +433,9 @@ class _MessageWidget extends StatelessWidget {
   final bool showUserAvatarInChat;
   final List<ImageMessage> imageMessages;
   final void Function(Message message) handleSetSelectedMessage;
-  final OnMessageGesture? onLongPressed;
+  // final OnMessageGesture? onLongPressed;
+  // final OnMessageGesture? onDoubleTapped;
+  // final OnMessageGesture? onImageMessageTapped;
   final CustomWidgetBuilder? customWidgetBuilder;
   final CustomWidgetBuilder? videoWidgetBuilder;
   final CustomWidgetBuilder? pdfWidgetBuilder;
@@ -438,7 +446,9 @@ class _MessageWidget extends StatelessWidget {
       required this.imageMessages,
       required this.showUserAvatarInChat,
       required this.handleSetSelectedMessage,
-      this.onLongPressed,
+      // this.onLongPressed,
+      // this.onDoubleTapped,
+      // this.onImageMessageTapped,
       required this.customWidgetBuilder,
       required this.pdfWidgetBuilder,
       required this.videoWidgetBuilder});
@@ -447,12 +457,26 @@ class _MessageWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onLongPress: () {
+        OnMessageGesture? onLongPressed = MessageGestureCallbackManager()
+            .getCallback(CallbackName.onMessageLongPressed);
         if (onLongPressed != null) {
-          onLongPressed!(message, handleSetSelectedMessage);
+          onLongPressed(message, handleSetSelectedMessage);
         } else {
           handleSetSelectedMessage(message);
         }
       },
+      onDoubleTap: () {
+        OnMessageGesture? onDoubleTapped = MessageGestureCallbackManager()
+            .getCallback(CallbackName.onMessageDoubleTapped);
+        if (onDoubleTapped != null) {
+          onDoubleTapped(message, (Message message) {});
+        } else {}
+      },
+      // onTap: (){
+      //   if(message.type == MessageType.image && onImageMessageTapped != null){
+      //     onImageMessageTapped!(message, (Message message){});
+      //   }
+      // },
       child: Container(
         constraints: BoxConstraints(
             minWidth: 63, maxWidth: MediaQuery.of(context).size.width * .60),
@@ -496,6 +520,20 @@ class _MessageWidget extends StatelessWidget {
             if (message.type == MessageType.image) {
               int currentImageIndex =
                   imageMessages.indexWhere((element) => element == message);
+              OnMessageGesture? onImageTapped = MessageGestureCallbackManager()
+                  .getCallback(CallbackName.onImageMessageTapped);
+              if (onImageTapped != null) {
+                Message message = imageMessages[currentImageIndex];
+                onImageTapped(message, (message) {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: ((context) => ImageCarousel(
+                                imageMessages: imageMessages,
+                                currentIndex: currentImageIndex,
+                              ))));
+                });
+              }
               Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -552,6 +590,7 @@ class _MessageWidget extends StatelessWidget {
                   customWidgetBuilder: customWidgetBuilder,
                   pdfWidgetBuilder: pdfWidgetBuilder,
                   videoWidgetBuilder: videoWidgetBuilder,
+                  // onImageMessageTapped: onImageMessageTapped,
                 ),
               ),
             ],

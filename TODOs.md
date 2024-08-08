@@ -1,5 +1,5 @@
 PENDING:
-* Refactoring code to enable package users override each of all the default actions triggered by user events on messages such as `onMessageLongPressed`, `onImageMessageTap`, `onMessageSwipedLeft`, `onMessageSwipedRight`, and [NEW] `onMessageDoubleTap`
+* Refactoring code to enable package users override each of all the default actions triggered by user events on messages such as `onMessageLongPressed`, `onImageMessageTapped`, `onMessageSwipedLeft`, `onMessageSwipedRight`, and [NEW] `onMessageDoubleTapped`
 * Add lastReadMessageID for displaying `[x] New Message(s)` when the chat user has new message(s) in the chat for the first entrance.
 
 ## 2.0.0

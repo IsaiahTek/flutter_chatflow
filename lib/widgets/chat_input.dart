@@ -70,6 +70,7 @@ class _ChatInputWidgetState extends State<ChatInputWidget> {
   @override
   void dispose() {
     _textEditingController.dispose();
+    textInputFocusNode.unfocus();
     textInputFocusNode.dispose();
     super.dispose();
   }
@@ -121,8 +122,8 @@ class _ChatInputWidgetState extends State<ChatInputWidget> {
                 ),
               ),
               Positioned(
-                  top: 0,
-                  right: 0,
+                  top: 3,
+                  right: 5,
                   child: Container(
                     height: 20,
                     width: 20,

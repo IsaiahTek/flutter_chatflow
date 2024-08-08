@@ -20,6 +20,6 @@ typedef OnAttachmentPressed = void Function({Message? repliedTo})?;
 /// Default action for a particular message gesture defined
 typedef DefaultAction = void Function(Message message);
 
-/// A particular message gesture like onLongPressed, onSwipedLeft, onDoubleTapped, etc.
+/// A particular message gesture like onLongPressed, onSwipedLeft, onMessageDoubleTapped, etc.
 typedef OnMessageGesture = void Function(
     Message message, DefaultAction defaultAction);

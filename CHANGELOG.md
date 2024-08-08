@@ -1,7 +1,7 @@
 ## 2.0.0
 * BREAKING CHANGES:
 * 1. Renamed FluChatNotifier to UserTypingStateStream
-* 2. Added an optional onMessageDoubleTap callback
+* 2. Added an optional onMessageDoubleTapped callback
 
 MINOR FIX:
 * Added minimum container size to contain message delivery overflow

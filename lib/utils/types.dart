@@ -42,3 +42,15 @@ enum DeliveryStatus {
   /// Double check and primary color
   read,
 }
+
+/// List of all callbacks
+enum CallbackName {
+  ///
+  onMessageLongPressed,
+
+  ///
+  onImageMessageTapped,
+
+  ///
+  onMessageDoubleTapped
+}
