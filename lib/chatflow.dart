@@ -262,10 +262,6 @@ class _ChatFlowState extends State<ChatFlow> {
                                       message: _messages[index],
                                       chatUser: widget.chatUser,
                                       imageMessages: _imageMessages,
-                                      // onLongPressed:
-                                      //     widget.onMessageLongPressed,
-                                      // onDoubleTapped:
-                                      //     widget.onMessageDoubleTapped,
                                       showUserAvatarInChat:
                                           showUserAvatarInChat,
                                       previousMessageCreatedAt: index > 0

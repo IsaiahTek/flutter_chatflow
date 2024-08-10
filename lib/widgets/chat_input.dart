@@ -1,8 +1,4 @@
 part of "../library.dart";
-// import 'package:flutter/material.dart';
-// import 'package:flutter_chatflow/models.dart';
-// import 'package:flutter_chatflow/utils/type_defs.dart';
-// import 'package:flutter_chatflow/widgets/replied_message_widget.dart';
 
 /// Not for your usage
 class ChatInputWidget extends StatefulWidget {
@@ -49,35 +45,34 @@ class ChatInputWidget extends StatefulWidget {
 class _ChatInputWidgetState extends State<ChatInputWidget> {
   final TextEditingController _textEditingController = TextEditingController();
   bool textIsNotEmpty = false;
-  final FocusNode textInputFocusNode = FocusNode();
+  // final FocusNode textInputFocusNode = FocusNode();
 
   @override
   initState() {
-    textInputFocusNode.skipTraversal = true;
-    textIsNotEmpty = _textEditingController.text.isNotEmpty;
-    _textEditingController.addListener(() {
-      if (textInputFocusNode.hasFocus) {
-        UserTypingStateStream.instance.setIsTyping();
-        textIsNotEmpty = _textEditingController.text.isNotEmpty;
-        setState(() {
-          textIsNotEmpty;
-        });
-      }
-    });
+    // textIsNotEmpty = _textEditingController.text.isNotEmpty;
+    // _textEditingController.addListener(() {
+    //   // if (textInputFocusNode.hasFocus) {
+    //     UserTypingStateStream.instance.setIsTyping();
+    //     textIsNotEmpty = _textEditingController.text.isNotEmpty;
+    //     setState(() {
+    //       textIsNotEmpty;
+    //     });
+    //   // }
+    // });
     super.initState();
   }
 
   @override
   void dispose() {
     _textEditingController.dispose();
-    textInputFocusNode.unfocus();
-    textInputFocusNode.dispose();
+    // textInputFocusNode.unfocus();
+    // textInputFocusNode.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    List<String> detectedUrls = detectUrls(_textEditingController.text);
+    List<String> detectedUrls = getUrls(_textEditingController.text);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -186,9 +181,9 @@ class _ChatInputWidgetState extends State<ChatInputWidget> {
                       minLines: 1,
                       style: const TextStyle(color: Colors.white),
                       controller: _textEditingController,
-                      focusNode: textInputFocusNode,
+                      // focusNode: textInputFocusNode,
                     )),
-                    if (textIsNotEmpty)
+                    // if (textIsNotEmpty)
                       IconButton.filledTonal(
                         onPressed: () {
                           // try {

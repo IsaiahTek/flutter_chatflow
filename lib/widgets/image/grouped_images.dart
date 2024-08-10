@@ -25,6 +25,9 @@ class GroupedImages extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
+      mainAxisAlignment: chatUser.userID == images.first.author.userID
+          ? MainAxisAlignment.end
+          : MainAxisAlignment.start,
       children: [
         ChatAvatar(
           showUserAvatarInChat: isGroupChat,
@@ -34,11 +37,7 @@ class GroupedImages extends StatelessWidget {
         Container(
           padding:
               const EdgeInsets.only(left: 10, right: 10, top: 10, bottom: 12),
-          // color: Colors.white,
           child: Row(
-            mainAxisAlignment: chatUser.userID == images.first.author.userID
-                ? MainAxisAlignment.end
-                : MainAxisAlignment.start,
             children: [
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,

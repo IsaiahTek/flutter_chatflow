@@ -19,6 +19,22 @@ class ImageWidget extends StatelessWidget {
             if (snapshot.data!) {
               return Image.file(
                 File(uri),
+                errorBuilder: (context, error, stackTrace) => Container(
+                width: MediaQuery.of(context).size.width,
+                decoration: BoxDecoration(
+                    gradient: LinearGradient(colors: [
+                  Theme.of(context).primaryColor.withOpacity(.8),
+                  Theme.of(context).primaryColor.withAlpha(255)
+                ])),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 50),
+                child: Text(
+                  "$error",
+                  // "Local file image not found with the file name \n${Uri.file(uri).pathSegments[Uri.file(uri).pathSegments.length - 1]}\nEnsure it hasn't been deleted from the device",
+                  style: const TextStyle(
+                      fontStyle: FontStyle.italic, color: Colors.white),
+                ),
+                ),
               );
             } else {
               return Image.network(

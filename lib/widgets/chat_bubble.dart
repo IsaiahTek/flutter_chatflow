@@ -30,12 +30,6 @@ class ChatBubble extends StatefulWidget {
   /// timestamp of previous message
   final int? previousMessageCreatedAt;
 
-  // /// Callback for onLongPressed
-  // final OnMessageGesture? onLongPressed;
-
-  // /// Callback for onMessageDoubleTapped
-  // final OnMessageGesture? onDoubleTapped;
-
   /// Callback to set selected messages
   final void Function(List<Message> message) setSelectedMessages;
 
@@ -61,8 +55,6 @@ class ChatBubble extends StatefulWidget {
       required this.currentMessageIndex,
       required this.chatUser,
       required this.imageMessages,
-      // this.onLongPressed,
-      // this.onDoubleTapped,
       required this.showUserAvatarInChat,
       this.previousMessageCreatedAt,
       required this.setSelectedMessages,
@@ -218,8 +210,6 @@ class _ChatBubbleState extends State<ChatBubble> {
                                   message: widget.message,
                                   chatUser: widget.chatUser,
                                   imageMessages: widget.imageMessages,
-                                  // onLongPressed: widget.onLongPressed,
-                                  // onDoubleTapped: widget.onDoubleTapped,
                                   handleSetSelectedMessage:
                                       _handleSetSelectedMessage,
                                   customWidgetBuilder:
@@ -329,10 +319,13 @@ class _InfoMessage extends StatelessWidget {
   }
 }
 
-class _DeliveryStateIcon extends StatelessWidget {
+class _DeliveryStatusIcon extends StatelessWidget {
   final DeliveryStatus? deliveryStatus;
+  final bool? isAtText;
 
-  const _DeliveryStateIcon({this.deliveryStatus});
+  const _DeliveryStatusIcon({this.deliveryStatus, this.isAtText});
+
+  bool get _isAtText => isAtText??true; 
 
   @override
   Widget build(BuildContext context) {
@@ -348,14 +341,14 @@ class _DeliveryStateIcon extends StatelessWidget {
         icon = Icon(
           Icons.done_rounded,
           size: iconSize,
-          color: Colors.white,
+          color: _isAtText ? Colors.black87 : Colors.white,
         );
         break;
       case DeliveryStatus.delivered:
         icon = Icon(
           Icons.done_all_rounded,
           size: iconSize,
-          color: Colors.white,
+          color: _isAtText ? Colors.black87 : Colors.white,
         );
         break;
       case DeliveryStatus.read:
@@ -419,7 +412,7 @@ class _MessageDeliveryWidget extends StatelessWidget {
                           .labelSmall
                           ?.fontSize, // Adjust height and width as needed
                       width: Theme.of(context).textTheme.labelSmall?.fontSize,
-                      child: _DeliveryStateIcon(deliveryStatus: message.status),
+                      child: _DeliveryStatusIcon(deliveryStatus: message.status, isAtText: _deliveryIsShownAtTextPoint(message),),
                     )
                   ],
                 )
@@ -433,9 +426,6 @@ class _MessageWidget extends StatelessWidget {
   final bool showUserAvatarInChat;
   final List<ImageMessage> imageMessages;
   final void Function(Message message) handleSetSelectedMessage;
-  // final OnMessageGesture? onLongPressed;
-  // final OnMessageGesture? onDoubleTapped;
-  // final OnMessageGesture? onImageMessageTapped;
   final CustomWidgetBuilder? customWidgetBuilder;
   final CustomWidgetBuilder? videoWidgetBuilder;
   final CustomWidgetBuilder? pdfWidgetBuilder;
@@ -446,9 +436,6 @@ class _MessageWidget extends StatelessWidget {
       required this.imageMessages,
       required this.showUserAvatarInChat,
       required this.handleSetSelectedMessage,
-      // this.onLongPressed,
-      // this.onDoubleTapped,
-      // this.onImageMessageTapped,
       required this.customWidgetBuilder,
       required this.pdfWidgetBuilder,
       required this.videoWidgetBuilder});
@@ -525,22 +512,23 @@ class _MessageWidget extends StatelessWidget {
               if (onImageTapped != null) {
                 Message message = imageMessages[currentImageIndex];
                 onImageTapped(message, (message) {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: ((context) => ImageCarousel(
-                                imageMessages: imageMessages,
-                                currentIndex: currentImageIndex,
-                              ))));
+                  // Navigator.push(
+                  //     context,
+                  //     MaterialPageRoute(
+                  //         builder: ((context) => ImageCarousel(
+                  //               imageMessages: imageMessages,
+                  //               currentIndex: currentImageIndex,
+                  //             ))));
                 });
+              }else{
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: ((context) => ImageCarousel(
+                              imageMessages: imageMessages,
+                              currentIndex: currentImageIndex,
+                            ))));
               }
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: ((context) => ImageCarousel(
-                            imageMessages: imageMessages,
-                            currentIndex: currentImageIndex,
-                          ))));
             }
           },
           child: SizedBox(
@@ -590,7 +578,6 @@ class _MessageWidget extends StatelessWidget {
                   customWidgetBuilder: customWidgetBuilder,
                   pdfWidgetBuilder: pdfWidgetBuilder,
                   videoWidgetBuilder: videoWidgetBuilder,
-                  // onImageMessageTapped: onImageMessageTapped,
                 ),
               ),
             ],

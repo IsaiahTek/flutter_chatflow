@@ -28,6 +28,11 @@ abstract class Message {
   /// When a messsage is marked as a repliedTo message, ChatFlow will include it in the payload passed to either the onSendPressed or the onAttachmentPressed callback.
   Message? repliedTo;
 
+  @override
+  String toString(){
+    return 'Message(message type: $type, author:${author.toString()}, status:$status, timestamp:$createdAt)';
+  }
+
   ///Create the class
   Message(
       {required this.type,
@@ -42,7 +47,7 @@ abstract class Message {
 /// Image message
 class ImageMessage extends Message {
   /// uri/url or local file path
-  final String uri;
+  String uri;
 
   /// [Optional] text
   String? text;
@@ -64,7 +69,7 @@ class ImageMessage extends Message {
 /// Audio message
 class AudioMessage extends Message {
   /// uri/url or local file path
-  final String uri;
+  String uri;
 
   /// [Optional] text
   String? text;
@@ -86,7 +91,7 @@ class AudioMessage extends Message {
 /// Video message
 class VideoMessage extends Message {
   /// uri/url or local file path
-  final String uri;
+  String uri;
 
   /// [Optional] text
   String? text;
@@ -108,17 +113,83 @@ class VideoMessage extends Message {
 /// PDF
 class PdfMessage extends Message {
   /// uri/url or local file path
-  final String uri;
+  String uri;
 
   /// [Optional] text
   String? text;
 
   /// Create class
   PdfMessage({
-    super.type = MessageType.video,
+    super.type = MessageType.pdf,
     required super.author,
     required super.createdAt,
     required this.uri,
+    this.text,
+    super.status,
+    super.messageID,
+    super.meta,
+    super.repliedTo,
+  });
+}
+
+/// PDF
+class DocMessage extends Message {
+  /// uri/url or local file path
+  String uri;
+
+  /// [Optional] text
+  String? text;
+
+  /// Create class
+  DocMessage({
+    super.type = MessageType.doc,
+    required super.author,
+    required super.createdAt,
+    required this.uri,
+    this.text,
+    super.status,
+    super.messageID,
+    super.meta,
+    super.repliedTo,
+  });
+}
+
+/// PDF
+class FileMessage extends Message {
+  /// uri/url or local file path
+  String uri;
+
+  /// [Optional] text
+  String? text;
+
+  /// Create class
+  FileMessage({
+    super.type = MessageType.file,
+    required super.author,
+    required super.createdAt,
+    required this.uri,
+    this.text,
+    super.status,
+    super.messageID,
+    super.meta,
+    super.repliedTo,
+  });
+}
+
+/// PDF
+class CustomMessage extends Message {
+  /// uri/url or local file path
+  final dynamic custom;
+
+  /// [Optional] text
+  String? text;
+
+  /// Create class
+  CustomMessage({
+    super.type = MessageType.custom,
+    required super.author,
+    required super.createdAt,
+    this.custom,
     this.text,
     super.status,
     super.messageID,

@@ -276,12 +276,75 @@ class ConsecutiveOccurrence {
   ConsecutiveOccurrence({required this.startIndex, this.endIndex});
 }
 
-/// Util function to detect urls in a text. Feel free to use if you need it!
-List<String> detectUrls(String text) {
-  String urlPattern =
-      r'(?:(?:https?|ftp):\/\/)?(?:[\w-]+\.)+[a-z]{2,}(?:\/\S*)?';
-  final regex = RegExp(urlPattern, caseSensitive: false);
-  final matches = regex.allMatches(text);
+// /// Util function to detect urls in a text. Feel free to use if you need it!
+// List<String> detectUrls(String text) {
+//   String urlPattern =
+//       r'(?:(?:https?|ftp):\/\/)?(?:[\w-]+\.)+[a-z]{2,}(?:\/\S*)?';
+//   final regex = RegExp(urlPattern, caseSensitive: false);
+//   final matches = regex.allMatches(text);
 
-  return matches.map((match) => match.group(0)!).toList();
+//   return matches.map((match) => match.group(0)!).toList();
+// }
+
+
+/// Use this function if you need to dynamically get the url of file-based message.
+String? getFileUrlFromMessage(Message message){
+  String? url;
+  switch (message.type) {
+    case MessageType.image:
+      url = (message as ImageMessage).uri;
+      break;
+    case MessageType.video:
+      url = (message as VideoMessage).uri;
+      break;
+    case MessageType.audio:
+      url = (message as AudioMessage).uri;
+      break;
+    case MessageType.pdf:
+      url = (message as PdfMessage).uri;
+      break;
+    case MessageType.doc:
+      url = (message as DocMessage).uri;
+      break;
+    case MessageType.file:
+      url = (message as FileMessage).uri;
+      break;
+    default:
+      break;
+  }
+
+  return url;
+}
+
+
+/// Use this util to update the uri of a file based message when needed
+Message updateMessageUri(Message message, String uri){
+  return _updatedUri(message, uri);
+}
+
+
+Message _updatedUri(Message message, String uri){
+  switch (message.type) {
+    case MessageType.image:
+      (message as ImageMessage).uri = uri;
+      break;
+    case MessageType.video:
+      (message as VideoMessage).uri = uri;
+      break;
+    case MessageType.audio:
+      (message as AudioMessage).uri = uri;
+      break;
+    case MessageType.pdf:
+      (message as PdfMessage).uri = uri;
+      break;
+    case MessageType.doc:
+      (message as DocMessage).uri = uri;
+      break;
+    case MessageType.file:
+      (message as FileMessage).uri = uri;
+      break;
+    default:
+      break;
+  }
+  return message;
 }
