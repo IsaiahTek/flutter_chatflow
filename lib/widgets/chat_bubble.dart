@@ -6,7 +6,7 @@ import 'package:flutter_chatflow/utils/types.dart';
 import 'package:flutter_chatflow/utils/utils.dart';
 import 'package:flutter_chatflow/widgets/chat_avatar.dart';
 import 'package:flutter_chatflow/widgets/sent_at.dart';
-import '../library.dart';
+import '../chatflow.dart';
 import 'package:flutter_chatflow/widgets/image/image_carousel.dart';
 import 'package:flutter_chatflow/widgets/replied_message_widget.dart';
 

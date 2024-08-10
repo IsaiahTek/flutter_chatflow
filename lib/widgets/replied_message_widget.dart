@@ -3,7 +3,7 @@ import 'package:flutter_chatflow/models.dart';
 import 'package:flutter_chatflow/utils/type_defs.dart';
 import 'package:flutter_chatflow/utils/types.dart';
 import 'package:flutter_chatflow/utils/utils.dart';
-import '../library.dart';
+import '../chatflow.dart';
 
 /// To be used internally by the package developers and contributors
 ///

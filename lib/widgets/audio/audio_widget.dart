@@ -1,4 +1,4 @@
-part of '../../library.dart';
+part of '../../chatflow.dart';
 
 /// Audio Widget
 class AudioWidget extends StatelessWidget {
