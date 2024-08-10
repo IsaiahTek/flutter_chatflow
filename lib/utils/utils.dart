@@ -287,7 +287,9 @@ class ConsecutiveOccurrence {
 // }
 
 /// Use this function if you need to dynamically get the url of file-based message.
-String? getFileUrlFromMessage(Message message) {
+String? getFileUrlFromMessage(Message message) => _getFileUrlFromMessage(message);
+
+String? _getFileUrlFromMessage(Message message) {
   String? url;
   switch (message.type) {
     case MessageType.image:
