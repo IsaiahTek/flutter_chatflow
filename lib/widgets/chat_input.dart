@@ -184,27 +184,26 @@ class _ChatInputWidgetState extends State<ChatInputWidget> {
                       // focusNode: textInputFocusNode,
                     )),
                     // if (textIsNotEmpty)
-                      IconButton.filledTonal(
-                        onPressed: () {
-                          // try {
-                          widget.onSendPressed != null
-                              ? widget.onSendPressed!(
-                                  _textEditingController.text,
-                                  repliedTo: widget.replyMessage)
-                              : null;
-                          // } catch (e) {
-                          //   logError("Error on onSendPressed: $e");
-                          // }
-                          _textEditingController.clear();
-                          if (widget.unsetReplyMessage != null) {
-                            widget.unsetReplyMessage!();
-                          }
-                        },
-                        icon: Icon(
-                          Icons.send,
-                          color: Theme.of(context).primaryColor,
-                        ),
-                      )
+                    IconButton.filledTonal(
+                      onPressed: () {
+                        // try {
+                        widget.onSendPressed != null
+                            ? widget.onSendPressed!(_textEditingController.text,
+                                repliedTo: widget.replyMessage)
+                            : null;
+                        // } catch (e) {
+                        //   logError("Error on onSendPressed: $e");
+                        // }
+                        _textEditingController.clear();
+                        if (widget.unsetReplyMessage != null) {
+                          widget.unsetReplyMessage!();
+                        }
+                      },
+                      icon: Icon(
+                        Icons.send,
+                        color: Theme.of(context).primaryColor,
+                      ),
+                    )
                   ],
                 ))),
       ],

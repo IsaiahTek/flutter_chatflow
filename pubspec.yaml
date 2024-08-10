@@ -6,14 +6,12 @@ version: 1.0.0
 
 repository: 'https://github.com/IsaiahTek/flutter_chatflow.git'
 
-publish_to: 'none'
-
 topics:
   - chat
   - message
-  - messaging
+  - whatsapp
   - chat-ui
-  - chat-room
+  - telegram
 
 environment:
   sdk: '>=3.3.4 <4.0.0'
@@ -22,10 +20,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  link_utils:
-    path: ../link_utils
-    # git:
-    #   url: 'https://github.com/IsaiahTek/link_utils.git'
+  link_utils: ^0.0.2
 
 dev_dependencies:
   flutter_test:

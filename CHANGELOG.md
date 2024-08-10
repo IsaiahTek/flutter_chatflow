@@ -1,7 +1,31 @@
 ## 2.0.0
-* BREAKING CHANGES:
+BREAKING CHANGES:
 * 1. Renamed FluChatNotifier to UserTypingStateStream
-* 2. Added an optional onMessageDoubleTapped callback
+```dart
+// If you encounter an issue of FluChatNotifier, just rename from
+// old
+FluChatNotifier
+// to new
+UserTypingStateStream
+```
+
+OTHERS:
+* Added some utility functions such as
+* Added an optional onMessageDoubleTapped callback
+* Implemented onImageMessageTapped and it applies to each grouped image when opened and tapped.
+* Implemented callback for onMessageLongPressed.
+
+NOTE: For all message gesture callbacks, by registering a callback, you can run your custom code alone (or prevent the default action) or run it together with the default action. If provided, you must call the default action if you want that to also run. Otherwise, omit it and the default action would still run.
+
+```dart
+updateMessageUri(Message message, String uri)
+```
+and 
+
+```dart
+getFileUrlFromMessage(Message message)
+```
+
 
 MINOR FIX:
 * Added minimum container size to contain message delivery overflow

@@ -29,7 +29,7 @@ abstract class Message {
   Message? repliedTo;
 
   @override
-  String toString(){
+  String toString() {
     return 'Message(message type: $type, author:${author.toString()}, status:$status, timestamp:$createdAt)';
   }
 

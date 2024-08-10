@@ -226,10 +226,11 @@ packages:
   link_utils:
     dependency: transitive
     description:
-      path: "../../link_utils"
-      relative: true
-    source: path
-    version: "0.0.1"
+      name: link_utils
+      sha256: f843c3d3cf8d5f8b5a3020fd98d5e14cd791c6c5b70fa46254f2741fbc710a12
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.2"
   matcher:
     dependency: transitive
     description:

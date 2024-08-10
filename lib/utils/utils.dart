@@ -286,9 +286,8 @@ class ConsecutiveOccurrence {
 //   return matches.map((match) => match.group(0)!).toList();
 // }
 
-
 /// Use this function if you need to dynamically get the url of file-based message.
-String? getFileUrlFromMessage(Message message){
+String? getFileUrlFromMessage(Message message) {
   String? url;
   switch (message.type) {
     case MessageType.image:
@@ -316,14 +315,12 @@ String? getFileUrlFromMessage(Message message){
   return url;
 }
 
-
 /// Use this util to update the uri of a file based message when needed
-Message updateMessageUri(Message message, String uri){
+Message updateMessageUri(Message message, String uri) {
   return _updatedUri(message, uri);
 }
 
-
-Message _updatedUri(Message message, String uri){
+Message _updatedUri(Message message, String uri) {
   switch (message.type) {
     case MessageType.image:
       (message as ImageMessage).uri = uri;

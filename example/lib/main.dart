@@ -197,7 +197,10 @@ class _HomeState extends State<Home> {
               action(message);
               Navigator.pop(context);
             },
-            child: const Text('Delete for Me', style: TextStyle(fontWeight: FontWeight.bold),),
+            child: const Text(
+              'Delete for Me',
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
           ),
           CupertinoActionSheetAction(
             onPressed: () {
@@ -231,7 +234,7 @@ class _HomeState extends State<Home> {
           child: const Text('Cancel'),
         ),
       ),
-    ).then((_){
+    ).then((_) {
       FocusScope.of(context).unfocus();
     });
   }
@@ -293,28 +296,25 @@ class _HomeState extends State<Home> {
                   onMessageLongPressed: (Message message,
                           Function(Message message) defaultAction) =>
                       _showMenu(context, message, defaultAction),
-                  onImageMessageTapped: (Message message, Function(Message message) defaultAction){
+                  onImageMessageTapped: (Message message,
+                      Function(Message message) defaultAction) {
                     showCupertinoDialog(
                       context: context,
                       builder: (context) {
                         return CupertinoAlertDialog(
                           actions: [
                             CupertinoActionSheetAction(
-                              onPressed: ()=>Navigator.pop(context),
-                              child: Text("Don't")
-                            ),
+                                onPressed: () => Navigator.pop(context),
+                                child: Text("Don't")),
                             CupertinoActionSheetAction(
-                              onPressed: ()=>Navigator.pop(context),
-                              child: Text("Don't")
-                            ),
+                                onPressed: () => Navigator.pop(context),
+                                child: Text("Don't")),
                             CupertinoActionSheetAction(
-                              onPressed: ()=>Navigator.pop(context),
-                              child: Text("Don't")
-                            ),
+                                onPressed: () => Navigator.pop(context),
+                                child: Text("Don't")),
                             CupertinoActionSheetAction(
-                              onPressed: ()=>Navigator.pop(context),
-                              child: Text("Don't")
-                            )
+                                onPressed: () => Navigator.pop(context),
+                                child: Text("Don't"))
                           ],
                         );
                       },

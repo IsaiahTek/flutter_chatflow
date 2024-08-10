@@ -325,7 +325,7 @@ class _DeliveryStatusIcon extends StatelessWidget {
 
   const _DeliveryStatusIcon({this.deliveryStatus, this.isAtText});
 
-  bool get _isAtText => isAtText??true; 
+  bool get _isAtText => isAtText ?? true;
 
   @override
   Widget build(BuildContext context) {
@@ -412,7 +412,10 @@ class _MessageDeliveryWidget extends StatelessWidget {
                           .labelSmall
                           ?.fontSize, // Adjust height and width as needed
                       width: Theme.of(context).textTheme.labelSmall?.fontSize,
-                      child: _DeliveryStatusIcon(deliveryStatus: message.status, isAtText: _deliveryIsShownAtTextPoint(message),),
+                      child: _DeliveryStatusIcon(
+                        deliveryStatus: message.status,
+                        isAtText: _deliveryIsShownAtTextPoint(message),
+                      ),
                     )
                   ],
                 )
@@ -520,7 +523,7 @@ class _MessageWidget extends StatelessWidget {
                   //               currentIndex: currentImageIndex,
                   //             ))));
                 });
-              }else{
+              } else {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
