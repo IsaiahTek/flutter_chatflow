@@ -2,7 +2,7 @@ name: flutter_chatflow
 
 description: "A versatile chat solution for Flutter apps, offering fast messaging, customizable UI, user management, media sharing, and group chats. Ideal for building robust communication apps"
 
-version: 1.0.0
+version: 2.0.0
 
 repository: 'https://github.com/IsaiahTek/flutter_chatflow.git'
 
