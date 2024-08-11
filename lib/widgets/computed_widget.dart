@@ -1,4 +1,4 @@
-part of '../chatflow.dart';
+part of '../library.dart';
 
 /// Class to dynamically chose which widget to use to display a particular message based on message type
 class ComputedMessage extends StatelessWidget {

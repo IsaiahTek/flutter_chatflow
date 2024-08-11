@@ -1,4 +1,4 @@
-part of '../../chatflow.dart';
+part of '../../library.dart';
 
 /// Image Message Widget for displaying images.
 class ImageMessageWidget extends StatelessWidget {

@@ -6,7 +6,7 @@ import 'package:flutter_chatflow/utils/types.dart';
 import 'package:flutter_chatflow/utils/utils.dart';
 import 'package:flutter_chatflow/widgets/chat_avatar.dart';
 import 'package:flutter_chatflow/widgets/sent_at.dart';
-import '../chatflow.dart';
+import '../library.dart';
 import 'package:flutter_chatflow/widgets/image/image_carousel.dart';
 import 'package:flutter_chatflow/widgets/replied_message_widget.dart';
 
@@ -333,8 +333,9 @@ class _DeliveryStatusIcon extends StatelessWidget {
     double iconSize = Theme.of(context).textTheme.labelSmall?.fontSize ?? 14;
     switch (deliveryStatus) {
       case DeliveryStatus.sending:
-        icon = const CircularProgressIndicator(
+        icon = CircularProgressIndicator(
           strokeWidth: 1.5,
+          color: _isAtText?null:Colors.white,
         );
         break;
       case DeliveryStatus.sent:

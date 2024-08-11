@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_chatflow/chatflow.dart';
+import 'package:flutter_chatflow/library.dart';
 
 // import 'package:flutter_chatflow/widgets/image/image_widget.dart';
 

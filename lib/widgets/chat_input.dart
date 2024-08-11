@@ -1,4 +1,4 @@
-part of "../chatflow.dart";
+part of "../library.dart";
 
 /// Not for your usage
 class ChatInputWidget extends StatefulWidget {
