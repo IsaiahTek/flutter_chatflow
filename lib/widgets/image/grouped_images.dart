@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_chatflow/message_gesture_callback_manager.dart';
 import 'package:flutter_chatflow/models.dart';
+import 'package:flutter_chatflow/utils/type_defs.dart';
+import 'package:flutter_chatflow/utils/types.dart';
 import 'package:flutter_chatflow/utils/utils.dart';
 import 'package:flutter_chatflow/widgets/chat_avatar.dart';
 import 'package:flutter_chatflow/library.dart';
+import 'package:flutter_chatflow/widgets/image/image_carousel.dart';
 
 /// Internal use only
 class GroupedImages extends StatelessWidget {
@@ -347,7 +351,32 @@ class _ScrollableImagesView extends StatelessWidget {
               children: [
                 Stack(
                   children: [
-                    ImageWidget(uri: images[index].uri),
+                    GestureDetector(
+                        onTap: () {
+                          OnMessageGesture? onImageTapped =
+                              MessageGestureCallbackManager.instance.getCallback(
+                                  CallbackName.onImageMessageTapped);
+                          if (onImageTapped != null) {
+                            onImageTapped(images[index], (message) {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: ((context) => ImageCarousel(
+                                          imageMessages: images,
+                                          currentIndex: index,
+                                        ))));
+                            });
+                          } else {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: ((context) => ImageCarousel(
+                                          imageMessages: images,
+                                          currentIndex: index,
+                                        ))));
+                          }
+                        },
+                        child: ImageWidget(uri: images[index].uri)),
                     Positioned(
                         bottom: 10,
                         right: 10,

@@ -50,6 +50,7 @@ class RepliedMessageWidget extends StatelessWidget {
         child: (replyMessage.type != MessageType.text)
             ? Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Container(
                       constraints:
@@ -115,6 +116,7 @@ class RepliedMessageWidget extends StatelessWidget {
                                 style: const TextStyle(color: Colors.black))
                           ]),
                           maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
                         )
                       ]))
                 ],

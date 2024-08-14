@@ -21,6 +21,7 @@ dependencies:
   flutter:
     sdk: flutter
   link_utils: ^0.0.2
+  scroll_to_id: ^1.5.1
 
 dev_dependencies:
   flutter_test:

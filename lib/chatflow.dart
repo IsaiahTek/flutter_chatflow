@@ -59,6 +59,9 @@ class ChatFlow extends StatefulWidget {
   /// The callback when the user presses down a message for long. By default, the message is selected.
   final OnMessageGesture? onMessageDoubleTapped;
 
+  /// The callback to handle when a message is gestured to be replied to. By default, when a user swipes his/her message left or when a user swipes other person's message right we chain a replyTo event to such a gesture. To override such swipe behaviour or to even intercept it and add custom action together with the default pass in the `onReplyToMessage` callback and you will have access to the gestured message.
+  final OnMessageGesture? onReplyToMessage;
+
   /// Callback for when a message is swiped left
   final void Function(Message swipedMessage)? onMessageSwipedLeft;
 
@@ -107,7 +110,8 @@ class ChatFlow extends StatefulWidget {
   List<Map<CallbackName, OnMessageGesture?>> get _registrableCallbackNames => [
         {CallbackName.onMessageLongPressed: onMessageLongPressed},
         {CallbackName.onImageMessageTapped: onImageMessageTapped},
-        {CallbackName.onMessageDoubleTapped: onMessageDoubleTapped}
+        {CallbackName.onMessageDoubleTapped: onMessageDoubleTapped},
+        {CallbackName.onReplyToMessage: onReplyToMessage},
       ];
 
   /// ChatFlow used to add chat features to the app
@@ -122,6 +126,7 @@ class ChatFlow extends StatefulWidget {
       this.onImageMessageTapped,
       this.onMessageSwipedLeft,
       this.onMessageSwipedRight,
+      this.onReplyToMessage,
       this.showUserAvatarInChat,
       this.onMessageSelectionChanged,
       this.theme,
@@ -134,7 +139,7 @@ class ChatFlow extends StatefulWidget {
     for (var i = 0; i < _registrableCallbackNames.length; i++) {
       CallbackName name = _registrableCallbackNames[i].keys.first;
       OnMessageGesture? callback = _registrableCallbackNames[i].values.first;
-      MessageGestureCallbackManager().registerCallback(name, callback);
+      MessageGestureCallbackManager.instance.registerCallback(name, callback);
     }
   }
 
@@ -143,8 +148,11 @@ class ChatFlow extends StatefulWidget {
 }
 
 class _ChatFlowState extends State<ChatFlow> {
+  final ScrollController _scrollController = ScrollController();
+
   Message? replyMessage;
 
+  // Sorting messages to enforce rearranging messages based on timestamp
   List<Message> get _messages =>
       widget.messages..sort((a, b) => a.createdAt.compareTo(b.createdAt));
 
@@ -193,9 +201,19 @@ class _ChatFlowState extends State<ChatFlow> {
   }
 
   void handleSetReplyMessage(Message reply) {
-    setState(() {
-      replyMessage = reply;
-    });
+    OnMessageGesture? onReplyToMessage = MessageGestureCallbackManager.instance
+        .getCallback(CallbackName.onReplyToMessage);
+    if (onReplyToMessage != null) {
+      onReplyToMessage(reply, (reply) {
+        setState(() {
+          replyMessage = reply;
+        });
+      });
+    } else {
+      setState(() {
+        replyMessage = reply;
+      });
+    }
   }
 
   void handleUnsetReplyMessage() {
@@ -203,6 +221,86 @@ class _ChatFlowState extends State<ChatFlow> {
       replyMessage = null;
     });
   }
+
+  void _scrollToBottom(){
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          _scrollController.animateTo(_scrollController.position.maxScrollExtent,
+              duration: const Duration(milliseconds: 500),
+              curve: Curves.decelerate);
+        });
+  }
+
+  void handleOnSendPressed(String text, {Message? repliedTo}) {
+    if (widget.onSendPressed != null) {
+      widget.onSendPressed!(text, repliedTo: repliedTo);
+        _scrollToBottom();
+    }
+  }
+
+  Future<void> handleOnAttachmentPressed({Message? repliedTo})async{
+    if(widget.onAttachmentPressed != null){
+      await widget.onAttachmentPressed!(repliedTo: repliedTo);
+      if(_scrollController.hasClients){
+        _scrollToBottom();
+      }else{
+        Future.delayed(
+          const Duration(seconds: 5),
+          (){
+            // WidgetsBinding.instance.addPostFrameCallback((_){
+            //   _scrollController.animateTo(_scrollController.position.maxScrollExtent,
+            //     duration: const Duration(milliseconds: 500),
+            //     curve: Curves.decelerate);
+            // });
+          }
+        );
+      }
+    }
+  }
+
+  void _scrollToIndex(double offset) {
+    // double offset = _itemHeights[index];
+    debugPrint("CHECKING FOR HEIGHT$offset");
+    _scrollController.animateTo(
+      offset,
+      duration: const Duration(milliseconds: 500),
+      curve: Curves.easeInOut,
+    );
+  }
+
+  void _scrollToMessage(Message message){
+    final double? height = (message.key?.currentContext?.findRenderObject() as RenderBox?)?.size.height;
+
+    if(height != null){
+      _scrollToIndex(height);
+      debugPrint("CURRENT STATE IS ${(message.key?.currentContext?.findRenderObject() as RenderBox?)?.size.height} MAX HEIGHT ${message.key?.currentContext?.findRenderObject()}");
+    }else{
+      debugPrint("CURRENT STATE IS ${(message.key?.currentContext?.findRenderObject() as RenderBox?)?.size.height}");
+    }
+  }
+
+  void handleScrollToRepliedMessage(Message repliedMessage) {
+    //
+    // int repliedMessageIndex = _messages.indexWhere((test)=> test.createdAt == repliedMessage.createdAt);
+    // if(repliedMessageIndex != -1){
+    // }
+    _scrollToMessage(repliedMessage);
+  }
+
+  // final List<int> _keys = [];
+  // final _ItemHeightCache _heightCache = _ItemHeightCache();
+  // void _getSizes() {
+  //   // Call this function when you want to get the sizes
+  //   for (int i = 0; i < _keys.length; i++) {
+  //     if (!_heightCache.hasItem(i)) {
+  //       RenderBox renderBox = _keys[i]!.findRenderObject() as RenderBox;
+  //       Size size = renderBox.size;
+  //       // Use the size.height
+  //     }
+  //   }
+  // }
+
+  double _cumulativeHeight = 0.0;
+  List<double> _itemHeights = [];
 
   @override
   Widget build(BuildContext context) {
@@ -219,22 +317,21 @@ class _ChatFlowState extends State<ChatFlow> {
                     ? widget.minImagesToGroup
                     : 4)
             : [];
-    return GestureDetector(
-        onTap: () => FocusScope.of(context).unfocus(),
-        child: Column(
-          children: [
-            Expanded(
-                child: SingleChildScrollView(
-              reverse: true,
-              child: Column(
-                // mainAxisSize: MainAxisSize.min,
-                children: [
-                  ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: _messages.length,
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemBuilder: (context, index) {
-                        return SizedBox(
+    return Column(
+      children: [
+        Expanded(
+            child: GestureDetector(
+              onTap: ()=>FocusScope.of(context).unfocus(),
+              child: ListView.builder(
+                  // reverse: true,
+                  controller: _scrollController,
+                  shrinkWrap: true,
+                  itemCount: _messages.length,
+                  itemBuilder: (context, index) {
+                    return SizedBox(
+                          key: _messages[index].repliedTo != null
+                              ? _messages[index].key
+                              : null,
                           width: MediaQuery.of(context).size.width,
                           child: (indexIsInConsecutivesAndIsFirstTake(
                                   groupedImages, index))
@@ -277,39 +374,41 @@ class _ChatFlowState extends State<ChatFlow> {
                                       pdfWidgetBuilder: widget.pdfWidgetBuilder,
                                       customWidgetBuilder:
                                           widget.customWidgetBuilder,
+                                      onTappedRepliedMessagePreview: handleScrollToRepliedMessage,
                                     ),
                         );
                       }
-                      // }
-                      ),
-                ],
-              ),
+                  ),
             )),
-            if (!(widget.hideDefaultInputWidget ?? false))
-              Container(
-                decoration: const BoxDecoration(color: Colors.transparent),
-                margin: EdgeInsets.only(bottom: Platform.isIOS ? 30 : 0),
-                child: ChatInputWidget(
-                  onSendPressed: widget.onSendPressed,
-                  onAttachmentPressed: widget.onAttachmentPressed,
-                  replyMessage: replyMessage,
-                  pdfWidgetBuilder: widget.pdfWidgetBuilder,
-                  customWidgetBuilder: widget.customWidgetBuilder,
-                  videoWidgetBuilder: widget.videoWidgetBuilder,
-                  isAuthor:
-                      widget.chatUser.userID == replyMessage?.author.userID,
-                  unsetReplyMessage: handleUnsetReplyMessage,
-                ),
-              )
-          ],
-        ));
+        if (!(widget.hideDefaultInputWidget ?? false))
+          Container(
+            decoration: const BoxDecoration(color: Colors.transparent),
+            margin: EdgeInsets.only(bottom: Platform.isIOS ? 30 : 0),
+            child: ChatInputWidget(
+              onSendPressed: handleOnSendPressed,
+              onAttachmentPressed: handleOnAttachmentPressed,
+              replyMessage: replyMessage,
+              pdfWidgetBuilder: widget.pdfWidgetBuilder,
+              customWidgetBuilder: widget.customWidgetBuilder,
+              videoWidgetBuilder: widget.videoWidgetBuilder,
+              isAuthor:
+                  widget.chatUser.userID == replyMessage?.author.userID,
+              unsetReplyMessage: handleUnsetReplyMessage,
+            ),
+          )
+      ],
+    );
   }
 }
 
-/// Use this class' static members to trigger functions in your code that you want to ChatFlow to handle
+/// Use this class' static members to trigger functions in your code that you want ChatFlow to handle
 class ChatFlowEvent {
-  /// Used when closing/exiting selected messages
+  /// Used when closing/exiting selected messages based on your custom user event like tapping a button icon for disposing all selected messages
   static void unselectAllMessages() {
+    _unselectAllMessages();
+  }
+
+  static void _unselectAllMessages() {
     EventManager.instance.unselectAllMessages();
   }
 }
@@ -390,4 +489,22 @@ class _InfoMessage extends StatelessWidget {
       ],
     );
   }
+}
+
+
+class _ItemHeightCache {
+  Map<String, double> _cache = {};
+
+  double getHeight(int index) {
+    return _cache["widget-$index"] ?? 0;
+  }
+
+  void setHeight(int index, double height) {
+    _cache["widget-$index"] = height;
+  }
+
+  bool hasItem(int index){
+    return _cache.keys.contains("widget-$index");
+  }
+
 }

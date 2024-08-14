@@ -77,6 +77,8 @@ class ComputedMessage extends StatelessWidget {
         TextMessage textMessage = message as TextMessage;
         String? firstDetectUrl = getUrls(textMessage.text).firstOrNull;
         result = Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             if (firstDetectUrl != null && firstDetectUrl.isNotEmpty)
               GestureDetector(
@@ -85,6 +87,7 @@ class ComputedMessage extends StatelessWidget {
             Text(
               textMessage.text,
               maxLines: shouldHideText ?? false ? 4 : null,
+              overflow: shouldHideText ?? false ? TextOverflow.ellipsis : null,
             ),
           ],
         );

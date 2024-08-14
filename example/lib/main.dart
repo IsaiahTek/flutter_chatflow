@@ -16,13 +16,17 @@ void main() {
   runApp(const MainApp());
 }
 
+final RouteObserver routeObserver = RouteObserver<ModalRoute>();
 class MainApp extends StatelessWidget {
   const MainApp({super.key});
+
+  
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
+      navigatorObservers: [routeObserver],
       theme: ThemeData(
         colorScheme: const ColorScheme.highContrastLight(
             primary: Colors.amber, secondary: Color.fromARGB(255, 110, 38, 12)),
@@ -40,7 +44,7 @@ class Home extends StatefulWidget {
   State<Home> createState() => _HomeState();
 }
 
-class _HomeState extends State<Home> {
+class _HomeState extends State<Home> with RouteAware {
   bool _hideKeyboard = false;
   List<Message> messages = [
     ChatInfo(
@@ -58,6 +62,32 @@ class _HomeState extends State<Home> {
   bool isJohn = true;
 
   final ImagePicker _picker = ImagePicker();
+
+
+  @override
+  void initState() {
+    FocusManager.instance.primaryFocus?.unfocus();
+    super.initState();
+  }
+
+  @override
+  didChangeDependencies(){
+    routeObserver.subscribe(this, ModalRoute.of(context)!);
+    super.didChangeDependencies();
+  }
+
+  @override
+  void didPopNext() {
+    FocusManager.instance.primaryFocus?.unfocus();
+    super.didPopNext();
+  }
+
+  @override
+  dispose(){
+    routeObserver.unsubscribe(this);
+    return super.dispose();
+  }
+
 
   void onSendPressed(String message, {Message? repliedTo}) {
     TextMessage textMessage = TextMessage(
@@ -79,7 +109,7 @@ class _HomeState extends State<Home> {
     // });
   }
 
-  void _handleImageSelection({Message? repliedTo}) async {
+  Future<void> _handleImageSelection({Message? repliedTo}) async {
     setState(() {
       inProgress = true;
     });
@@ -102,7 +132,7 @@ class _HomeState extends State<Home> {
                 createdAt: createdAt,
                 repliedTo: repliedTo,
                 uri: element.uri,
-                status: DeliveryStatus.read,
+                status: DeliveryStatus.sending,
                 text: element.text);
 
             messages.insert(0, message);
@@ -142,11 +172,6 @@ class _HomeState extends State<Home> {
   bool inProgress = false;
 
   List<Message>? selectedMessages;
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-  }
 
   bool isMenuVisible = false;
 
@@ -327,16 +352,23 @@ class _HomeState extends State<Home> {
                                       onPressed: () => Navigator.pop(context),
                                       child: Text("Don't")),
                                   CupertinoActionSheetAction(
-                                      onPressed: () => Navigator.pop(context),
-                                      child: Text("Don't"))
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                        defaultAction(message);
+                                      },
+                                      child: Text("Open Image"))
                                 ],
                               );
                             },
-                          );
+                          ).then((c){
+                            FocusManager.instance.primaryFocus?.unfocus();
+                          });
                         },
-                        // hideDefaultInputWidget: true,
+                        // onReplyToMessage: (message, action){
+                        //   debugPrint("Replying to $message");
+                        // },
                         showUserAvatarInChat: true,
-                        minImagesToGroup: 3,
+                        minImagesToGroup: 5,
                         onMessageSelectionChanged: _handleMessageSelectionChange,
                         hideDefaultInputWidget: _hideKeyboard,
                       ),

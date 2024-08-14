@@ -15,7 +15,7 @@ typedef OnSendPressed = void Function(String message, {Message? repliedTo})?;
 /// The callback to handle attachment button click.
 ///
 /// Starting from v1.0.0, the callback passes a message to reply to if the user marks a message for replying.
-typedef OnAttachmentPressed = void Function({Message? repliedTo})?;
+typedef OnAttachmentPressed = Future<void> Function({Message? repliedTo})?;
 
 /// Default action for a particular message gesture defined
 typedef DefaultAction = void Function(Message message);

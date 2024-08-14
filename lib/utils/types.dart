@@ -52,5 +52,8 @@ enum CallbackName {
   onImageMessageTapped,
 
   ///
-  onMessageDoubleTapped
+  onMessageDoubleTapped,
+
+  ///
+  onReplyToMessage
 }

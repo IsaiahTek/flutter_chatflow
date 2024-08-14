@@ -48,6 +48,9 @@ class ChatBubble extends StatefulWidget {
   /// Set Replying Message
   final void Function(Message reply) setReplyMessage;
 
+  /// When a replied message preview is tapped
+  final void Function(Message reply)? onTappedRepliedMessagePreview;
+
   /// Chat Bubble.
   const ChatBubble(
       {super.key,
@@ -62,6 +65,7 @@ class ChatBubble extends StatefulWidget {
       this.videoWidgetBuilder,
       this.pdfWidgetBuilder,
       this.customWidgetBuilder,
+      this.onTappedRepliedMessagePreview,
       required this.setReplyMessage});
 
   @override
@@ -218,6 +222,7 @@ class _ChatBubbleState extends State<ChatBubble> {
                                   videoWidgetBuilder: widget.videoWidgetBuilder,
                                   showUserAvatarInChat:
                                       widget.showUserAvatarInChat,
+                                  onTappedRepliedMessagePreview: widget.onTappedRepliedMessagePreview,
                                 ),
                                 // Message Delivery Widget
                                 Positioned(
@@ -433,6 +438,7 @@ class _MessageWidget extends StatelessWidget {
   final CustomWidgetBuilder? customWidgetBuilder;
   final CustomWidgetBuilder? videoWidgetBuilder;
   final CustomWidgetBuilder? pdfWidgetBuilder;
+  final Function(Message message)? onTappedRepliedMessagePreview;
 
   const _MessageWidget(
       {required this.message,
@@ -442,13 +448,15 @@ class _MessageWidget extends StatelessWidget {
       required this.handleSetSelectedMessage,
       required this.customWidgetBuilder,
       required this.pdfWidgetBuilder,
-      required this.videoWidgetBuilder});
+      required this.videoWidgetBuilder,
+      this.onTappedRepliedMessagePreview
+      });
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onLongPress: () {
-        OnMessageGesture? onLongPressed = MessageGestureCallbackManager()
+        OnMessageGesture? onLongPressed = MessageGestureCallbackManager.instance
             .getCallback(CallbackName.onMessageLongPressed);
         if (onLongPressed != null) {
           onLongPressed(message, handleSetSelectedMessage);
@@ -457,7 +465,7 @@ class _MessageWidget extends StatelessWidget {
         }
       },
       onDoubleTap: () {
-        OnMessageGesture? onDoubleTapped = MessageGestureCallbackManager()
+        OnMessageGesture? onDoubleTapped = MessageGestureCallbackManager.instance
             .getCallback(CallbackName.onMessageDoubleTapped);
         if (onDoubleTapped != null) {
           onDoubleTapped(message, (Message message) {});
@@ -511,18 +519,18 @@ class _MessageWidget extends StatelessWidget {
             if (message.type == MessageType.image) {
               int currentImageIndex =
                   imageMessages.indexWhere((element) => element == message);
-              OnMessageGesture? onImageTapped = MessageGestureCallbackManager()
+              OnMessageGesture? onImageTapped = MessageGestureCallbackManager.instance
                   .getCallback(CallbackName.onImageMessageTapped);
               if (onImageTapped != null) {
                 Message message = imageMessages[currentImageIndex];
                 onImageTapped(message, (message) {
-                  // Navigator.push(
-                  //     context,
-                  //     MaterialPageRoute(
-                  //         builder: ((context) => ImageCarousel(
-                  //               imageMessages: imageMessages,
-                  //               currentIndex: currentImageIndex,
-                  //             ))));
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: ((context) => ImageCarousel(
+                                imageMessages: imageMessages,
+                                currentIndex: currentImageIndex,
+                              ))));
                 });
               } else {
                 Navigator.push(
@@ -541,9 +549,17 @@ class _MessageWidget extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               if (message.repliedTo != null)
-                RepliedMessageWidget(
-                  replyMessage: message.repliedTo!,
-                  isAuthor: message.author.userID == chatUser.userID,
+                GestureDetector(
+                  onTap: (){
+                    if(onTappedRepliedMessagePreview != null){
+                      debugPrint("CHECKING FOR");
+                      onTappedRepliedMessagePreview!(message);
+                    }
+                  },
+                  child: RepliedMessageWidget(
+                    replyMessage: message.repliedTo!,
+                    isAuthor: message.author.userID == chatUser.userID,
+                  ),
                 ),
               if (showUserAvatarInChat &&
                   chatUser.userID != message.author.userID)
@@ -561,6 +577,7 @@ class _MessageWidget extends StatelessWidget {
                   child: Text(
                     "~${message.author.name != null && message.author.name!.isNotEmpty ? message.author.name : message.author.userID}",
                     overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
                     style: TextStyle(
                         overflow: TextOverflow.ellipsis,
                         fontStyle: FontStyle.italic,

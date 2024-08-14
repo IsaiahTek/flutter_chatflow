@@ -12,7 +12,7 @@ class MessageGestureCallbackManager {
       MessageGestureCallbackManager._internal();
 
   /// Factory constructor to return the same instance
-  factory MessageGestureCallbackManager() => _instance;
+  static MessageGestureCallbackManager get instance => _instance;
 
   // Collection of callbacks
   final Map<CallbackName, OnMessageGesture> _callbacks = {};
