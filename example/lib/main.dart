@@ -365,7 +365,6 @@ class _HomeState extends State<Home> with RouteAware {
                           });
                         },
                         // onReplyToMessage: (message, action){
-                        //   debugPrint("Replying to $message");
                         // },
                         showUserAvatarInChat: true,
                         minImagesToGroup: 5,

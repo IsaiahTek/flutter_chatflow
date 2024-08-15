@@ -279,14 +279,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.8"
-  scroll_to_id:
-    dependency: transitive
-    description:
-      name: scroll_to_id
-      sha256: "4c5b5b4e1146636c686133d5170b15660d1422d00655da50ac624ed82e06b0cc"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.5.1"
   sky_engine:
     dependency: transitive
     description: flutter

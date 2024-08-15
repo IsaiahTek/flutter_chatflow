@@ -1,6 +1,5 @@
 library library;
 
-import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -18,7 +17,3 @@ part 'widgets/audio/audio_message.dart';
 part 'widgets/audio/audio_widget.dart';
 part 'widgets/image/image_message.dart';
 part 'widgets/image/image_widget.dart';
-// part './notifier.dart';
-// part 'widgets/replied_message_widget.dart';
-// part 'widgets/video/video_message.dart';
-// part 'widgets/chat_bubble.dart';

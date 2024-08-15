@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_chatflow/library.dart';
 import 'package:flutter_chatflow/event_manager.dart';
 import 'package:flutter_chatflow/message_gesture_callback_manager.dart';
@@ -40,7 +41,6 @@ class ChatFlow extends StatefulWidget {
   ///   onSendPressed: onSendPressed,
   ///   onAttachmentPressed: _handleImageSelection,
   ///   onMessageLongPressed: (Message message, Function(Message message) defaultAction) {
-  ///     debugPrint("Here is the message long pressed $message");
   ///     defaultAction(message);
   ///   },
   ///   onMessageSelectionChanged: _handleMessageSelectionChange,
@@ -152,13 +152,13 @@ class _ChatFlowState extends State<ChatFlow> {
 
   Message? replyMessage;
 
-  // Sorting messages to enforce rearranging messages based on timestamp
+  
+
   List<Message> get _messages =>
       widget.messages..sort((a, b) => a.createdAt.compareTo(b.createdAt));
 
   bool showUserAvatarInChat = false;
 
-  // Passed to image carousel for viewing all images in current chat
   List<ImageMessage> get _imageMessages => _messages
       .where((element) => element.type == MessageType.image)
       .cast<ImageMessage>()
@@ -186,6 +186,14 @@ class _ChatFlowState extends State<ChatFlow> {
   }
 
   @override
+  void didChangeDependencies() {
+    SchedulerBinding.instance.addPostFrameCallback((_) {
+      _scrollToBottomWhenReady();
+    });
+    super.didChangeDependencies();
+  }
+
+  @override
   void initState() {
     setState(() {
       showUserAvatarInChat = widget.showUserAvatarInChat ?? false;
@@ -198,6 +206,20 @@ class _ChatFlowState extends State<ChatFlow> {
   void dispose() {
     EventManager.instance.removeListener(_handleUnselectAllMessages);
     super.dispose();
+  }
+
+  String currentScrolledToItemKeyHashCode = "";
+  bool shouldShowHighlightForScroll(String keyHashCode){
+    if(keyHashCode == currentScrolledToItemKeyHashCode){
+      Future.delayed(const Duration(seconds: 2), (){
+        setState(() {
+          currentScrolledToItemKeyHashCode = "";
+        });
+      });
+      return true;
+    }else{
+      return false;
+    }
   }
 
   void handleSetReplyMessage(Message reply) {
@@ -222,12 +244,15 @@ class _ChatFlowState extends State<ChatFlow> {
     });
   }
 
-  void _scrollToBottom(){
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          _scrollController.animateTo(_scrollController.position.maxScrollExtent,
-              duration: const Duration(milliseconds: 500),
-              curve: Curves.decelerate);
-        });
+  void _scrollToBottom() {
+    _getSizes();
+    if (_scrollController.hasClients) {
+      _scrollController.animateTo(
+        _scrollController.position.maxScrollExtent,
+        duration: const Duration(milliseconds: 500),
+        curve: Curves.easeInOut,
+      );
+    }
   }
 
   void handleOnSendPressed(String text, {Message? repliedTo}) {
@@ -237,29 +262,27 @@ class _ChatFlowState extends State<ChatFlow> {
     }
   }
 
+
   Future<void> handleOnAttachmentPressed({Message? repliedTo})async{
     if(widget.onAttachmentPressed != null){
       await widget.onAttachmentPressed!(repliedTo: repliedTo);
-      if(_scrollController.hasClients){
-        _scrollToBottom();
-      }else{
-        Future.delayed(
-          const Duration(seconds: 5),
-          (){
-            // WidgetsBinding.instance.addPostFrameCallback((_){
-            //   _scrollController.animateTo(_scrollController.position.maxScrollExtent,
-            //     duration: const Duration(milliseconds: 500),
-            //     curve: Curves.decelerate);
-            // });
-          }
-        );
-      }
     }
   }
 
+  void _scrollToBottomWhenReady() {
+    SchedulerBinding.instance.addPostFrameCallback((_) {
+      if (_scrollController.hasClients && _messages.isNotEmpty) {
+        _scrollToBottom();
+      } else {
+        Future.delayed(const Duration(milliseconds: 100), _scrollToBottomWhenReady);
+      }
+    });
+  }
+
+  final _ItemHeightCache _heightCache = _ItemHeightCache();
+
   void _scrollToIndex(double offset) {
     // double offset = _itemHeights[index];
-    debugPrint("CHECKING FOR HEIGHT$offset");
     _scrollController.animateTo(
       offset,
       duration: const Duration(milliseconds: 500),
@@ -268,39 +291,39 @@ class _ChatFlowState extends State<ChatFlow> {
   }
 
   void _scrollToMessage(Message message){
-    final double? height = (message.key?.currentContext?.findRenderObject() as RenderBox?)?.size.height;
+    
 
-    if(height != null){
-      _scrollToIndex(height);
-      debugPrint("CURRENT STATE IS ${(message.key?.currentContext?.findRenderObject() as RenderBox?)?.size.height} MAX HEIGHT ${message.key?.currentContext?.findRenderObject()}");
-    }else{
-      debugPrint("CURRENT STATE IS ${(message.key?.currentContext?.findRenderObject() as RenderBox?)?.size.height}");
-    }
+    double offset = _heightCache.getCummulative(message.key.hashCode.toString());
+    _scrollToIndex(offset);
   }
 
   void handleScrollToRepliedMessage(Message repliedMessage) {
     //
-    // int repliedMessageIndex = _messages.indexWhere((test)=> test.createdAt == repliedMessage.createdAt);
-    // if(repliedMessageIndex != -1){
-    // }
+    int repliedMessageIndex = _messages.indexWhere((test)=> test.createdAt == repliedMessage.createdAt);
+    if(repliedMessageIndex != -1){
+      setState(() {
+        currentScrolledToItemKeyHashCode = repliedMessage.key.hashCode.toString();
+      });
+    }
     _scrollToMessage(repliedMessage);
   }
 
-  // final List<int> _keys = [];
-  // final _ItemHeightCache _heightCache = _ItemHeightCache();
-  // void _getSizes() {
-  //   // Call this function when you want to get the sizes
-  //   for (int i = 0; i < _keys.length; i++) {
-  //     if (!_heightCache.hasItem(i)) {
-  //       RenderBox renderBox = _keys[i]!.findRenderObject() as RenderBox;
-  //       Size size = renderBox.size;
-  //       // Use the size.height
-  //     }
-  //   }
-  // }
+  void _getSizes() {
+    
+    for (int i = 0; i < _messages.length; i++) {
+      
+      Message message = _messages[i];
 
-  double _cumulativeHeight = 0.0;
-  List<double> _itemHeights = [];
+      if (!_heightCache.hasItem(message.key.hashCode.toString())) {
+
+        final double? height = (message.key?.currentContext?.findRenderObject() as RenderBox?)?.size.height;
+
+        if(height != null){
+          _heightCache.setHeight(message.key.hashCode.toString(), height);
+        }
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -328,55 +351,58 @@ class _ChatFlowState extends State<ChatFlow> {
                   shrinkWrap: true,
                   itemCount: _messages.length,
                   itemBuilder: (context, index) {
-                    return SizedBox(
-                          key: _messages[index].repliedTo != null
-                              ? _messages[index].key
-                              : null,
-                          width: MediaQuery.of(context).size.width,
-                          child: (indexIsInConsecutivesAndIsFirstTake(
-                                  groupedImages, index))
-                              ? Column(
-                                  children: [
-                                    _TimePartitionText(
-                                        createdAt: _messages[index].createdAt,
-                                        previousMessageCreatedAt:
-                                            _messages[index - 1].createdAt),
-                                    if (_messages[index].type ==
-                                        MessageType.info)
-                                      _InfoMessage(message: _messages[index]),
-                                    GroupedImages(
-                                      images: getGroupedImageMessages(
-                                          _messages, groupedImages, index),
-                                      chatUser: widget.chatUser,
-                                      isGroupChat:
-                                          widget.showUserAvatarInChat ?? false,
-                                    ),
-                                  ],
-                                )
-                              : (indexIsInConsecutives(groupedImages, index))
-                                  ? const SizedBox.shrink()
-                                  : ChatBubble(
-                                      message: _messages[index],
-                                      chatUser: widget.chatUser,
-                                      imageMessages: _imageMessages,
-                                      showUserAvatarInChat:
-                                          showUserAvatarInChat,
-                                      previousMessageCreatedAt: index > 0
-                                          ? _messages[index - 1].createdAt
-                                          : null,
-                                      currentMessageIndex: index,
-                                      setReplyMessage: handleSetReplyMessage,
-                                      setSelectedMessages:
-                                          _handleSetSelectedMessage,
-                                      selectedMessages: selectedMessages,
-                                      videoWidgetBuilder:
-                                          widget.videoWidgetBuilder,
-                                      pdfWidgetBuilder: widget.pdfWidgetBuilder,
-                                      customWidgetBuilder:
-                                          widget.customWidgetBuilder,
-                                      onTappedRepliedMessagePreview: handleScrollToRepliedMessage,
-                                    ),
-                        );
+                    return AnimatedContainer(
+                      duration: const Duration(seconds: 2),
+                      color: shouldShowHighlightForScroll(_messages[index].key.hashCode.toString()) ? Theme.of(context).primaryColor.withOpacity(.2) : null,
+                      curve: Curves.fastOutSlowIn,
+                      child: SizedBox(
+                          key: _messages[index].key,
+                            width: MediaQuery.of(context).size.width,
+                            child: (indexIsInConsecutivesAndIsFirstTake(
+                                    groupedImages, index))
+                                ? Column(
+                                    children: [
+                                      _TimePartitionText(
+                                          createdAt: _messages[index].createdAt,
+                                          previousMessageCreatedAt:
+                                              _messages[index - 1].createdAt),
+                                      if (_messages[index].type ==
+                                          MessageType.info)
+                                        _InfoMessage(message: _messages[index]),
+                                      GroupedImages(
+                                        images: getGroupedImageMessages(
+                                            _messages, groupedImages, index),
+                                        chatUser: widget.chatUser,
+                                        isGroupChat:
+                                            widget.showUserAvatarInChat ?? false,
+                                      ),
+                                    ],
+                                  )
+                                : (indexIsInConsecutives(groupedImages, index))
+                                    ? const SizedBox.shrink()
+                                    : ChatBubble(
+                                        message: _messages[index],
+                                        chatUser: widget.chatUser,
+                                        imageMessages: _imageMessages,
+                                        showUserAvatarInChat:
+                                            showUserAvatarInChat,
+                                        previousMessageCreatedAt: index > 0
+                                            ? _messages[index - 1].createdAt
+                                            : null,
+                                        currentMessageIndex: index,
+                                        setReplyMessage: handleSetReplyMessage,
+                                        setSelectedMessages:
+                                            _handleSetSelectedMessage,
+                                        selectedMessages: selectedMessages,
+                                        videoWidgetBuilder:
+                                            widget.videoWidgetBuilder,
+                                        pdfWidgetBuilder: widget.pdfWidgetBuilder,
+                                        customWidgetBuilder:
+                                            widget.customWidgetBuilder,
+                                        onTappedRepliedMessagePreview: handleScrollToRepliedMessage,
+                                      ),
+                          ),
+                    );
                       }
                   ),
             )),
@@ -493,18 +519,34 @@ class _InfoMessage extends StatelessWidget {
 
 
 class _ItemHeightCache {
-  Map<String, double> _cache = {};
+  final List<Map<String, double>> _cache = [];
 
   double getHeight(int index) {
-    return _cache["widget-$index"] ?? 0;
+    return _cache[index].values.isNotEmpty ? _cache[index].values.first : 0;
   }
 
-  void setHeight(int index, double height) {
-    _cache["widget-$index"] = height;
+  int getCacheIndexOf(String id){
+    return _cache.indexWhere((en)=>en.keys.contains("widget-$id"));
   }
 
-  bool hasItem(int index){
-    return _cache.keys.contains("widget-$index");
+  double getCummulative(String id){
+    double cummulative = 0;
+    for (var i = 0; i < getCacheIndexOf(id); i++) {
+      cummulative = cummulative + getHeight(i);
+    }
+
+    return cummulative;
+  }
+
+  void setHeight(String id, double height) {
+    if(!hasItem(id)){
+      _cache.add({"widget-$id":height});
+      debugPrint("CACHED HEIGHTS $_cache");
+    }
+  }
+
+  bool hasItem(String id){
+    return getCacheIndexOf(id) > -1;
   }
 
 }

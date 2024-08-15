@@ -478,7 +478,7 @@ class _MessageWidget extends StatelessWidget {
       // },
       child: Container(
         constraints: BoxConstraints(
-            minWidth: 63, maxWidth: MediaQuery.of(context).size.width * .60),
+            minWidth: 100, maxWidth: MediaQuery.of(context).size.width * .60),
         decoration: BoxDecoration(
             boxShadow: [
               if (chatUser.userID != message.author.userID)
@@ -552,8 +552,7 @@ class _MessageWidget extends StatelessWidget {
                 GestureDetector(
                   onTap: (){
                     if(onTappedRepliedMessagePreview != null){
-                      debugPrint("CHECKING FOR");
-                      onTappedRepliedMessagePreview!(message);
+                      onTappedRepliedMessagePreview!(message.repliedTo!);
                     }
                   },
                   child: RepliedMessageWidget(

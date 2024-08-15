@@ -147,8 +147,10 @@ String _computeTimePartitionText(int millisecondsSinceEpoch) {
 
 /// Error message printer
 void logError(String message) => _logError(message);
+String _errorHeader = "\x1B[31mERROR:";
+String _errorFooter = "\x1B[0m";
 void _logError(String message) {
-  debugPrint('\x1B[31mERROR: $message\x1B[0m');
+  debugPrint('$_errorHeader $message$_errorFooter');
 }
 
 /// Collecting consecutive images if upto minimum number of images to group
