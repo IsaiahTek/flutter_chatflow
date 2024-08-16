@@ -45,28 +45,28 @@ class ChatInputWidget extends StatefulWidget {
 class _ChatInputWidgetState extends State<ChatInputWidget> {
   final TextEditingController _textEditingController = TextEditingController();
   bool textIsNotEmpty = false;
-  // final FocusNode textInputFocusNode = FocusNode();
+  final FocusNode textInputFocusNode = FocusNode();
 
   @override
   initState() {
-    // textIsNotEmpty = _textEditingController.text.isNotEmpty;
-    // _textEditingController.addListener(() {
-    //   // if (textInputFocusNode.hasFocus) {
-    //     UserTypingStateStream.instance.setIsTyping();
-    //     textIsNotEmpty = _textEditingController.text.isNotEmpty;
-    //     setState(() {
-    //       textIsNotEmpty;
-    //     });
-    //   // }
-    // });
+    textIsNotEmpty = _textEditingController.text.isNotEmpty;
+    _textEditingController.addListener(() {
+      // if (textInputFocusNode.hasFocus) {
+      UserTypingStateStream.instance.setIsTyping();
+      textIsNotEmpty = _textEditingController.text.isNotEmpty;
+      setState(() {
+        textIsNotEmpty;
+      });
+      // }
+    });
     super.initState();
   }
 
   @override
   void dispose() {
     _textEditingController.dispose();
-    // textInputFocusNode.unfocus();
-    // textInputFocusNode.dispose();
+    textInputFocusNode.unfocus();
+    textInputFocusNode.dispose();
     super.dispose();
   }
 
@@ -183,27 +183,28 @@ class _ChatInputWidgetState extends State<ChatInputWidget> {
                       controller: _textEditingController,
                       // focusNode: textInputFocusNode,
                     )),
-                    // if (textIsNotEmpty)
-                    IconButton.filledTonal(
-                      onPressed: () {
-                        // try {
-                        widget.onSendPressed != null
-                            ? widget.onSendPressed!(_textEditingController.text,
-                                repliedTo: widget.replyMessage)
-                            : null;
-                        // } catch (e) {
-                        //   logError("Error on onSendPressed: $e");
-                        // }
-                        _textEditingController.clear();
-                        if (widget.unsetReplyMessage != null) {
-                          widget.unsetReplyMessage!();
-                        }
-                      },
-                      icon: Icon(
-                        Icons.send,
-                        color: Theme.of(context).primaryColor,
-                      ),
-                    )
+                    if (textIsNotEmpty)
+                      IconButton.filledTonal(
+                        onPressed: () {
+                          // try {
+                          widget.onSendPressed != null
+                              ? widget.onSendPressed!(
+                                  _textEditingController.text,
+                                  repliedTo: widget.replyMessage)
+                              : null;
+                          // } catch (e) {
+                          //   logError("Error on onSendPressed: $e");
+                          // }
+                          _textEditingController.clear();
+                          if (widget.unsetReplyMessage != null) {
+                            widget.unsetReplyMessage!();
+                          }
+                        },
+                        icon: Icon(
+                          Icons.send,
+                          color: Theme.of(context).primaryColor,
+                        ),
+                      )
                   ],
                 ))),
       ],
