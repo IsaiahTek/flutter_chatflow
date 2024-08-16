@@ -1,7 +1,8 @@
 /// Visibility Interface
-mixin TextVisibility{
+mixin TextVisibility {
   /// Text
   String? text;
+
   /// A flag to either hide or show text
   bool? shouldHideText;
 
@@ -19,5 +20,4 @@ mixin TextVisibility{
       return false;
     }
   }
-
 }

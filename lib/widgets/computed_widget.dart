@@ -75,10 +75,13 @@ class ComputedMessage extends StatelessWidget {
         break;
       case MessageType.audio:
         AudioMessage audioMessage = message as AudioMessage;
-        result = audioWidgetBuilder != null 
-          ? AudioMessageWidget(
-          audioWidgetBuilder: audioWidgetBuilder!,  uri: audioMessage.uri, text: audioMessage.text, isAuthor: isAuthor)
-          : const SizedBox();
+        result = audioWidgetBuilder != null
+            ? AudioMessageWidget(
+                audioWidgetBuilder: audioWidgetBuilder!,
+                uri: audioMessage.uri,
+                text: audioMessage.text,
+                isAuthor: isAuthor)
+            : const SizedBox();
       default:
         TextMessage textMessage = message as TextMessage;
         String? firstDetectUrl = getUrls(textMessage.text).firstOrNull;

@@ -6,7 +6,7 @@ class AudioMessageWidget extends StatelessWidget {
   final String uri;
 
   /// Create the widget and pass in for ChatFlow to use
-  final VideoWidgetBuilder audioWidgetBuilder;  
+  final VideoWidgetBuilder audioWidgetBuilder;
 
   /// [Optional] text
   final String? text;
@@ -18,14 +18,13 @@ class AudioMessageWidget extends StatelessWidget {
   final bool? shouldHideText;
 
   /// Audio message widget to display an audio message type
-  const AudioMessageWidget({
-    super.key,
-    required this.uri,
-    required this.audioWidgetBuilder,
-    this.text,
-    this.isAuthor,
-    this.shouldHideText
-  });
+  const AudioMessageWidget(
+      {super.key,
+      required this.uri,
+      required this.audioWidgetBuilder,
+      this.text,
+      this.isAuthor,
+      this.shouldHideText});
 
   /// Check and return if it is a text and not empty
   bool hasText() {
@@ -45,7 +44,7 @@ class AudioMessageWidget extends StatelessWidget {
           borderRadius: BorderRadius.circular(10),
           child: audioWidgetBuilder(context: context, uri: uri),
         ),
-        if(hasText()) Text(text!)
+        if (hasText()) Text(text!)
       ],
     ));
   }

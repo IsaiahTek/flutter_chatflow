@@ -222,7 +222,8 @@ class _ChatBubbleState extends State<ChatBubble> {
                                   videoWidgetBuilder: widget.videoWidgetBuilder,
                                   showUserAvatarInChat:
                                       widget.showUserAvatarInChat,
-                                  onTappedRepliedMessagePreview: widget.onTappedRepliedMessagePreview,
+                                  onTappedRepliedMessagePreview:
+                                      widget.onTappedRepliedMessagePreview,
                                 ),
                                 // Message Delivery Widget
                                 Positioned(
@@ -340,7 +341,7 @@ class _DeliveryStatusIcon extends StatelessWidget {
       case DeliveryStatus.sending:
         icon = CircularProgressIndicator(
           strokeWidth: 1.5,
-          color: _isAtText?null:Colors.white,
+          color: _isAtText ? null : Colors.white,
         );
         break;
       case DeliveryStatus.sent:
@@ -449,8 +450,7 @@ class _MessageWidget extends StatelessWidget {
       required this.customWidgetBuilder,
       required this.pdfWidgetBuilder,
       required this.videoWidgetBuilder,
-      this.onTappedRepliedMessagePreview
-      });
+      this.onTappedRepliedMessagePreview});
 
   @override
   Widget build(BuildContext context) {
@@ -465,7 +465,8 @@ class _MessageWidget extends StatelessWidget {
         }
       },
       onDoubleTap: () {
-        OnMessageGesture? onDoubleTapped = MessageGestureCallbackManager.instance
+        OnMessageGesture? onDoubleTapped = MessageGestureCallbackManager
+            .instance
             .getCallback(CallbackName.onMessageDoubleTapped);
         if (onDoubleTapped != null) {
           onDoubleTapped(message, (Message message) {});
@@ -519,7 +520,8 @@ class _MessageWidget extends StatelessWidget {
             if (message.type == MessageType.image) {
               int currentImageIndex =
                   imageMessages.indexWhere((element) => element == message);
-              OnMessageGesture? onImageTapped = MessageGestureCallbackManager.instance
+              OnMessageGesture? onImageTapped = MessageGestureCallbackManager
+                  .instance
                   .getCallback(CallbackName.onImageMessageTapped);
               if (onImageTapped != null) {
                 Message message = imageMessages[currentImageIndex];
@@ -550,8 +552,8 @@ class _MessageWidget extends StatelessWidget {
             children: [
               if (message.repliedTo != null)
                 GestureDetector(
-                  onTap: (){
-                    if(onTappedRepliedMessagePreview != null){
+                  onTap: () {
+                    if (onTappedRepliedMessagePreview != null) {
                       onTappedRepliedMessagePreview!(message.repliedTo!);
                     }
                   },
