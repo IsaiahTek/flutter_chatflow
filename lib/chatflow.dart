@@ -94,6 +94,12 @@ class ChatFlow extends StatefulWidget {
   /// Widget for displaying pdf files
   final CustomWidgetBuilder? pdfWidgetBuilder;
 
+  /// Widget for displaying audio files
+  final CustomWidgetBuilder? audioWidgetBuilder;
+
+  /// Widget for displaying doc files
+  final CustomWidgetBuilder? docWidgetBuilder;
+
   /// Option for hiding ChatFlow default input widget.
   ///
   /// ChatFlow default input widget contains basically 3 other widgets:
@@ -133,6 +139,8 @@ class ChatFlow extends StatefulWidget {
       this.videoWidgetBuilder,
       this.pdfWidgetBuilder,
       this.customWidgetBuilder,
+      this.audioWidgetBuilder,
+      this.docWidgetBuilder,
       this.shouldGroupConsecutiveImages,
       this.minImagesToGroup,
       this.hideDefaultInputWidget = false}) {
