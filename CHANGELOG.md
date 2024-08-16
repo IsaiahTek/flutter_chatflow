@@ -8,6 +8,7 @@ FluChatNotifier
 // to new
 UserTypingStateStream
 ```
+* 2. Changed the return type of `onAttachmentPressed` callback from `void` to `Future<void>`. See example for usage.
 
 OTHERS:
 * Added some utility functions such as

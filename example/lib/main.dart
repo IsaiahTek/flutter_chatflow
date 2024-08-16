@@ -16,13 +16,17 @@ void main() {
   runApp(const MainApp());
 }
 
+final RouteObserver routeObserver = RouteObserver<ModalRoute>();
 class MainApp extends StatelessWidget {
   const MainApp({super.key});
+
+  
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
+      navigatorObservers: [routeObserver],
       theme: ThemeData(
         colorScheme: const ColorScheme.highContrastLight(
             primary: Colors.amber, secondary: Color.fromARGB(255, 110, 38, 12)),
@@ -40,7 +44,8 @@ class Home extends StatefulWidget {
   State<Home> createState() => _HomeState();
 }
 
-class _HomeState extends State<Home> {
+class _HomeState extends State<Home> with RouteAware {
+  bool _hideKeyboard = false;
   List<Message> messages = [
     ChatInfo(
         createdAt: DateTime.now().millisecondsSinceEpoch,
@@ -57,6 +62,32 @@ class _HomeState extends State<Home> {
   bool isJohn = true;
 
   final ImagePicker _picker = ImagePicker();
+
+
+  @override
+  void initState() {
+    FocusManager.instance.primaryFocus?.unfocus();
+    super.initState();
+  }
+
+  @override
+  didChangeDependencies(){
+    routeObserver.subscribe(this, ModalRoute.of(context)!);
+    super.didChangeDependencies();
+  }
+
+  @override
+  void didPopNext() {
+    FocusManager.instance.primaryFocus?.unfocus();
+    super.didPopNext();
+  }
+
+  @override
+  dispose(){
+    routeObserver.unsubscribe(this);
+    return super.dispose();
+  }
+
 
   void onSendPressed(String message, {Message? repliedTo}) {
     TextMessage textMessage = TextMessage(
@@ -78,7 +109,7 @@ class _HomeState extends State<Home> {
     // });
   }
 
-  void _handleImageSelection({Message? repliedTo}) async {
+  Future<void> _handleImageSelection({Message? repliedTo}) async {
     setState(() {
       inProgress = true;
     });
@@ -101,7 +132,7 @@ class _HomeState extends State<Home> {
                 createdAt: createdAt,
                 repliedTo: repliedTo,
                 uri: element.uri,
-                status: DeliveryStatus.read,
+                status: DeliveryStatus.sending,
                 text: element.text);
 
             messages.insert(0, message);
@@ -142,11 +173,6 @@ class _HomeState extends State<Home> {
 
   List<Message>? selectedMessages;
 
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-  }
-
   bool isMenuVisible = false;
 
   bool get _canPop {
@@ -186,6 +212,7 @@ class _HomeState extends State<Home> {
 
   void _showMenu(
       BuildContext context, Message message, Function(Message message) action) {
+        FocusManager.instance.primaryFocus?.unfocus();
     showCupertinoModalPopup(
       context: context,
       builder: (BuildContext context) => CupertinoActionSheet(
@@ -235,7 +262,8 @@ class _HomeState extends State<Home> {
         ),
       ),
     ).then((_) {
-      FocusScope.of(context).unfocus();
+      // FocusScope.of(context).unfocus();
+      FocusManager.instance.primaryFocus?.unfocus();
     });
   }
 
@@ -258,7 +286,15 @@ class _HomeState extends State<Home> {
                       )
                     : AppBar(
                         leadingWidth: 100,
-                        actions: const [
+                        actions: [
+                          IconButton(
+                            onPressed: (){
+                              setState(() {
+                                _hideKeyboard = !_hideKeyboard;
+                              });
+                            },
+                            icon: Icon(Icons.change_circle_rounded)
+                          ),
                           IconButton(
                               onPressed: null, icon: Icon(Icons.more_vert))
                         ],
@@ -288,43 +324,103 @@ class _HomeState extends State<Home> {
                                 }),
                           ],
                         )),
-                body: ChatFlow(
-                  messages: messages,
-                  chatUser: john,
-                  onSendPressed: onSendPressed,
-                  onAttachmentPressed: _handleImageSelection,
-                  onMessageLongPressed: (Message message,
-                          Function(Message message) defaultAction) =>
-                      _showMenu(context, message, defaultAction),
-                  onImageMessageTapped: (Message message,
-                      Function(Message message) defaultAction) {
-                    showCupertinoDialog(
-                      context: context,
-                      builder: (context) {
-                        return CupertinoAlertDialog(
-                          actions: [
-                            CupertinoActionSheetAction(
-                                onPressed: () => Navigator.pop(context),
-                                child: Text("Don't")),
-                            CupertinoActionSheetAction(
-                                onPressed: () => Navigator.pop(context),
-                                child: Text("Don't")),
-                            CupertinoActionSheetAction(
-                                onPressed: () => Navigator.pop(context),
-                                child: Text("Don't")),
-                            CupertinoActionSheetAction(
-                                onPressed: () => Navigator.pop(context),
-                                child: Text("Don't"))
-                          ],
-                        );
-                      },
-                    );
-                  },
-                  // hideDefaultInputWidget: true,
-                  showUserAvatarInChat: true,
-                  minImagesToGroup: 3,
-                  onMessageSelectionChanged: _handleMessageSelectionChange,
+                body: Column(
+                  children: [
+                    Expanded(
+                      child: ChatFlow(
+                        messages: messages,
+                        chatUser: john,
+                        onSendPressed: onSendPressed,
+                        onAttachmentPressed: _handleImageSelection,
+                        onMessageLongPressed: (Message message,
+                                Function(Message message) defaultAction) =>
+                            _showMenu(context, message, defaultAction),
+                        onImageMessageTapped: (Message message,
+                            Function(Message message) defaultAction) {
+                          showCupertinoDialog(
+                            context: context,
+                            builder: (context) {
+                              return CupertinoAlertDialog(
+                                actions: [
+                                  CupertinoActionSheetAction(
+                                      onPressed: () => Navigator.pop(context),
+                                      child: Text("Don't")),
+                                  CupertinoActionSheetAction(
+                                      onPressed: () => Navigator.pop(context),
+                                      child: Text("Don't")),
+                                  CupertinoActionSheetAction(
+                                      onPressed: () => Navigator.pop(context),
+                                      child: Text("Don't")),
+                                  CupertinoActionSheetAction(
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                        defaultAction(message);
+                                      },
+                                      child: Text("Open Image"))
+                                ],
+                              );
+                            },
+                          ).then((c){
+                            FocusManager.instance.primaryFocus?.unfocus();
+                          });
+                        },
+                        // onReplyToMessage: (message, action){
+                        // },
+                        showUserAvatarInChat: true,
+                        minImagesToGroup: 5,
+                        onMessageSelectionChanged: _handleMessageSelectionChange,
+                        hideDefaultInputWidget: _hideKeyboard,
+                      ),
+                    ),
+                    if(_hideKeyboard)
+                    Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: Color.fromARGB(255, 255, 255, 255)
+                      ),
+                      child: Row(
+                        children: [
+                          CupertinoButton(child: Transform.rotate(angle: pi/6, child: Icon(Icons.attach_file, size: 24,)), onPressed: _handleImageSelection),
+                          Expanded(
+                            child: Container(
+                              height: 40,
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: Colors.grey,
+                                  // width: 1,
+                                ),
+                                borderRadius: BorderRadius.circular(50)
+                              ),
+                              child: Row(
+                                // mainAxisAlignment: MainAxisAlignment.start,
+                                // crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Expanded(
+                                    child: TextField(
+                                      decoration: InputDecoration(
+                                        border: InputBorder.none,
+                                        hintText: "Start typing",
+                                        contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical:9)
+                                      ),
+                                      onSubmitted: onSendPressed,
+                                    ),
+                                  ),
+                                  Container(
+                                    // color: Colors.blue,
+                                    alignment: Alignment.topCenter,
+                                    padding: EdgeInsets.only(bottom: 90),
+                                    child: IconButton(icon: Icon(Icons.gif), onPressed: (){}))
+                                ],
+                              )
+                            )
+                          ),
+                          CupertinoButton(child: Icon(Icons.mic), onPressed: null)
+                        ],
+                      ),
+                    )
+                  ],
                 ),
+
               )
             : Scaffold(
                 backgroundColor:

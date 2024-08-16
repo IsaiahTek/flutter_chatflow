@@ -25,4 +25,8 @@ class EventManager {
       listener();
     }
   }
+
+  // void setMessageToReply(){
+    
+  // }
 }

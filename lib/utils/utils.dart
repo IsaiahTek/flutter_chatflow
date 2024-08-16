@@ -3,7 +3,9 @@ import 'package:flutter_chatflow/models.dart';
 import 'package:flutter_chatflow/utils/types.dart';
 
 /// convert a number digits to list of individual digits
-List<int> computeNumbersList(int hashCode) {
+List<int> computeNumbersList(int hashCode) => _computeNumbersList(hashCode);
+
+List<int> _computeNumbersList(int hashCode) {
   return hashCode
       .toString()
       .split('')
@@ -12,7 +14,8 @@ List<int> computeNumbersList(int hashCode) {
 }
 
 /// Convert a list of numbers to RGB group of 3 set of numbers in a list
-List<int> groupNumbersIntoRGB(List<int> numbers) {
+List<int> groupNumbersIntoRGB(List<int> numbers) => _groupNumbersIntoRGB(numbers);
+List<int> _groupNumbersIntoRGB(List<int> numbers) {
   List<int> rgbList = [];
   for (var i = 0; i < 3; i++) {
     String numberList = '';
@@ -41,7 +44,8 @@ class ColorPair {
 }
 
 /// Color equivalence of integer
-ColorPair createColorFromHashCode(int hashCode) {
+ColorPair createColorFromHashCode(int hashCode) => _createColorFromHashCode(hashCode);
+ColorPair _createColorFromHashCode(int hashCode) {
   List<int> hashCodeInts = computeNumbersList(hashCode);
   List<int> computedRGBList = groupNumbersIntoRGB(hashCodeInts);
   int r = computedRGBList[0];
@@ -92,19 +96,22 @@ getMonthName(int month) {
 }
 
 /// Duration uptil now time format
-Duration getDurationTillNow(DateTime pastTime) {
+Duration getDurationTillNow(DateTime pastTime) => _getDurationTillNow(pastTime);
+Duration _getDurationTillNow(DateTime pastTime) {
   return DateTime.now().difference(pastTime);
 }
 
 /// Last seen at time format
-String getSentAt(int millisecondsSinceEpoch) {
+String getSentAt(int millisecondsSinceEpoch) => _getSentAt(millisecondsSinceEpoch);
+String _getSentAt(int millisecondsSinceEpoch) {
   DateTime date = DateTime.fromMillisecondsSinceEpoch(millisecondsSinceEpoch);
   String sentAt = '${date.hour}:${date.minute}';
   return sentAt;
 }
 
 /// Check if it's same day
-bool isSameDay(int? previousMessageTime, int currentMessageTime) {
+bool isSameDay(int? previousMessageTime, int currentMessageTime) => _isSameDay(previousMessageTime, currentMessageTime);
+bool _isSameDay(int? previousMessageTime, int currentMessageTime) {
   int? previousDay = previousMessageTime != null
       ? DateTime.fromMillisecondsSinceEpoch(previousMessageTime).day
       : null;
@@ -115,7 +122,8 @@ bool isSameDay(int? previousMessageTime, int currentMessageTime) {
 }
 
 /// Compute Time partition of messages based on created at time stamp
-String computeTimePartitionText(int millisecondsSinceEpoch) {
+String computeTimePartitionText(int millisecondsSinceEpoch) => _computeTimePartitionText(millisecondsSinceEpoch);
+String _computeTimePartitionText(int millisecondsSinceEpoch) {
   DateTime date = DateTime.fromMillisecondsSinceEpoch(millisecondsSinceEpoch);
   DateTime now = DateTime.now();
   int longAgo = now.difference(date).inDays;
@@ -138,12 +146,16 @@ String computeTimePartitionText(int millisecondsSinceEpoch) {
 }
 
 /// Error message printer
-void logError(String message) {
-  debugPrint('\x1B[31mERROR: $message\x1B[0m');
+void logError(String message) => _logError(message);
+String _errorHeader = "\x1B[31mERROR:";
+String _errorFooter = "\x1B[0m";
+void _logError(String message) {
+  debugPrint('$_errorHeader $message$_errorFooter');
 }
 
-///
-List<ConsecutiveOccurrence> getConsecutives(
+/// Collecting consecutive images if upto minimum number of images to group
+List<ConsecutiveOccurrence> getConsecutives({required List<Message> items, required Message check, int? amount}) => _getConsecutives(items: items, check: check);
+List<ConsecutiveOccurrence> _getConsecutives(
     {required List<Message> items, required Message check, int? amount}) {
   int found = 0;
   List<ConsecutiveOccurrence> results = [];
@@ -169,7 +181,8 @@ List<ConsecutiveOccurrence> getConsecutives(
 }
 
 /// For internal use only
-bool indexIsInConsecutives(List<ConsecutiveOccurrence> items, int index) {
+bool indexIsInConsecutives(List<ConsecutiveOccurrence> items, int index) => _indexIsInConsecutives(items, index);
+bool _indexIsInConsecutives(List<ConsecutiveOccurrence> items, int index) {
   return items.any((element) {
     if ((element.endIndex != null && element.endIndex! >= index) &&
         (element.startIndex <= index)) {
@@ -182,6 +195,8 @@ bool indexIsInConsecutives(List<ConsecutiveOccurrence> items, int index) {
 
 /// Internal use only
 bool indexIsInConsecutivesAndIsFirstTake(
+    List<ConsecutiveOccurrence> items, int index) => _indexIsInConsecutivesAndIsFirstTake(items, index);
+bool _indexIsInConsecutivesAndIsFirstTake(
     List<ConsecutiveOccurrence> items, int index) {
   return items.any((element) {
     if ((element.endIndex != null && element.endIndex! >= index) &&
@@ -276,19 +291,8 @@ class ConsecutiveOccurrence {
   ConsecutiveOccurrence({required this.startIndex, this.endIndex});
 }
 
-// /// Util function to detect urls in a text. Feel free to use if you need it!
-// List<String> detectUrls(String text) {
-//   String urlPattern =
-//       r'(?:(?:https?|ftp):\/\/)?(?:[\w-]+\.)+[a-z]{2,}(?:\/\S*)?';
-//   final regex = RegExp(urlPattern, caseSensitive: false);
-//   final matches = regex.allMatches(text);
-
-//   return matches.map((match) => match.group(0)!).toList();
-// }
-
 /// Use this function if you need to dynamically get the url of file-based message.
 String? getFileUrlFromMessage(Message message) => _getFileUrlFromMessage(message);
-
 String? _getFileUrlFromMessage(Message message) {
   String? url;
   switch (message.type) {

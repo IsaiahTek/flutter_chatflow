@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_chatflow/utils/types.dart';
 
 /// Base Message class and should'nt be used directly. Can be extended to create other message types
@@ -28,9 +29,12 @@ abstract class Message {
   /// When a messsage is marked as a repliedTo message, ChatFlow will include it in the payload passed to either the onSendPressed or the onAttachmentPressed callback.
   Message? repliedTo;
 
+  /// Do not set this. Chatflow automatically sets it.
+  GlobalKey? key;
+
   @override
   String toString() {
-    return 'Message(message type: $type, author:${author.toString()}, status:$status, timestamp:$createdAt)';
+    return 'Message(message type: $type, author:${author.toString()}, status:$status, timestamp:$createdAt, key:$key)';
   }
 
   ///Create the class
@@ -41,7 +45,10 @@ abstract class Message {
       this.messageID,
       this.status,
       this.meta,
-      this.repliedTo});
+      this.repliedTo,
+      }){
+        key = GlobalKey();
+      }
 }
 
 /// Image message

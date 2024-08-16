@@ -15,6 +15,9 @@ class ComputedMessage extends StatelessWidget {
   final CustomWidgetBuilder? videoWidgetBuilder;
 
   /// Optional widget to be passed
+  final CustomWidgetBuilder? audioWidgetBuilder;
+
+  /// Optional widget to be passed
   final CustomWidgetBuilder? pdfWidgetBuilder;
 
   /// [Optional]
@@ -34,6 +37,7 @@ class ComputedMessage extends StatelessWidget {
       required this.message,
       required this.isAuthor,
       this.customWidgetBuilder,
+      this.audioWidgetBuilder,
       this.videoWidgetBuilder,
       this.pdfWidgetBuilder,
       this.shouldHideText,
@@ -71,12 +75,16 @@ class ComputedMessage extends StatelessWidget {
         break;
       case MessageType.audio:
         AudioMessage audioMessage = message as AudioMessage;
-        result = AudioMessageWidget(
-            uri: audioMessage.uri, text: audioMessage.text, isAuthor: isAuthor);
+        result = audioWidgetBuilder != null 
+          ? AudioMessageWidget(
+          audioWidgetBuilder: audioWidgetBuilder!,  uri: audioMessage.uri, text: audioMessage.text, isAuthor: isAuthor)
+          : const SizedBox();
       default:
         TextMessage textMessage = message as TextMessage;
         String? firstDetectUrl = getUrls(textMessage.text).firstOrNull;
         result = Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             if (firstDetectUrl != null && firstDetectUrl.isNotEmpty)
               GestureDetector(
@@ -85,6 +93,7 @@ class ComputedMessage extends StatelessWidget {
             Text(
               textMessage.text,
               maxLines: shouldHideText ?? false ? 4 : null,
+              overflow: shouldHideText ?? false ? TextOverflow.ellipsis : null,
             ),
           ],
         );
