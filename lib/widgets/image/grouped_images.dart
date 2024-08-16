@@ -354,17 +354,18 @@ class _ScrollableImagesView extends StatelessWidget {
                     GestureDetector(
                         onTap: () {
                           OnMessageGesture? onImageTapped =
-                              MessageGestureCallbackManager.instance.getCallback(
-                                  CallbackName.onImageMessageTapped);
+                              MessageGestureCallbackManager.instance
+                                  .getCallback(
+                                      CallbackName.onImageMessageTapped);
                           if (onImageTapped != null) {
                             onImageTapped(images[index], (message) {
                               Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: ((context) => ImageCarousel(
-                                          imageMessages: images,
-                                          currentIndex: index,
-                                        ))));
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: ((context) => ImageCarousel(
+                                            imageMessages: images,
+                                            currentIndex: index,
+                                          ))));
                             });
                           } else {
                             Navigator.push(

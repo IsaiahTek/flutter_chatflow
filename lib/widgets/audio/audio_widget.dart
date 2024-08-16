@@ -9,7 +9,8 @@ class AudioWidget extends StatelessWidget {
   final VideoWidgetBuilder audioWidgetBuilder;
 
   /// Pass in the uri
-  const AudioWidget({super.key, required this.uri, required this.audioWidgetBuilder});
+  const AudioWidget(
+      {super.key, required this.uri, required this.audioWidgetBuilder});
 
   @override
   Widget build(BuildContext context) {

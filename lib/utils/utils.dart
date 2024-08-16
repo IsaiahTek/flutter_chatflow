@@ -14,7 +14,8 @@ List<int> _computeNumbersList(int hashCode) {
 }
 
 /// Convert a list of numbers to RGB group of 3 set of numbers in a list
-List<int> groupNumbersIntoRGB(List<int> numbers) => _groupNumbersIntoRGB(numbers);
+List<int> groupNumbersIntoRGB(List<int> numbers) =>
+    _groupNumbersIntoRGB(numbers);
 List<int> _groupNumbersIntoRGB(List<int> numbers) {
   List<int> rgbList = [];
   for (var i = 0; i < 3; i++) {
@@ -44,7 +45,8 @@ class ColorPair {
 }
 
 /// Color equivalence of integer
-ColorPair createColorFromHashCode(int hashCode) => _createColorFromHashCode(hashCode);
+ColorPair createColorFromHashCode(int hashCode) =>
+    _createColorFromHashCode(hashCode);
 ColorPair _createColorFromHashCode(int hashCode) {
   List<int> hashCodeInts = computeNumbersList(hashCode);
   List<int> computedRGBList = groupNumbersIntoRGB(hashCodeInts);
@@ -102,7 +104,8 @@ Duration _getDurationTillNow(DateTime pastTime) {
 }
 
 /// Last seen at time format
-String getSentAt(int millisecondsSinceEpoch) => _getSentAt(millisecondsSinceEpoch);
+String getSentAt(int millisecondsSinceEpoch) =>
+    _getSentAt(millisecondsSinceEpoch);
 String _getSentAt(int millisecondsSinceEpoch) {
   DateTime date = DateTime.fromMillisecondsSinceEpoch(millisecondsSinceEpoch);
   String sentAt = '${date.hour}:${date.minute}';
@@ -110,7 +113,8 @@ String _getSentAt(int millisecondsSinceEpoch) {
 }
 
 /// Check if it's same day
-bool isSameDay(int? previousMessageTime, int currentMessageTime) => _isSameDay(previousMessageTime, currentMessageTime);
+bool isSameDay(int? previousMessageTime, int currentMessageTime) =>
+    _isSameDay(previousMessageTime, currentMessageTime);
 bool _isSameDay(int? previousMessageTime, int currentMessageTime) {
   int? previousDay = previousMessageTime != null
       ? DateTime.fromMillisecondsSinceEpoch(previousMessageTime).day
@@ -122,7 +126,8 @@ bool _isSameDay(int? previousMessageTime, int currentMessageTime) {
 }
 
 /// Compute Time partition of messages based on created at time stamp
-String computeTimePartitionText(int millisecondsSinceEpoch) => _computeTimePartitionText(millisecondsSinceEpoch);
+String computeTimePartitionText(int millisecondsSinceEpoch) =>
+    _computeTimePartitionText(millisecondsSinceEpoch);
 String _computeTimePartitionText(int millisecondsSinceEpoch) {
   DateTime date = DateTime.fromMillisecondsSinceEpoch(millisecondsSinceEpoch);
   DateTime now = DateTime.now();
@@ -154,7 +159,9 @@ void _logError(String message) {
 }
 
 /// Collecting consecutive images if upto minimum number of images to group
-List<ConsecutiveOccurrence> getConsecutives({required List<Message> items, required Message check, int? amount}) => _getConsecutives(items: items, check: check);
+List<ConsecutiveOccurrence> getConsecutives(
+        {required List<Message> items, required Message check, int? amount}) =>
+    _getConsecutives(items: items, check: check);
 List<ConsecutiveOccurrence> _getConsecutives(
     {required List<Message> items, required Message check, int? amount}) {
   int found = 0;
@@ -181,7 +188,8 @@ List<ConsecutiveOccurrence> _getConsecutives(
 }
 
 /// For internal use only
-bool indexIsInConsecutives(List<ConsecutiveOccurrence> items, int index) => _indexIsInConsecutives(items, index);
+bool indexIsInConsecutives(List<ConsecutiveOccurrence> items, int index) =>
+    _indexIsInConsecutives(items, index);
 bool _indexIsInConsecutives(List<ConsecutiveOccurrence> items, int index) {
   return items.any((element) {
     if ((element.endIndex != null && element.endIndex! >= index) &&
@@ -195,7 +203,8 @@ bool _indexIsInConsecutives(List<ConsecutiveOccurrence> items, int index) {
 
 /// Internal use only
 bool indexIsInConsecutivesAndIsFirstTake(
-    List<ConsecutiveOccurrence> items, int index) => _indexIsInConsecutivesAndIsFirstTake(items, index);
+        List<ConsecutiveOccurrence> items, int index) =>
+    _indexIsInConsecutivesAndIsFirstTake(items, index);
 bool _indexIsInConsecutivesAndIsFirstTake(
     List<ConsecutiveOccurrence> items, int index) {
   return items.any((element) {
@@ -292,7 +301,8 @@ class ConsecutiveOccurrence {
 }
 
 /// Use this function if you need to dynamically get the url of file-based message.
-String? getFileUrlFromMessage(Message message) => _getFileUrlFromMessage(message);
+String? getFileUrlFromMessage(Message message) =>
+    _getFileUrlFromMessage(message);
 String? _getFileUrlFromMessage(Message message) {
   String? url;
   switch (message.type) {

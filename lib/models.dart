@@ -38,17 +38,17 @@ abstract class Message {
   }
 
   ///Create the class
-  Message(
-      {required this.type,
-      required this.author,
-      required this.createdAt,
-      this.messageID,
-      this.status,
-      this.meta,
-      this.repliedTo,
-      }){
-        key = GlobalKey();
-      }
+  Message({
+    required this.type,
+    required this.author,
+    required this.createdAt,
+    this.messageID,
+    this.status,
+    this.meta,
+    this.repliedTo,
+  }) {
+    key = GlobalKey();
+  }
 }
 
 /// Image message

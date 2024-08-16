@@ -27,6 +27,6 @@ class EventManager {
   }
 
   // void setMessageToReply(){
-    
+
   // }
 }
