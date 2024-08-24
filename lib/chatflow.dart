@@ -11,6 +11,7 @@ import 'package:flutter_chatflow/utils/types.dart';
 import 'package:flutter_chatflow/utils/utils.dart';
 import 'package:flutter_chatflow/widgets/chat_bubble.dart';
 import 'package:flutter_chatflow/widgets/image/grouped_images.dart';
+import 'package:scroll_to_index/scroll_to_index.dart';
 
 /// Entry point to using the ChatFlow.
 class ChatFlow extends StatefulWidget {
@@ -156,7 +157,7 @@ class ChatFlow extends StatefulWidget {
 }
 
 class _ChatFlowState extends State<ChatFlow> {
-  final ScrollController _scrollController = ScrollController();
+  final AutoScrollController _scrollController = AutoScrollController();
 
   Message? replyMessage;
 
@@ -193,9 +194,9 @@ class _ChatFlowState extends State<ChatFlow> {
 
   @override
   void didChangeDependencies() {
-    SchedulerBinding.instance.addPostFrameCallback((_) {
-      _scrollToBottomWhenReady();
-    });
+    // SchedulerBinding.instance.addPostFrameCallback((_) {
+    //   _scrollToBottomWhenReady();
+    // });
     super.didChangeDependencies();
   }
 
@@ -211,6 +212,7 @@ class _ChatFlowState extends State<ChatFlow> {
   @override
   void dispose() {
     EventManager.instance.removeListener(_handleUnselectAllMessages);
+    _scrollController.dispose();
     super.dispose();
   }
 
@@ -251,7 +253,6 @@ class _ChatFlowState extends State<ChatFlow> {
   }
 
   void _scrollToBottom() {
-    _getSizes();
     if (_scrollController.hasClients) {
       _scrollController.animateTo(
         _scrollController.position.maxScrollExtent,
@@ -259,6 +260,7 @@ class _ChatFlowState extends State<ChatFlow> {
         curve: Curves.easeInOut,
       );
     }
+    // _getSizes();
   }
 
   void handleOnSendPressed(String text, {Message? repliedTo}) {
@@ -287,19 +289,25 @@ class _ChatFlowState extends State<ChatFlow> {
 
   final _ItemHeightCache _heightCache = _ItemHeightCache();
 
-  void _scrollToIndex(double offset) {
+  void _scrollToIndex(int index) {
     // double offset = _itemHeights[index];
-    _scrollController.animateTo(
-      offset,
-      duration: const Duration(milliseconds: 500),
-      curve: Curves.easeInOut,
-    );
+    _scrollController.scrollToIndex(
+      index,
+      preferPosition: AutoScrollPosition.begin
+    )
+    .then((onValue)=>debugPrint("AUTOSCROLLED TO INDEX ($index, $onValue)"))
+    .onError((err, s){
+      debugPrint("AUTOSCROLLED ERROR $err");
+    });
+    _scrollController.highlight(index);
   }
 
   void _scrollToMessage(Message message) {
-    double offset =
-        _heightCache.getCummulative(message.key.hashCode.toString());
-    _scrollToIndex(offset);
+    // double offset =
+    //     _heightCache.getCummulative(message.key.hashCode.toString());
+    int index = _messages.indexWhere((a)=>a.createdAt == message.createdAt);
+    debugPrint("AUTOSCROLLED $index ${DateTime.fromMillisecondsSinceEpoch(message.createdAt)} $message");
+    _scrollToIndex(index);
   }
 
   void handleScrollToRepliedMessage(Message repliedMessage) {
@@ -352,64 +360,78 @@ class _ChatFlowState extends State<ChatFlow> {
         Expanded(
             child: GestureDetector(
           onTap: () => FocusScope.of(context).unfocus(),
-          child: ListView.builder(
-              // reverse: true,
-              controller: _scrollController,
-              shrinkWrap: true,
-              itemCount: _messages.length,
-              itemBuilder: (context, index) {
-                return AnimatedContainer(
-                  duration: const Duration(seconds: 2),
-                  color: shouldShowHighlightForScroll(
-                          _messages[index].key.hashCode.toString())
-                      ? Theme.of(context).primaryColor.withOpacity(.2)
-                      : null,
-                  curve: Curves.fastOutSlowIn,
-                  child: SizedBox(
-                    key: _messages[index].key,
-                    width: MediaQuery.of(context).size.width,
-                    child: (indexIsInConsecutivesAndIsFirstTake(
-                            groupedImages, index))
-                        ? Column(
-                            children: [
-                              _TimePartitionText(
-                                  createdAt: _messages[index].createdAt,
-                                  previousMessageCreatedAt:
-                                      _messages[index - 1].createdAt),
-                              if (_messages[index].type == MessageType.info)
-                                _InfoMessage(message: _messages[index]),
-                              GroupedImages(
-                                images: getGroupedImageMessages(
-                                    _messages, groupedImages, index),
-                                chatUser: widget.chatUser,
-                                isGroupChat:
-                                    widget.showUserAvatarInChat ?? false,
-                              ),
-                            ],
-                          )
-                        : (indexIsInConsecutives(groupedImages, index))
-                            ? const SizedBox.shrink()
-                            : ChatBubble(
-                                message: _messages[index],
-                                chatUser: widget.chatUser,
-                                imageMessages: _imageMessages,
-                                showUserAvatarInChat: showUserAvatarInChat,
-                                previousMessageCreatedAt: index > 0
-                                    ? _messages[index - 1].createdAt
-                                    : null,
-                                currentMessageIndex: index,
-                                setReplyMessage: handleSetReplyMessage,
-                                setSelectedMessages: _handleSetSelectedMessage,
-                                selectedMessages: selectedMessages,
-                                videoWidgetBuilder: widget.videoWidgetBuilder,
-                                pdfWidgetBuilder: widget.pdfWidgetBuilder,
-                                customWidgetBuilder: widget.customWidgetBuilder,
-                                onTappedRepliedMessagePreview:
-                                    handleScrollToRepliedMessage,
-                              ),
-                  ),
-                );
-              }),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Flexible(
+                child: ListView.builder(
+                    // reverse: true,
+                    scrollDirection: Axis.vertical,
+                    controller: _scrollController,
+                    shrinkWrap: true,
+                    itemCount: _messages.length,
+                    itemBuilder: (context, index) {
+                      return AnimatedContainer(
+                        duration: const Duration(seconds: 2),
+                        color: shouldShowHighlightForScroll(
+                                _messages[index].key.hashCode.toString())
+                            ? Theme.of(context).primaryColor.withOpacity(.2)
+                            : null,
+                        curve: Curves.fastOutSlowIn,
+                        child: AutoScrollTag(
+                          key: ValueKey(_messages[index].createdAt),
+                          controller: _scrollController,
+                          index: index,
+                          highlightColor: Colors.red,
+                          child: SizedBox(
+                            key: _messages[index].key,
+                            width: MediaQuery.of(context).size.width,
+                            child: (indexIsInConsecutivesAndIsFirstTake(
+                                    groupedImages, index))
+                                ? Column(
+                                    children: [
+                                      _TimePartitionText(
+                                          createdAt: _messages[index].createdAt,
+                                          previousMessageCreatedAt:
+                                              _messages[index - 1].createdAt),
+                                      if (_messages[index].type == MessageType.info)
+                                        _InfoMessage(message: _messages[index]),
+                                      GroupedImages(
+                                        images: getGroupedImageMessages(
+                                            _messages, groupedImages, index),
+                                        chatUser: widget.chatUser,
+                                        isGroupChat:
+                                            widget.showUserAvatarInChat ?? false,
+                                      ),
+                                    ],
+                                  )
+                                : (indexIsInConsecutives(groupedImages, index))
+                                    ? const SizedBox.shrink()
+                                    : ChatBubble(
+                                        message: _messages[index],
+                                        chatUser: widget.chatUser,
+                                        imageMessages: _imageMessages,
+                                        showUserAvatarInChat: showUserAvatarInChat,
+                                        previousMessageCreatedAt: index > 0
+                                            ? _messages[index - 1].createdAt
+                                            : null,
+                                        currentMessageIndex: index,
+                                        setReplyMessage: handleSetReplyMessage,
+                                        setSelectedMessages: _handleSetSelectedMessage,
+                                        selectedMessages: selectedMessages,
+                                        videoWidgetBuilder: widget.videoWidgetBuilder,
+                                        pdfWidgetBuilder: widget.pdfWidgetBuilder,
+                                        customWidgetBuilder: widget.customWidgetBuilder,
+                                        onTappedRepliedMessagePreview:
+                                            handleScrollToRepliedMessage,
+                                      ),
+                          ),
+                        ),
+                      );
+                    }),
+              ),
+            ],
+          ),
         )),
         if (!(widget.hideDefaultInputWidget ?? false))
           Container(
