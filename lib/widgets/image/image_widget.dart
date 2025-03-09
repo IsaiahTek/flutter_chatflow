@@ -1,4 +1,5 @@
 part of '../../library.dart';
+
 /// Image widget to display image messages
 class ImageWidget extends StatelessWidget {
   /// Image url/uri or local file path
