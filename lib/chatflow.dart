@@ -277,6 +277,7 @@ class _ChatFlowState extends State<ChatFlow> {
   }
 
   void _scrollToBottomWhenReady() {
+    
     SchedulerBinding.instance.addPostFrameCallback((_) {
       if (_scrollController.hasClients && _messages.isNotEmpty) {
         _scrollToBottom();
