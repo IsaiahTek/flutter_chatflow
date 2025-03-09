@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 
 /// Image Wrapper for Image.file
-class LocalImageWidget extends StatelessWidget{
-  
+class LocalImageWidget extends StatelessWidget {
   /// File path;
   final String uri;
 
