@@ -38,7 +38,6 @@ Easiest way is to run the `flutter pub add flutter_chatflow`
 Here is a basic example to get you started:
 
 ```dart
-import 'dart:io';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
