@@ -4,6 +4,7 @@ import 'package:flutter_chatflow/library.dart';
 import 'package:flutter_chatflow/event_manager.dart';
 import 'package:flutter_chatflow/message_gesture_callback_manager.dart';
 import 'package:flutter_chatflow/models.dart';
+import 'package:flutter_chatflow/platform_implementation/platform_web.dart';
 import 'package:flutter_chatflow/utils/type_defs.dart';
 import 'package:flutter_chatflow/utils/types.dart';
 import 'package:flutter_chatflow/utils/utils.dart';
