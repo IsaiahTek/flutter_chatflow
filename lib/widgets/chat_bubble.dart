@@ -559,7 +559,8 @@ class _MessageWidget extends StatelessWidget {
                   },
                   child: RepliedMessageWidget(
                     replyMessage: message.repliedTo!,
-                    isAuthor: message.author.userID == chatUser.userID,
+                    isAuthor:
+                        message.repliedTo!.author.userID == chatUser.userID,
                   ),
                 ),
               if (showUserAvatarInChat &&

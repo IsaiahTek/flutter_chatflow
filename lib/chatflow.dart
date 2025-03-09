@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_chatflow/library.dart';
@@ -12,6 +10,7 @@ import 'package:flutter_chatflow/utils/utils.dart';
 import 'package:flutter_chatflow/widgets/chat_bubble.dart';
 import 'package:flutter_chatflow/widgets/image/grouped_images.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
+import 'platform_implementation/platform_io.dart' if (dart.library.html) 'platform_implementation/platform_web.dart';
 
 /// Entry point to using the ChatFlow.
 class ChatFlow extends StatefulWidget {
@@ -291,22 +290,17 @@ class _ChatFlowState extends State<ChatFlow> {
 
   void _scrollToIndex(int index) {
     // double offset = _itemHeights[index];
-    _scrollController.scrollToIndex(
-      index,
-      preferPosition: AutoScrollPosition.begin
-    )
-    .then((onValue)=>debugPrint("AUTOSCROLLED TO INDEX ($index, $onValue)"))
-    .onError((err, s){
-      debugPrint("AUTOSCROLLED ERROR $err");
-    });
+    _scrollController.scrollToIndex(index,
+        preferPosition: AutoScrollPosition.middle);
     _scrollController.highlight(index);
   }
 
   void _scrollToMessage(Message message) {
     // double offset =
     //     _heightCache.getCummulative(message.key.hashCode.toString());
-    int index = _messages.indexWhere((a)=>a.createdAt == message.createdAt);
-    debugPrint("AUTOSCROLLED $index ${DateTime.fromMillisecondsSinceEpoch(message.createdAt)} $message");
+    int index = _messages.indexWhere((a) => a.createdAt == message.createdAt);
+    debugPrint(
+        "AUTOSCROLLED $index ${DateTime.fromMillisecondsSinceEpoch(message.createdAt)} $message");
     _scrollToIndex(index);
   }
 
@@ -375,14 +369,15 @@ class _ChatFlowState extends State<ChatFlow> {
                         duration: const Duration(seconds: 2),
                         color: shouldShowHighlightForScroll(
                                 _messages[index].key.hashCode.toString())
-                            ? Theme.of(context).primaryColor.withOpacity(.2)
+                            ? Theme.of(context).primaryColor.withValues(alpha: .2)
                             : null,
                         curve: Curves.fastOutSlowIn,
                         child: AutoScrollTag(
                           key: ValueKey(_messages[index].createdAt),
                           controller: _scrollController,
                           index: index,
-                          highlightColor: Colors.red,
+                          highlightColor:
+                              Theme.of(context).primaryColor.withValues(alpha: .2),
                           child: SizedBox(
                             key: _messages[index].key,
                             width: MediaQuery.of(context).size.width,
@@ -394,14 +389,16 @@ class _ChatFlowState extends State<ChatFlow> {
                                           createdAt: _messages[index].createdAt,
                                           previousMessageCreatedAt:
                                               _messages[index - 1].createdAt),
-                                      if (_messages[index].type == MessageType.info)
+                                      if (_messages[index].type ==
+                                          MessageType.info)
                                         _InfoMessage(message: _messages[index]),
                                       GroupedImages(
                                         images: getGroupedImageMessages(
                                             _messages, groupedImages, index),
                                         chatUser: widget.chatUser,
                                         isGroupChat:
-                                            widget.showUserAvatarInChat ?? false,
+                                            widget.showUserAvatarInChat ??
+                                                false,
                                       ),
                                     ],
                                   )
@@ -411,17 +408,22 @@ class _ChatFlowState extends State<ChatFlow> {
                                         message: _messages[index],
                                         chatUser: widget.chatUser,
                                         imageMessages: _imageMessages,
-                                        showUserAvatarInChat: showUserAvatarInChat,
+                                        showUserAvatarInChat:
+                                            showUserAvatarInChat,
                                         previousMessageCreatedAt: index > 0
                                             ? _messages[index - 1].createdAt
                                             : null,
                                         currentMessageIndex: index,
                                         setReplyMessage: handleSetReplyMessage,
-                                        setSelectedMessages: _handleSetSelectedMessage,
+                                        setSelectedMessages:
+                                            _handleSetSelectedMessage,
                                         selectedMessages: selectedMessages,
-                                        videoWidgetBuilder: widget.videoWidgetBuilder,
-                                        pdfWidgetBuilder: widget.pdfWidgetBuilder,
-                                        customWidgetBuilder: widget.customWidgetBuilder,
+                                        videoWidgetBuilder:
+                                            widget.videoWidgetBuilder,
+                                        pdfWidgetBuilder:
+                                            widget.pdfWidgetBuilder,
+                                        customWidgetBuilder:
+                                            widget.customWidgetBuilder,
                                         onTappedRepliedMessagePreview:
                                             handleScrollToRepliedMessage,
                                       ),
@@ -436,7 +438,7 @@ class _ChatFlowState extends State<ChatFlow> {
         if (!(widget.hideDefaultInputWidget ?? false))
           Container(
             decoration: const BoxDecoration(color: Colors.transparent),
-            margin: EdgeInsets.only(bottom: Platform.isIOS ? 30 : 0),
+            margin: EdgeInsets.only(bottom: PlatformHelper.isIOS ? 30 : 0),
             child: ChatInputWidget(
               onSendPressed: handleOnSendPressed,
               onAttachmentPressed: handleOnAttachmentPressed,
