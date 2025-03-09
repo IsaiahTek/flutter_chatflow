@@ -1,11 +1,10 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_chatflow/library.dart';
 import 'package:flutter_chatflow/event_manager.dart';
 import 'package:flutter_chatflow/message_gesture_callback_manager.dart';
 import 'package:flutter_chatflow/models.dart';
+import 'package:flutter_chatflow/platform_implementation/platform_web.dart';
 import 'package:flutter_chatflow/utils/type_defs.dart';
 import 'package:flutter_chatflow/utils/types.dart';
 import 'package:flutter_chatflow/utils/utils.dart';
@@ -414,7 +413,7 @@ class _ChatFlowState extends State<ChatFlow> {
         if (!(widget.hideDefaultInputWidget ?? false))
           Container(
             decoration: const BoxDecoration(color: Colors.transparent),
-            margin: EdgeInsets.only(bottom: Platform.isIOS ? 30 : 0),
+            margin: EdgeInsets.only(bottom: PlatformHelper.isIOS ? 30 : 0),
             child: ChatInputWidget(
               onSendPressed: handleOnSendPressed,
               onAttachmentPressed: handleOnAttachmentPressed,
