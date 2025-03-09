@@ -268,7 +268,7 @@ class _HomeState extends State<Home> with RouteAware {
   Widget build(BuildContext context) {
     return PopScope(
         canPop: _canPop,
-        onPopInvoked: (_) {
+        onPopInvokedWithResult: (_, __) {
           handleOnExitMenu();
         },
         child: !inProgress
