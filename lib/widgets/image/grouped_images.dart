@@ -56,7 +56,7 @@ class GroupedImages extends StatelessWidget {
                             color: chatUser.userID == images.first.author.userID
                                 ? Theme.of(context)
                                     .primaryColor
-                                    .withOpacity(0.02)
+                                    .withValues(alpha: .02)
                                 : Colors.white,
                             borderRadius: const BorderRadius.only(
                                 topLeft: Radius.circular(20),
@@ -221,7 +221,7 @@ class GroupedImages extends StatelessWidget {
                                               },
                                               child: Container(
                                                 color: Colors.black
-                                                    .withOpacity(.5),
+                                                    .withValues(alpha: .5),
                                                 child: Center(
                                                     child: SizedBox(
                                                         width: 150,
@@ -296,7 +296,7 @@ class _GroupedImage extends StatelessWidget {
               padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 10),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
-                color: Colors.black.withOpacity(0.2),
+                color: Colors.black.withValues(alpha: .2),
               ),
               child: Text(
                 getSentAt(image.createdAt),
@@ -386,7 +386,7 @@ class _ScrollableImagesView extends StatelessWidget {
                               vertical: 3, horizontal: 10),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
-                            color: Colors.black.withOpacity(0.2),
+                            color: Colors.black.withValues(alpha: .2),
                           ),
                           child: Text(
                             getSentAt(images[index].createdAt),

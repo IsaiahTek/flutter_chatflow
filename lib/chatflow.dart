@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_chatflow/library.dart';
@@ -361,7 +363,7 @@ class _ChatFlowState extends State<ChatFlow> {
                   duration: const Duration(seconds: 2),
                   color: shouldShowHighlightForScroll(
                           _messages[index].key.hashCode.toString())
-                      ? Theme.of(context).primaryColor.withOpacity(.2)
+                      ? Theme.of(context).primaryColor.withValues(alpha: .2)
                       : null,
                   curve: Curves.fastOutSlowIn,
                   child: SizedBox(

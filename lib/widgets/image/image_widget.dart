@@ -25,7 +25,7 @@ class ImageWidget extends StatelessWidget {
                   width: MediaQuery.of(context).size.width,
                   decoration: BoxDecoration(
                       gradient: LinearGradient(colors: [
-                    Theme.of(context).primaryColor.withOpacity(.8),
+                    Theme.of(context).primaryColor.withValues(alpha: .8),
                     Theme.of(context).primaryColor.withAlpha(255)
                   ])),
                   padding:
@@ -43,7 +43,7 @@ class ImageWidget extends StatelessWidget {
               width: MediaQuery.of(context).size.width,
               decoration: BoxDecoration(
                   gradient: LinearGradient(colors: [
-                Theme.of(context).primaryColor.withOpacity(.8),
+                Theme.of(context).primaryColor.withValues(alpha: .8),
                 Theme.of(context).primaryColor.withAlpha(255)
               ])),
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 50),
