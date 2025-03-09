@@ -397,7 +397,7 @@ class _MessageDeliveryWidget extends StatelessWidget {
         decoration: !_deliveryIsShownAtTextPoint(message)
             ? BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
-                color: Colors.black.withOpacity(0.2),
+                color: Colors.black.withValues(alpha: .2),
               )
             : null,
         child: Row(
@@ -504,7 +504,7 @@ class _MessageWidget extends StatelessWidget {
                   : Radius.zero,
             ),
             color: chatUser.userID == message.author.userID
-                ? Theme.of(context).primaryColor.withOpacity(.1)
+                ? Theme.of(context).primaryColor.withValues(alpha: .1)
                 : Colors.white),
         padding:
             showUserAvatarInChat && chatUser.userID != message.author.userID
@@ -570,7 +570,7 @@ class _MessageWidget extends StatelessWidget {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
                   decoration: BoxDecoration(
-                    color: Colors.black.withOpacity(.003),
+                    color: Colors.black.withValues(alpha: .003),
                     borderRadius: const BorderRadius.only(
                       topLeft: Radius.circular(10),
                       topRight: Radius.circular(10),

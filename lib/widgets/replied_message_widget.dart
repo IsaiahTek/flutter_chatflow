@@ -41,7 +41,7 @@ class RepliedMessageWidget extends StatelessWidget {
               left:
                   BorderSide(width: 6, color: Theme.of(context).primaryColor)),
           borderRadius: const BorderRadius.all(Radius.circular(6)),
-          color: Theme.of(context).primaryColor.withOpacity(.04)),
+          color: Theme.of(context).primaryColor.withValues(alpha: .04)),
       constraints: BoxConstraints.loose(
           Size.fromWidth(MediaQuery.of(context).size.width)),
       child: Container(
