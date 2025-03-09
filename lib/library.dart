@@ -10,7 +10,6 @@ import 'package:flutter_chatflow/utils/types.dart';
 import 'package:flutter_chatflow/widgets/replied_message_widget.dart';
 import 'package:flutter_chatflow/widgets/video/video_message.dart';
 import 'package:link_utils/link_utils.dart';
-import 'platform_implementation/file_io.dart' if (dart.library.html) 'platform_implementation/file_web.dart';
 
 import 'platform_implementation/file_io.dart' if(dart.library.html) 'platform_implementation/file_web.dart';
 

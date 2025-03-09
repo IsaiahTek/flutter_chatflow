@@ -4,14 +4,14 @@ import 'package:flutter_chatflow/library.dart';
 import 'package:flutter_chatflow/event_manager.dart';
 import 'package:flutter_chatflow/message_gesture_callback_manager.dart';
 import 'package:flutter_chatflow/models.dart';
-import 'package:flutter_chatflow/platform_implementation/platform_web.dart';
 import 'package:flutter_chatflow/utils/type_defs.dart';
 import 'package:flutter_chatflow/utils/types.dart';
 import 'package:flutter_chatflow/utils/utils.dart';
 import 'package:flutter_chatflow/widgets/chat_bubble.dart';
 import 'package:flutter_chatflow/widgets/image/grouped_images.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
-import 'platform_implementation/platform_io.dart' if (dart.library.html) 'platform_implementation/platform_web.dart';
+
+import 'platform_implementation/platform_io.dart' if(dart.library.html) 'platform_implementation/platform_web.dart';
 
 /// Entry point to using the ChatFlow.
 class ChatFlow extends StatefulWidget {
