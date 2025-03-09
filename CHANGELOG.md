@@ -1,3 +1,6 @@
+## 2.0.2
+Minor fix
+
 ## 2.0.1
 Added web platform
 
