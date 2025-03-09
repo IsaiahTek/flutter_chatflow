@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_chatflow/platform_implementation/file_io.dart';
 
+/// Image Wrapper for Image.file
 class LocalImageWidget extends StatelessWidget{
   
-  String uri;
-  LocalImageWidget({required this.uri});
+  /// File path
+  final String uri;
+
+  /// Image Wrapper for Image.file
+  const LocalImageWidget({super.key, required this.uri});
 
   @override
   Widget build(BuildContext context) {

@@ -1,7 +1,5 @@
 library library;
 
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_chatflow/models.dart';
 import 'package:flutter_chatflow/notifier.dart';
