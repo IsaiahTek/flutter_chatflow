@@ -1,3 +1,6 @@
+## 2.0.1
+Added web platform
+
 ## 2.0.0
 BREAKING CHANGES:
 * 1. Renamed FluChatNotifier to UserTypingStateStream
